@@ -1,11 +1,10 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-{ config, lib, nixpkgs, home-manager, ... }: {
+{ config, lib, nixpkgs, home-manager, pkgs, ... }: {
   # do something with home-manager here, for instance:
   imports =
     [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
       home-manager.nixosModules.default
     ];
 
