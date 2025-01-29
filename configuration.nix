@@ -104,6 +104,23 @@
     plymouth
   ];
 
+  services.xserver.videoDrivers = [ "displaylink" "modesetting" "fbdev" ];
+
+
+  hardware.graphics = {
+    enable = true;
+    extraPackages = with pkgs; [
+      intel-media-driver # For Broadwell (2014) or newer processors. LIBVA_DRIVER_NAME=iHD
+      intel-vaapi-driver # For older processors. LIBVA_DRIVER_NAME=i965
+    ];
+  };
+  environment.sessionVariables = { LIBVA_DRIVER_NAME = "iHD"; }; # Optionally, set the environment variable
+ 
+  # I think this will be useful for emulating 32 bit windows:
+  #hardware.graphics.extraPackages32 = with pkgs.pkgsi686Linux; [ intel-vaapi-driver ];
+
+
+
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
