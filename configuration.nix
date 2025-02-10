@@ -1,7 +1,7 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-{ config, lib, nixpkgs, home-manager, pkgs, ... }: {
+{ config, lib, nixpkgs, home-manager, pkgs, ... }@inputs: {
   # do something with home-manager here, for instance:
   imports =
     [ # Include the results of the hardware scan.
@@ -104,6 +104,12 @@
         })
     ];
   };
+  #home-manager = {
+  #  specialArgs = inputs;
+  #  users = {
+  #    "brian" = import ./home.nix;
+  #  };
+  #};
 
   # Install firefox.
   programs.firefox.enable = true;

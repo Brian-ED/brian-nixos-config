@@ -1,6 +1,6 @@
 {
   description = "A very basic flake";
-
+  
   inputs = {
     nixpkgs.url = github:NixOS/nixpkgs/nixos-unstable;
     home-manager.url = github:nix-community/home-manager;
@@ -19,8 +19,28 @@
       specialArgs = i;
       modules = [
         ./configuration.nix
-        # i.home-manager.nixosModule.default
+        i.home-manager.nixosModules.default
       ];
     };
   };
+
+# Home manager default:
+#  outputs = { nixpkgs, home-manager, ... }:
+#    let
+#      system = "x86_64-linux";
+#      pkgs = nixpkgs.legacyPackages.${system};
+#    in {
+#      homeConfigurations."brian" = home-manager.lib.homeManagerConfiguration {
+#        inherit pkgs;
+#
+#        # Specify your home configuration modules here, for example,
+#        # the path to your home.nix.
+#        modules = [ ./home.nix ];
+#
+#        # Optionally use extraSpecialArgs
+#        # to pass through arguments to home.nix
+#      };
+#    };
+
+
 }
