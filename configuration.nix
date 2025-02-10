@@ -84,9 +84,10 @@
     description = "Brian Ellingsgaard";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
-       thunderbird
         git
         vim
+        rhythmbox
+        sops
         (vscode-with-extensions.override {
           vscode = vscodium;
           vscodeExtensions = with vscode-extensions; [
@@ -106,6 +107,14 @@
 
   # Install firefox.
   programs.firefox.enable = true;
+#  services.firefox-syncserver.secrets = "./file.json";
+#  services.firefox-syncserver.enable = true;
+#  services.firefox-syncserver.singleNode.enable = true;
+
+  programs.thunderbird.enable = true;
+  programs.thunderbird.policies = {
+    DefaultDownloadDirectory = "${config.users.users.brian.home}/Downloads";
+  };
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
