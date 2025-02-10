@@ -3,6 +3,7 @@
 
   inputs.nixpkgs.url = github:NixOS/nixpkgs/nixos-unstable;
   inputs.home-manager.url = github:nix-community/home-manager;
+  inputs.sops-nix.url = "github:Mic92/sops-nix";
 
   outputs = { self, nixpkgs, ... }@attrs: {
 
