@@ -104,12 +104,7 @@
         })
     ];
   };
-  #home-manager = {
-  #  specialArgs = inputs;
-  #  users = {
-  #    "brian" = import ./home.nix;
-  #  };
-  #};
+  home-manager.users.brian = import ./home.nix;
 
   # Install firefox.
   programs.firefox.enable = true;
