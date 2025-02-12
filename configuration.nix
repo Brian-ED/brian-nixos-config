@@ -2,15 +2,13 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 { config, lib, nixpkgs, home-manager, pkgs, ... }@inputs: {
-  # do something with home-manager here, for instance:
   imports =
     [ # Include the results of the hardware scan.
-      home-manager.nixosModules.default
       ./hardware-configuration.nix
     ];
-
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
-
+  home-manager.useGlobalPkgs = true; # Allows me to install obsidian. No idea why.
+  
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -106,7 +104,6 @@
   #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   #  wget
     plymouth
-    home-manager
   ];
 
   services.xserver.videoDrivers = [ "displaylink" "modesetting" "fbdev" ];

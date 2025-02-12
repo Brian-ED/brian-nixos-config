@@ -14,18 +14,14 @@
     cbqn   # BQN programming language
     baobab # Drive space tree-like view
     restic # Backup the borgBackup folder at drive/backup-brian-Lenovo-Yoga-C940-14IIL-LinuxMintCinamon
+    obsidian # Unfree package. Can only use for non-profit.
+    python314 # python 3.14
     (vscode-with-extensions.override {
       vscode = vscodium;
       vscodeExtensions = with vscode-extensions; [
         bbenoist.nix  # Nix extension
         ms-python.python # Python extension
       ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
-        {
-          name = "remote-ssh-edit";
-          publisher = "ms-vscode-remote";
-          version = "0.47.2";
-          sha256 = "1hp6gjh4xp2m1xlm1jsdzxw9d8frkiidhph6nvl24d0h8z34w49g";
-        }
         {
           name = "bqn";
           publisher = "mk12";
@@ -35,17 +31,25 @@
       ];
     })
 
-
-    # You can also create simple shell scripts directly inside your
-    # configuration. For example, this adds a command 'my-hello' to your
-    # environment:
-    (pkgs.writeShellScriptBin "my-hello" ''
-      echo "Hello, ${config.home.username}!"
-    '')
-
+    # Shell scripts
     (pkgs.writeShellScriptBin "fix-nix-hash" ''
       nix hash convert --hash-algo sha256 --to nix32 $1
     '')
+    (pkgs.writeShellScriptBin "RN" ''
+      sudo nixos-rebuild switch --flake ~/nixos/#brians-laptop
+    '')
+    (pkgs.writeShellScriptBin "RH" ''
+      home-manager switch --flake ~/nixos/#brian
+    '')
+    (pkgs.writeShellScriptBin "NR" ''
+      sudo nixos-rebuild switch --flake ~/nixos/#brians-laptop
+    '')
+    (pkgs.writeShellScriptBin "HR" ''
+      home-manager switch --flake ~/nixos/#brian
+    '')
+
+
+    
   ];
 
   # managing dotfiles through 'home.file'.
@@ -61,6 +65,8 @@
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
+
+  # git
   programs.git = {
     enable = true;
     userName = "Brian-ED";
