@@ -4,6 +4,7 @@
   home.username = "brian";
   home.homeDirectory = "/home/brian";
   home.stateVersion = "24.11"; # You should not change this value, even if you update Home Manager
+  home.keyboard = null;
 
   # Install Nix packages
   home.packages = with pkgs; [
@@ -16,6 +17,10 @@
     restic # Backup the borgBackup folder at drive/backup-brian-Lenovo-Yoga-C940-14IIL-LinuxMintCinamon
     obsidian # Unfree package. Can only use for non-profit.
     python314 # python 3.14
+    xorg.xkbcomp # Temporary for messing with my keyboard settings
+    #warpinator # I never used warpinator
+    zig zls # Zig stuff
+    rustc cargo # Rust stuff
     (vscode-with-extensions.override {
       vscode = vscodium;
       vscodeExtensions = with vscode-extensions; [
@@ -47,9 +52,6 @@
     (pkgs.writeShellScriptBin "HR" ''
       home-manager switch --flake ~/nixos/#brian
     '')
-
-
-    
   ];
 
   # managing dotfiles through 'home.file'.

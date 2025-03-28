@@ -2,10 +2,8 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 { config, lib, nixpkgs, home-manager, pkgs, ... }@inputs: {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+  # Include the results of the hardware scan.
+  imports = [ ./hardware-configuration.nix ];
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   home-manager.useGlobalPkgs = true; # Allows me to install obsidian. No idea why.
   
@@ -27,20 +25,20 @@
   time.timeZone = "Europe/Copenhagen";
 
   # Select internationalisation properties.
-  i18n.defaultLocale = "en_DK.UTF-8";
-
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS        = "da_DK.UTF-8";
-    LC_IDENTIFICATION = "da_DK.UTF-8";
-    LC_MEASUREMENT    = "da_DK.UTF-8";
-    LC_MONETARY       = "da_DK.UTF-8";
-    LC_NAME           = "da_DK.UTF-8";
-    LC_NUMERIC        = "da_DK.UTF-8";
-    LC_PAPER          = "da_DK.UTF-8";
-    LC_TELEPHONE      = "da_DK.UTF-8";
-    LC_TIME           = "da_DK.UTF-8";
+  i18n = {
+    defaultLocale = "en_DK.UTF-8";
+    extraLocaleSettings = {
+      LC_ADDRESS        = "da_DK.UTF-8";
+      LC_IDENTIFICATION = "da_DK.UTF-8";
+      LC_MEASUREMENT    = "da_DK.UTF-8";
+      LC_MONETARY       = "da_DK.UTF-8";
+      LC_NAME           = "da_DK.UTF-8";
+      LC_NUMERIC        = "da_DK.UTF-8";
+      LC_PAPER          = "da_DK.UTF-8";
+      LC_TELEPHONE      = "da_DK.UTF-8";
+      LC_TIME           = "da_DK.UTF-8";
+    };
   };
-
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
@@ -50,7 +48,8 @@
 
   # Configure keymap in X11
   services.xserver.xkb = {
-    layout = "fo";
+    options = "grp:lswitch";
+    layout = "fo,bqn";
     variant = "";
   };
 
