@@ -18,13 +18,15 @@
     obsidian # Unfree package. Can only use for non-profit.
     python314 # python 3.14
     xorg.xkbcomp # Temporary for messing with my keyboard settings
+    nodejs_23
+    pgadmin4
     #warpinator # I never used warpinator
     zig zls # Zig stuff
     rustc cargo # Rust stuff
     (vscode-with-extensions.override {
       vscode = vscodium;
       vscodeExtensions = with vscode-extensions; [
-        bbenoist.nix  # Nix extension
+       bbenoist.nix  # Nix extension
         ms-python.python # Python extension
       ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
         {
