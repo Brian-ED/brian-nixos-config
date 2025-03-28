@@ -37,7 +37,7 @@
     };
 
     nixosConfigurations.brians-laptop = i.nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
+      system = system;
       specialArgs = i;
       modules = [
         ./configuration.nix
