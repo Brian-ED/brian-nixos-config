@@ -63,6 +63,12 @@
           version = "0.12.2";
           sha256 = "0i5i0fpnf90pfjrw86cqbgsy4b7vb6bqcw9y2wh9qz6hgpm4m3jc";
         }
+        {
+          name = "newline";
+          publisher = "chang196700";
+          version = "0.0.4";
+          sha256 = "0xijg1nqlrlwkl4ls21hzikr30iz8fd98ynpbmhhdxrkm3iccqa1";
+        }
       ];
     })
 
