@@ -59,6 +59,16 @@
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
+  
+  programs.light.enable = true;
+
+  # Added while getting SwayWM to work 
+  services.gnome.gnome-keyring.enable = true;
+  programs.sway = {
+    enable = true;
+    wrapperFeatures.gtk = true;
+  };
+
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -79,7 +89,7 @@
   users.users.brian = {
     isNormalUser = true;
     description = "Brian Ellingsgaard";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "video"]; # video added while getting sway to work
   };
   home-manager.users.brian = import ./home.nix;
 
@@ -94,8 +104,29 @@
     DefaultDownloadDirectory = "${config.users.users.brian.home}/Downloads";
   };
 
+  programs.bash.shellAliases = {
+    code = "codium";
+    zig14 = "/home/brian/Downloads/zig-linux-x86_64-0.14.0/zig";
+  };
+
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
+
+# TODO add the following to i3 config
+#      code = ''
+#        # Brightness
+#        bindsym XF86MonBrightnessDown exec light -U 10
+#        bindsym XF86MonBrightnessUp exec light -A 10
+#
+#        # Volume
+#        bindsym XF86AudioRaiseVolume exec 'pactl set-sink-volume @DEFAULT_SINK@ +1%'
+#        bindsym XF86AudioLowerVolume exec 'pactl set-sink-volume @DEFAULT_SINK@ -1%'
+#        bindsym XF86AudioMute exec 'pactl set-sink-mute @DEFAULT_SINK@ toggle'
+#
+#        # give sway a little time to startup before starting kanshi.
+#        exec sleep 5; systemctl --user start kanshi.service
+#      '';
+
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -103,10 +134,29 @@
   #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   #  wget
     plymouth
+
+    # Added while getting SwayWM to work
+    grim # screenshot functionality
+    slurp # screenshot functionality
+    wl-clipboard # wl-copy and wl-paste for copy/paste from stdin / stdout
+    mako # notification system developed by swaywm maintainer
   ];
 
   services.xserver.videoDrivers = [ "displaylink" "modesetting" "fbdev" ];
 
+  # Added while getting SwayWM to work
+  # kanshi systemd service
+  systemd.user.services.kanshi = {
+    description = "kanshi daemon";
+    serviceConfig = {
+      Type = "simple";
+      ExecStart = ''${pkgs.kanshi}/bin/kanshi -c kanshi_config_file'';
+    };
+  };
+  # Added while getting SwayWM to work. Apparently can improve perf?
+  security.pam.loginLimits = [
+    { domain = "@users"; item = "rtprio"; type = "-"; value = 1; }
+  ];
 
   hardware.graphics = {
     enable = true;
