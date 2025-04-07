@@ -29,6 +29,7 @@
     elixir # I want to try out elixer to develop concurrent applications
     gh # github commands
     libllvm # Playing around with llvm IR
+    gnome-clocks
 
     #warpinator # I never used warpinator
     zig zls # Zig stuff
