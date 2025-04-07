@@ -28,6 +28,7 @@
     pgadmin4
     elixir # I want to try out elixer to develop concurrent applications
     gh # github commands
+    libllvm # Playing around with llvm IR
 
     #warpinator # I never used warpinator
     zig zls # Zig stuff
@@ -51,10 +52,16 @@
           sha256 = "0lqw9pybd64fds473vl2m3r55qfmrmh3hk46rwlwgvgqhgcmv1dv";
         }
         {
-          name = "prettier-vscode"; # prettier-vscode
+          name = "prettier-vscode";
           publisher = "esbenp";
           version = "11.0.0";
           sha256 = "1fcz8f4jgnf24kblf8m8nwgzd5pxs2gmrv235cpdgmqz38kf9n54";
+        }
+        {
+          name = "code-runner";
+          publisher = "formulahendry";
+          version = "0.12.2";
+          sha256 = "0i5i0fpnf90pfjrw86cqbgsy4b7vb6bqcw9y2wh9qz6hgpm4m3jc";
         }
       ];
     })
