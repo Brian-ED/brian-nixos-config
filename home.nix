@@ -28,7 +28,7 @@
     pgadmin4
     elixir # I want to try out elixer to develop concurrent applications
     gh # github commands
-    libllvm # Playing around with llvm IR
+    lld # Playing around with llvm IR
 
     #warpinator # I never used warpinator
     zig zls # Zig stuff
