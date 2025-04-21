@@ -29,16 +29,21 @@
     elixir # I want to try out elixer to develop concurrent applications
     gh # github commands
     libllvm # Playing around with llvm IR
-    gnome-clocks
-
-    #warpinator # I never used warpinator
+    gnome-clocks # Needed a timer
+    pet # Snippet manager, not exactly sure what that means
+    qutebrowser # browser with loads of shortcuts
+    i3status-rust
+    lxappearance # Icons for i3 and dark mode maybe?
     zig zls # Zig stuff
     rustc cargo # Rust stuff
     (vscode-with-extensions.override {
       vscode = vscodium;
       vscodeExtensions = with vscode-extensions; [
-       bbenoist.nix  # Nix extension
+        bbenoist.nix  # Nix extension
         ms-python.python # Python extension
+        ziglang.vscode-zig
+        esbenp.prettier-vscode
+        formulahendry.code-runner
       ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
         {
           name = "bqn";
@@ -47,28 +52,16 @@
           sha256 = "18arx9nrqwlpx7b5qq9w83p4cbicz6d40x3447g300gqapfhlb3j";
         }
         {
-          name = "vscode-zig";
-          publisher = "ziglang";
-          version = "0.6.8";
-          sha256 = "0lqw9pybd64fds473vl2m3r55qfmrmh3hk46rwlwgvgqhgcmv1dv";
-        }
-        {
-          name = "prettier-vscode";
-          publisher = "esbenp";
-          version = "11.0.0";
-          sha256 = "1fcz8f4jgnf24kblf8m8nwgzd5pxs2gmrv235cpdgmqz38kf9n54";
-        }
-        {
-          name = "code-runner";
-          publisher = "formulahendry";
-          version = "0.12.2";
-          sha256 = "0i5i0fpnf90pfjrw86cqbgsy4b7vb6bqcw9y2wh9qz6hgpm4m3jc";
-        }
-        {
           name = "newline";
           publisher = "chang196700";
           version = "0.0.4";
           sha256 = "0xijg1nqlrlwkl4ls21hzikr30iz8fd98ynpbmhhdxrkm3iccqa1";
+        }
+        {
+          name = "tws"; # Trailing white space
+          publisher = "jkiviluoto";
+          version = "1.0.1";
+          sha256 = "0aj58iasgnmd2zb7zxz587k9mfmykjwrb8h7hfvpkmh76s9bj4y5";
         }
       ];
     })
