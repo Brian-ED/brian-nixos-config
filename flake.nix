@@ -7,6 +7,9 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     sops-nix.url = "github:Mic92/sops-nix";
 
+    brian-i3-config.url = "github:Brian-ED/brian-i3-config";
+    brian-i3-config.flake = false;
+
     # Optional, if you intend to follow nvf's obsidian-nvim input
     # you must also add it as a flake input.
     #obsidian-nvim.url = "github:epwalsh/obsidian.nvim";

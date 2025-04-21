@@ -16,6 +16,22 @@
         "type": "github"
       }
     },
+    "brian-i3-config": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1745096151,
+        "narHash": "sha256-Rx69CihiOtalIqbxFpAL1NIXHu8/CtXOhXO5BKcrOIE=",
+        "owner": "Brian-ED",
+        "repo": "brian-i3-config",
+        "rev": "54bbc5131961f7ba4b8b56c5df5103b80a062556",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Brian-ED",
+        "repo": "brian-i3-config",
+        "type": "github"
+      }
+    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": "nixpkgs-lib"
@@ -202,6 +218,7 @@
     },
     "root": {
       "inputs": {
+        "brian-i3-config": "brian-i3-config",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
         "nvf": "nvf",
