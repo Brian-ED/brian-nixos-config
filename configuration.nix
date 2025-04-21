@@ -15,6 +15,7 @@
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.supportedFilesystems = [ "ntfs" ];
 
   networking = {
     hostName = "brians-laptop"; # Define your hostname.
@@ -121,6 +122,17 @@
     pulseaudio.enable = false; # Enable sound
   };
   environment.pathsToLink = [ "/libexec" ]; # For i3
+  environment.etc = {
+    "xdg/gtk-2.0/gtkrc".text = "gtk-error-bell=0";
+    "xdg/gtk-3.0/settings.ini".text = ''
+      [Settings]
+      gtk-error-bell=false
+    '';
+    "xdg/gtk-4.0/settings.ini".text = ''
+      [Settings]
+      gtk-error-bell=false
+    '';
+  };
 
   programs = {
     dconf.enable = true; # For i3
@@ -206,6 +218,25 @@
     ];
   };
   environment.sessionVariables = { LIBVA_DRIVER_NAME = "iHD"; }; # Optionally, set the environment variable
+
+  fileSystems."/mnt/0AD47A53D47A414D" = {
+    device = "/dev/disk/by-uuid/0AD47A53D47A414D";
+    fsType = "ntfs";
+    options = [
+      "noatime"
+      "nodiratime"
+      "discard"
+    ];
+  };
+  fileSystems."/mnt/linux-mint" = {
+    device = "/dev/disk/by-uuid/3cd525e2-0864-4559-a882-5af643a62d00";
+    fsType = "ext4";
+    options = [
+      "noatime"
+      "nodiratime"
+      "discard"
+    ];
+  };
 
   # I think this will be useful for emulating 32 bit windows:
   #hardware.graphics.extraPackages32 = with pkgs.pkgsi686Linux; [ intel-vaapi-driver ];
