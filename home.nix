@@ -5,7 +5,7 @@
   home.homeDirectory = "/home/brian";
   home.stateVersion = "24.11"; # You should not change this value, even if you update Home Manager
   home.keyboard = null;
-  
+
   # TODO this doesn\t work often. I think it will never work now that I am using SwayWM
   dconf = {
     enable = true;

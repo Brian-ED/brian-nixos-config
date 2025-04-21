@@ -11,7 +11,7 @@
     useGlobalPkgs = true; # Allows me to install obsidian. No idea why.
     users.brian = import ./home.nix;
   };
-  
+
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -24,7 +24,7 @@
     # Configure network proxy if necessary
     # proxy.default = "http://user:password@proxy:port/";
     # proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-  
+
     firewall = {
       enable = true;
 
@@ -192,9 +192,9 @@
   # Set system schedular's priority for @users. Apparently improved swayWM perf, found it in their docs.
   security = {
     rtkit.enable = true; # Enable sound with pipewire.
-    
+
     pam.loginLimits = [
-      { domain = "@users"; item = "rtprio"; type = "-"; value = 1; }  
+      { domain = "@users"; item = "rtprio"; type = "-"; value = 1; }
     ];
   };
 
@@ -206,7 +206,7 @@
     ];
   };
   environment.sessionVariables = { LIBVA_DRIVER_NAME = "iHD"; }; # Optionally, set the environment variable
- 
+
   # I think this will be useful for emulating 32 bit windows:
   #hardware.graphics.extraPackages32 = with pkgs.pkgsi686Linux; [ intel-vaapi-driver ];
 
