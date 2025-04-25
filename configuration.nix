@@ -1,7 +1,7 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-{ config, pkgs, brian-i3-config, ... }:
+{ config, pkgs, lib, brian-i3-config, ... }:
 {
 
   # Include the results of the hardware scan.
@@ -9,10 +9,6 @@
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nix.settings.warn-dirty = false;
 
-  home-manager = {
-    useGlobalPkgs = true; # Allows me to install obsidian. No idea why.
-    users.brian = import ./home.nix;
-  };
 
 # Disable channels completely
 #  nix = {

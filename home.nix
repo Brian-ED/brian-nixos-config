@@ -1,12 +1,15 @@
-{ pkgs, ... }:
+{ pkgs, lib, home-manager, ... }:
 {
   home.username = "brian";
   home.homeDirectory = "/home/brian";
   home.stateVersion = "24.11"; # You should not change this value, even if you update Home Manager
   home.keyboard = null;
 
+  nixpkgs.config.allowUnfree = true;
+
   # Install Nix packages
   home.packages = with pkgs; [
+    home-manager.packages.${pkgs.system}.home-manager
     sops      # Encrypted secrets viewer and editor. TODO: Is it supposed to replace KeePassXC?
     keepassxc # Password manager. TODO: Needs to be configured
     baobab # Drive space tree-like view
@@ -101,12 +104,14 @@
     '')
     (pkgs.writeShellScriptBin "RN" ''
       sudo nixos-rebuild switch --flake ~/nixos/#brians-laptop
+      HR
     '')
     (pkgs.writeShellScriptBin "RH" ''
       home-manager switch --flake ~/nixos/#brian
     '')
     (pkgs.writeShellScriptBin "NR" ''
       sudo nixos-rebuild switch --flake ~/nixos/#brians-laptop
+      HR
     '')
     (pkgs.writeShellScriptBin "HR" ''
       home-manager switch --flake ~/nixos/#brian
@@ -180,9 +185,6 @@
   home.sessionVariables = {
     EDITOR = "codium";
   };
-
-  # Let Home Manager install and manage itself.
-  programs.home-manager.enable = true;
 
   # Let home-manager manage bash stuff
   # Disabled because it's producing errors like ".../starship directory missing"
