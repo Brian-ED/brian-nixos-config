@@ -2,17 +2,19 @@
   description = "A very basic flake";
 
   inputs = {
-    nixpkgs.url = github:NixOS/nixpkgs/nixos-unstable;
-    home-manager.url = github:nix-community/home-manager;
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     sops-nix.url = "github:Mic92/sops-nix";
+    nix-watch.url = "github:Cloud-Scythe-Labs/nix-watch"; # TODO figure out how to install stuff
 
     brian-i3-config.url = "github:Brian-ED/brian-i3-config";
     brian-i3-config.flake = false;
 
     # Optional, if you intend to follow nvf's obsidian-nvim input
     # you must also add it as a flake input.
-    #obsidian-nvim.url = "github:epwalsh/obsidian.nvim";
+    obsidian-nvim.url = "github:epwalsh/obsidian.nvim";
+    obsidian-nvim.flake = false;
 
     # Required, nvf works best and only directly supports flakes
     nvf = {
@@ -23,7 +25,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
       # Optionally, you can also override individual plugins
       # for example:
-      #inputs.obsidian-nvim.follows = "obsidian-nvim"; # <- this will use the obsidian-nvim from your inputs
+      inputs.obsidian-nvim.follows = "obsidian-nvim"; # <- this will use the obsidian-nvim from your inputs
     };
 
   };
@@ -35,13 +37,13 @@
 
     homeConfigurations.brian = i.home-manager.lib.homeManagerConfiguration {
       inherit pkgs;
-      modules = [ ./home.nix ];
+      modules = [ i.nvf.nixosModules.default ./home.nix ];
       extraSpecialArgs = i;
     };
 
     nixosConfigurations.brians-laptop = i.nixpkgs.lib.nixosSystem {
       system = system;
-      specialArgs = i;
+      specialArgs = i//{pathy-thing = "./";};
       modules = [
         ./configuration.nix
         i.home-manager.nixosModules.default

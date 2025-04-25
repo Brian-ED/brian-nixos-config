@@ -1,7 +1,9 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-{ config, lib, nixpkgs, home-manager, pkgs, brian-i3-config, ... }@inputs: {
+{ config, pkgs, brian-i3-config, ... }:
+{
+
   # Include the results of the hardware scan.
   imports = [ ./hardware-configuration.nix ];
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -12,10 +14,24 @@
     users.brian = import ./home.nix;
   };
 
+# Disable channels completely
+#  nix = {
+#      channel.enable = false;
+#      registry = lib.mapAttrs (_: x: { flake=x; }) inputs;
+#      nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") inputs;
+#      settings = {
+#          nix-path = lib.mapAttrsToList (n: _: "${n}=flake:${n}") inputs;
+#          flake-registry = ""; # optional, ensures flakes are truly self-contained
+#      };
+#  };
+
+
   # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.supportedFilesystems = [ "ntfs" ];
+  boot = {
+    loader.systemd-boot.enable = true;
+    loader.efi.canTouchEfiVariables = true;
+    supportedFilesystems = [ "ntfs" "ext4" ];
+  };
 
   networking = {
     hostName = "brians-laptop"; # Define your hostname.
@@ -78,20 +94,15 @@
 
       enable = true; # Enable the X11 windowing system.
 
-      # Enable the Cinnamon Desktop Environment.
-      displayManager.lightdm.enable = true;
+      # For i3
       desktopManager = {
-        cinnamon.enable = true;
-
-        # For i3
         wallpaper.combineScreens = true; # background img = ~/.background-image
         wallpaper.mode = "center"; # One of "center", "fill", "max", "scale", "tile"
       };
 
 
       windowManager.i3.enable = true;
-      windowManager.i3.configFile = "${brian-i3-config}/config";
-
+      windowManager.i3.configFile = if false then "${brian-i3-config}/config" else "/home/brian/brian-i3-config/config";
 
       # Configure keymap in X11
       xkb = {
@@ -118,20 +129,24 @@
       # no need to redefine it in your config for now)
       #media-session.enable = true;
     };
-
-    pulseaudio.enable = false; # Enable sound
   };
-  environment.pathsToLink = [ "/libexec" ]; # For i3
-  environment.etc = {
-    "xdg/gtk-2.0/gtkrc".text = "gtk-error-bell=0";
-    "xdg/gtk-3.0/settings.ini".text = ''
-      [Settings]
-      gtk-error-bell=false
-    '';
-    "xdg/gtk-4.0/settings.ini".text = ''
-      [Settings]
-      gtk-error-bell=false
-    '';
+  environment = {
+    # List packages installed in system profile. To search, run:
+    # $ nix search wget
+    systemPackages = [];
+    sessionVariables = { LIBVA_DRIVER_NAME = "iHD"; }; # Optionally, set the environment variable
+    pathsToLink = [ "/libexec" ]; # For i3
+    etc = {
+      "xdg/gtk-2.0/gtkrc".text = "gtk-error-bell=0";
+      "xdg/gtk-3.0/settings.ini".text = ''
+        [Settings]
+        gtk-error-bell=false
+      '';
+      "xdg/gtk-4.0/settings.ini".text = ''
+        [Settings]
+        gtk-error-bell=false
+      '';
+    };
   };
 
   programs = {
@@ -143,9 +158,6 @@
       enable = true;
       enableSSHSupport = true;
     };
-
-    # Install firefox.
-    firefox.enable = true;
 
     thunderbird = {
       enable = true;
@@ -187,20 +199,6 @@
 #        exec sleep 5; systemctl --user start kanshi.service
 #      '';
 
-
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [];
-
-  # Added while getting SwayWM to work
-  # kanshi systemd service
-  systemd.user.services.kanshi = {
-    description = "kanshi daemon";
-    serviceConfig = {
-      Type = "simple";
-      ExecStart = ''${pkgs.kanshi}/bin/kanshi -c kanshi_config_file'';
-    };
-  };
   # Set system schedular's priority for @users. Apparently improved swayWM perf, found it in their docs.
   security = {
     rtkit.enable = true; # Enable sound with pipewire.
@@ -217,25 +215,20 @@
       intel-vaapi-driver # For older processors. LIBVA_DRIVER_NAME=i965
     ];
   };
-  environment.sessionVariables = { LIBVA_DRIVER_NAME = "iHD"; }; # Optionally, set the environment variable
 
-  fileSystems."/mnt/0AD47A53D47A414D" = {
-    device = "/dev/disk/by-uuid/0AD47A53D47A414D";
-    fsType = "ntfs";
-    options = [
-      "noatime"
-      "nodiratime"
-      "discard"
-    ];
-  };
-  fileSystems."/mnt/linux-mint" = {
-    device = "/dev/disk/by-uuid/3cd525e2-0864-4559-a882-5af643a62d00";
-    fsType = "ext4";
-    options = [
-      "noatime"
-      "nodiratime"
-      "discard"
-    ];
+  fileSystems = let
+    opts = ["noatime" "nodiratime" "discard"];
+  in {
+    "/mnt/0AD47A53D47A414D" = {
+      device = "/dev/disk/by-uuid/0AD47A53D47A414D";
+      fsType = "ntfs";
+      options = opts;
+    };
+    "/mnt/linux-mint" = {
+      device = "/dev/disk/by-uuid/3cd525e2-0864-4559-a882-5af643a62d00";
+      fsType = "ext4";
+      options = opts;
+    };
   };
 
   # I think this will be useful for emulating 32 bit windows:

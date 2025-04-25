@@ -1,22 +1,14 @@
 { pkgs, ... }:
-
 {
   home.username = "brian";
   home.homeDirectory = "/home/brian";
   home.stateVersion = "24.11"; # You should not change this value, even if you update Home Manager
   home.keyboard = null;
 
-  # TODO this doesn\t work often. I think it will never work now that I am using SwayWM
-  dconf = {
-    enable = true;
-    settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
-  };
-
   # Install Nix packages
   home.packages = with pkgs; [
     sops      # Encrypted secrets viewer and editor. TODO: Is it supposed to replace KeePassXC?
     keepassxc # Password manager. TODO: Needs to be configured
-    cbqn   # BQN programming language
     baobab # Drive space tree-like view
     restic # Backup the borgBackup folder at drive/backup-brian-Lenovo-Yoga-C940-14IIL-LinuxMintCinamon
     obsidian # Unfree package. Can only use for non-profit.
@@ -42,7 +34,8 @@
     nil # Nix langauge server
     firefox-devedition
     firefox
-
+    nemo
+    xed-editor
     # Python with scientific libraries
     (
       python3.withPackages (p: with p;[
@@ -71,8 +64,8 @@
         jnoortheen.nix-ide
         ritwickdey.liveserver
         eamodio.gitlens
-        github.copilot
-        github.copilot-chat
+#        github.copilot
+#        github.copilot-chat
         hediet.vscode-drawio
         ms-vscode.cpptools
       ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace (map (x:
@@ -93,7 +86,7 @@
         [ "vsliveshare"                 "MS-vsliveshare" "1.0.5948"       "0rhwjar2c6bih1c5w4w8gdgpc6f18669gzycag5w9s35bv6bvsr8" ] # Live Share
         [ "inline-html-indent"          "vulkd"          "0.0.1"          "0mh7kpis821088g5qmzay76zrgvgbikl9v2jdjs3mdfkbh2rfl6s" ]
         [ "vuerd-vscode"                "dineug"         "2.0.5"          "1agcayiz8p7n05x6wm817gdj3fwmxkdxbsf5alx4jbp1msi6qwwh" ] # ERD editor
-        [ "chatgpt-copilot"             "feiskyer"       "4.8.4"          "0766vq07gjxgh4xpflzmrcx55i6b9w4hk5zg8yirvgfjscv5gvxv" ]
+#        [ "chatgpt-copilot"             "feiskyer"       "4.8.4"          "0766vq07gjxgh4xpflzmrcx55i6b9w4hk5zg8yirvgfjscv5gvxv" ]
         [ "vscode-apl-language-client"  "OptimaSystems"  "0.0.9"          "050nn7f6gfzskq1yavqdw77rgl1lxs3p8dqkzrmmliqh5kqh2gr8" ]
         [ "vscode-apl-language"         "OptimaSystems"  "0.0.7"          "003n637vskbi4wypm8qwdy4fa9skp19w6kli1bgc162gzcbswhia" ]
         [ "vscode-autohotkey-plus-plus" "mark-wiemer"    "6.7.0"          "10sf0qf0sqc5ifjf9vg2fyh7akz7swrilz6aifvyswzglglmca19" ]
@@ -118,6 +111,63 @@
     (pkgs.writeShellScriptBin "HR" ''
       home-manager switch --flake ~/nixos/#brian
     '')
+    (pkgs.stdenv.mkDerivation {
+      pname = "cbqn";
+      version = "rolling";
+      src = pkgs.fetchFromGitHub {
+        owner = "dzaima";
+        repo = "CBQN";
+        rev = "09642a354f124630996a6ae4e8442089625cd907";
+        hash = "sha256-M1dEB4o+nXXzq/96/PvBKL3sLH84y1XYrv3yknGzhmw=";
+        fetchSubmodules = true;
+      };
+
+      dontConfigure = true;
+      preferLocalBuild = true;
+
+      nativeBuildInputs = [ pkgs.pkg-config ];
+      buildInputs       = [ pkgs.libffi ];
+
+      # Set the system C compiler
+      makeFlags = [ "CC=${pkgs.stdenv.cc.targetPrefix}cc" ];
+
+      # Customize build for maximum performance.
+      buildFlags = [
+        "o3"
+        "notui=1"
+        "REPLXX=1"
+        "f=-march=znver4"
+        "target_from_cc=1"
+      ];
+
+      # Set up local copies of required submodules.
+      preBuild = ''
+        mkdir -p build/{singeliLocal,bytecodeLocal,replxxLocal}
+        cp -r build/singeliSubmodule/* build/singeliLocal/
+        cp -r build/bytecodeSubmodule/* build/bytecodeLocal/
+        cp -r build/replxxSubmodule/* build/replxxLocal/
+      '';
+
+      postPatch = ''
+        # Remove the SHELL definition from the makefile and fix shebangs.
+        sed -i '/SHELL =/d' makefile
+        patchShebangs build/build
+      '';
+
+      installPhase = ''
+        mkdir -p $out/bin
+        cp BQN $out/bin/
+        ln -sf BQN $out/bin/bqn
+        ln -sf BQN $out/bin/cbqn
+      '';
+
+      meta = {
+        description = "Optimized CBQN interpreter with REPLXX support for AMD Ryzen";
+        homepage    = "https://github.com/dzaima/CBQN";
+        license     = pkgs.lib.licenses.gpl3Only;
+        platforms   = pkgs.lib.platforms.linux;
+      };
+    })
   ];
 
   # managing dotfiles through 'home.file'.
