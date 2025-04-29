@@ -1,15 +1,31 @@
-{ pkgs, lib, home-manager, ... }:
+# TODO get home manager to manage files ~/.gtkrc-2.0
+{ pkgs, lib, ... }@i:
+let
+  nix-watch = i.nix-watch.packages.${pkgs.system}.default;
+  home-manager = i.home-manager.packages.${pkgs.system}.home-manager;
+  usernme = "brian";
+in
 {
-  home.username = "brian";
-  home.homeDirectory = "/home/brian";
+  home.username = usernme;
+  home.homeDirectory = "/home/${usernme}";
   home.stateVersion = "24.11"; # You should not change this value, even if you update Home Manager
   home.keyboard = null;
 
   nixpkgs.config.allowUnfree = true;
 
+  services.home-manager.autoExpire = {
+    enable = true;
+    timestamp = "-30 days";
+    frequency = "monthly";
+    store = {
+      cleanup = true;
+      options = "--delete-older-than 30d";
+    };
+  };
+
   # Install Nix packages
   home.packages = with pkgs; [
-    home-manager.packages.${pkgs.system}.home-manager
+    home-manager # Have home manager manage itself.
     sops      # Encrypted secrets viewer and editor. TODO: Is it supposed to replace KeePassXC?
     keepassxc # Password manager. TODO: Needs to be configured
     baobab # Drive space tree-like view
@@ -38,6 +54,7 @@
     firefox-devedition
     firefox
     nemo
+    xclip
     xed-editor
     # Python with scientific libraries
     (
@@ -89,33 +106,13 @@
         [ "vsliveshare"                 "MS-vsliveshare" "1.0.5948"       "0rhwjar2c6bih1c5w4w8gdgpc6f18669gzycag5w9s35bv6bvsr8" ] # Live Share
         [ "inline-html-indent"          "vulkd"          "0.0.1"          "0mh7kpis821088g5qmzay76zrgvgbikl9v2jdjs3mdfkbh2rfl6s" ]
         [ "vuerd-vscode"                "dineug"         "2.0.5"          "1agcayiz8p7n05x6wm817gdj3fwmxkdxbsf5alx4jbp1msi6qwwh" ] # ERD editor
-#        [ "chatgpt-copilot"             "feiskyer"       "4.8.4"          "0766vq07gjxgh4xpflzmrcx55i6b9w4hk5zg8yirvgfjscv5gvxv" ]
+#       [ "chatgpt-copilot"             "feiskyer"       "4.8.4"          "0766vq07gjxgh4xpflzmrcx55i6b9w4hk5zg8yirvgfjscv5gvxv" ]
         [ "vscode-apl-language-client"  "OptimaSystems"  "0.0.9"          "050nn7f6gfzskq1yavqdw77rgl1lxs3p8dqkzrmmliqh5kqh2gr8" ]
         [ "vscode-apl-language"         "OptimaSystems"  "0.0.7"          "003n637vskbi4wypm8qwdy4fa9skp19w6kli1bgc162gzcbswhia" ]
         [ "vscode-autohotkey-plus-plus" "mark-wiemer"    "6.7.0"          "10sf0qf0sqc5ifjf9vg2fyh7akz7swrilz6aifvyswzglglmca19" ]
         [ "i3"                          "dcasella"       "1.0.0"          "0z7qj6bwch1cxr6pab2i3yqk5id8k14mjlvl6i9f0cmdsxqkmci5" ]
       ]);
     })
-
-    # Shell scripts
-    # give in format sha256-...=
-    (pkgs.writeShellScriptBin "fix-nix-hash" ''
-      nix hash convert --hash-algo sha256 --to nix32 $1
-    '')
-    (pkgs.writeShellScriptBin "RN" ''
-      sudo nixos-rebuild switch --flake ~/nixos/#brians-laptop
-      HR
-    '')
-    (pkgs.writeShellScriptBin "RH" ''
-      home-manager switch --flake ~/nixos/#brian
-    '')
-    (pkgs.writeShellScriptBin "NR" ''
-      sudo nixos-rebuild switch --flake ~/nixos/#brians-laptop
-      HR
-    '')
-    (pkgs.writeShellScriptBin "HR" ''
-      home-manager switch --flake ~/nixos/#brian
-    '')
     (pkgs.stdenv.mkDerivation {
       pname = "cbqn";
       version = "rolling";
@@ -186,11 +183,21 @@
     EDITOR = "codium";
   };
 
-  # Let home-manager manage bash stuff
-  # Disabled because it's producing errors like ".../starship directory missing"
-#  programs.bash = {
-#    enable = true;
-#  };
+  programs.bash = {
+    enable = true;
+    shellAliases = {
+      code = "codium";
+      clang = "${pkgs.zig}/bin/zig cc";
+      nix-watch = "${nix-watch}/bin/nix-watch";
+      NRO = "sudo nixos-rebuild switch --flake ~/nixos/#brians-laptop";
+      fix-nix-hash = "nix hash convert --hash-algo sha256 --to nix32 $1"; # give in format sha256-...=
+      RN = "sudo nixos-rebuild switch --flake ~/nixos/#brians-laptop && HR";
+      RH = "home-manager switch --flake ~/nixos/#brian";
+      NR = "sudo nixos-rebuild switch --flake ~/nixos/#brians-laptop && HR";
+      HR = "home-manager switch --flake ~/nixos/#brian";
+      P = "pwd | xclip -selection clipboard";
+    };
+  };
 
   # git
   programs.git = {

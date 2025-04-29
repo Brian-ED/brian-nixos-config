@@ -2,11 +2,14 @@
   description = "A very basic flake";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs";
+
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 #    sops-nix.url = "github:Mic92/sops-nix";
-#    nix-watch.url = "github:Cloud-Scythe-Labs/nix-watch"; # TODO figure out how to install stuff
+    nix-watch.url = "github:Cloud-Scythe-Labs/nix-watch";
+    nix-watch.flake = true;
+    nix-watch.inputs.nixpkgs.follows = "nixpkgs";
 
     brian-i3-config.url = "github:Brian-ED/brian-i3-config";
     brian-i3-config.flake = false;
@@ -34,7 +37,6 @@
     system = "x86_64-linux";
     pkgs = i.nixpkgs.legacyPackages.${system};
   in {
-
     homeConfigurations.brian = i.home-manager.lib.homeManagerConfiguration {
       inherit pkgs;
       modules = [ ./home.nix ];
@@ -43,8 +45,9 @@
 
     nixosConfigurations.brians-laptop = i.nixpkgs.lib.nixosSystem {
       inherit system;
-      specialArgs = i;
+      specialArgs = {inputs = i;};
       modules = [
+        ./hardware-configuration.nix # Include the results of the hardware scan
         ./configuration.nix
       ];
     };

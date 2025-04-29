@@ -1,31 +1,26 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-{ config, pkgs, lib, brian-i3-config, ... }:
+{ config, pkgs, lib, brian-i3-config, ... }@inputs:
 {
+  nix = {
+    channel.enable = false;
+    nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") inputs; # For disabling channels
+    settings = {
+      experimental-features = [ "nix-command" "flakes" ];
+      warn-dirty = false;
 
-  # Include the results of the hardware scan.
-  imports = [ ./hardware-configuration.nix ];
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  nix.settings.warn-dirty = false;
+      nix-path = lib.mapAttrsToList (n: _: "${n}=flake:${n}") inputs; # For disabling channels
+      flake-registry = ""; # ensures flakes are truly self-contained
+    };
+  };
 
-
-# Disable channels completely
-#  nix = {
-#      channel.enable = false;
-#      registry = lib.mapAttrs (_: x: { flake=x; }) inputs;
-#      nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") inputs;
-#      settings = {
-#          nix-path = lib.mapAttrsToList (n: _: "${n}=flake:${n}") inputs;
-#          flake-registry = ""; # optional, ensures flakes are truly self-contained
-#      };
-#  };
-
-
-  # Bootloader.
   boot = {
-    loader.systemd-boot.enable = true;
-    loader.efi.canTouchEfiVariables = true;
+    loader = {
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+    };
+    initrd.systemd.network.wait-online.enable = false; # Apparently improves boot time. Why should the boot process wait for internet?
     supportedFilesystems = [ "ntfs" "ext4" ];
   };
 
@@ -111,8 +106,6 @@
     # Enable CUPS to print documents.
     printing.enable = true;
 
-    # TODO get home manager to manage files ~/.gtkrc-2.0, ?wallpaper?, i3-config.
-
     pipewire = {
       enable = true;
       alsa.enable = true;
@@ -161,69 +154,45 @@
         DefaultDownloadDirectory = "${config.users.users.brian.home}/Downloads";
       };
     };
-
-    bash.shellAliases = {
-      code = "codium";
-      zig14 = "/home/brian/Downloads/zig-linux-x86_64-0.14.0/zig";
-      clang = "zig cc";
-    };
   };
-
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.brian = {
     isNormalUser = true;
     description = "Brian Ellingsgaard";
-    extraGroups = [ "networkmanager" "wheel"]; #  "video" added while getting sway to work
+    extraGroups = [ "networkmanager" "wheel"];
   };
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-# TODO add the following to i3 config
-#      code = ''
-#        # Brightness
-#        bindsym XF86MonBrightnessDown exec light -U 10
-#        bindsym XF86MonBrightnessUp exec light -A 10
-#
-#        # Volume
-#        bindsym XF86AudioRaiseVolume exec 'pactl set-sink-volume @DEFAULT_SINK@ +1%'
-#        bindsym XF86AudioLowerVolume exec 'pactl set-sink-volume @DEFAULT_SINK@ -1%'
-#        bindsym XF86AudioMute exec 'pactl set-sink-mute @DEFAULT_SINK@ toggle'
-#
-#        # give sway a little time to startup before starting kanshi.
-#        exec sleep 5; systemctl --user start kanshi.service
-#      '';
-
-  # Set system schedular's priority for @users. Apparently improved swayWM perf, found it in their docs.
   security = {
     rtkit.enable = true; # Enable sound with pipewire.
 
-    pam.loginLimits = [
-      { domain = "@users"; item = "rtprio"; type = "-"; value = 1; }
-    ];
+    # Set system schedular's priority for @users. Apparently improved swayWM perf, found it in their docs.
+    pam.loginLimits = [ { domain = "@users"; item = "rtprio"; type = "-"; value = 1; } ];
   };
 
   hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [
       intel-media-driver # For Broadwell (2014) or newer processors. LIBVA_DRIVER_NAME=iHD
-      intel-vaapi-driver # For older processors. LIBVA_DRIVER_NAME=i965
+      # intel-vaapi-driver # For older processors. LIBVA_DRIVER_NAME=i965
     ];
   };
 
   fileSystems = let
-    opts = ["noatime" "nodiratime" "discard"];
+    options = ["noatime" "nodiratime" "discard"];
   in {
     "/mnt/0AD47A53D47A414D" = {
       device = "/dev/disk/by-uuid/0AD47A53D47A414D";
       fsType = "ntfs";
-      options = opts;
+      inherit options;
     };
     "/mnt/linux-mint" = {
       device = "/dev/disk/by-uuid/3cd525e2-0864-4559-a882-5af643a62d00";
       fsType = "ext4";
-      options = opts;
+      inherit options;
     };
   };
 
