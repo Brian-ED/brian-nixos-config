@@ -1,5 +1,5 @@
 # TODO get home manager to manage files ~/.gtkrc-2.0
-{ pkgs, lib, ... }@i:
+{ pkgs, ... }@i:
 let
   nix-watch = i.nix-watch.packages.${pkgs.system}.default;
   home-manager = i.home-manager.packages.${pkgs.system}.home-manager;
@@ -25,37 +25,38 @@ in
 
   # Install Nix packages
   home.packages = with pkgs; [
-    home-manager # Have home manager manage itself.
-    sops      # Encrypted secrets viewer and editor. TODO: Is it supposed to replace KeePassXC?
-    keepassxc # Password manager. TODO: Needs to be configured
-    baobab # Drive space tree-like view
-    restic # Backup the borgBackup folder at drive/backup-brian-Lenovo-Yoga-C940-14IIL-LinuxMintCinamon
-    obsidian # Unfree package. Can only use for non-profit.
-    xorg.xkbcomp # Temporary for messing with my keyboard settings
-    nodejs_23 # Javascript interpreter
-    pgadmin4 # Postgresql for database connection
-    xorg.xev # I use this for testing button presses on i3
+    home-manager    # Have home manager manage itself.
+    xorg.xkbcomp    # Temporary for messing with my keyboard settings
+    xorg.xev        # I use this for testing button presses on i3
     xorg.xbacklight # Modify device brightness, xrandr can only modify software brightness.
-    haruna # Video player
-    light # My i3 config uses this
-    elixir # I want to try out elixer to develop concurrent applications
-    gh # github commands
-    libllvm # Playing around with llvm IR
-    gnome-clocks # Needed a timer
-    pet # Snippet manager, not exactly sure what that means
-    qutebrowser # browser with loads of shortcuts
+    sops            # Encrypted secrets viewer and editor. TODO: Is it supposed to replace KeePassXC?
+    gnome-clocks    # Needed a timer
+    keepassxc       # Password manager. TODO: Needs to be configured
+    baobab          # Drive space tree-like view
+    restic          # Backup the borgBackup folder at drive/backup-brian-Lenovo-Yoga-C940-14IIL-LinuxMintCinamon
+    obsidian        # Unfree package. Can only use for non-profit.
+    nodejs_23       # Javascript interpreter
+    pgadmin4        # Postgresql for database connection
+    haruna          # Video player
+    light           # My i3 config uses this
+    elixir          # I want to try out elixer to develop concurrent applications
+    gh              # github commands
+    libllvm         # Playing around with llvm IR
+    pet             # Snippet manager, not exactly sure what that means
+    qutebrowser     # browser with loads of shortcuts
+    lxappearance    # Icons for i3 and dark mode maybe?
+    ghostty         # Terminal emulator
+    audacious       # For playing music
+    nil             # Nix langauge server
+    rustc cargo     # Rust stuff
+    zig zls         # Zig stuff
     i3status-rust
-    lxappearance # Icons for i3 and dark mode maybe?
-    zig zls # Zig stuff
-    ghostty # Terminal emulator
-    rustc cargo # Rust stuff
-    audacious # For playing music
-    nil # Nix langauge server
     firefox-devedition
     firefox
     nemo
     xclip
     xed-editor
+    gnome-system-monitor
     # Python with scientific libraries
     (
       python3.withPackages (p: with p;[
@@ -84,33 +85,33 @@ in
         jnoortheen.nix-ide
         ritwickdey.liveserver
         eamodio.gitlens
-#        github.copilot
-#        github.copilot-chat
+#       github.copilot
+#       github.copilot-chat
         hediet.vscode-drawio
         ms-vscode.cpptools
       ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace (map (x:
         let I=builtins.elemAt; in
-        { name=I x 0;                   publisher=I x 1; version=I x 2;   sha256=I x 3; } ) [
-        [ "bqn"                         "mk12"           "0.1.7"          "18arx9nrqwlpx7b5qq9w83p4cbicz6d40x3447g300gqapfhlb3j" ]
-        [ "newline"                     "chang196700"    "0.0.4"          "0xijg1nqlrlwkl4ls21hzikr30iz8fd98ynpbmhhdxrkm3iccqa1" ]
-        [ "tws"                         "jkiviluoto"     "1.0.1"          "0aj58iasgnmd2zb7zxz587k9mfmykjwrb8h7hfvpkmh76s9bj4y5" ] # Trailing white space
-        [ "toggle-zen-mode"             "fudd"           "1.1.2"          "0whmbpnin1r1qnq45fpz7ayp51d4lilvbnv7llqd6jplx5b4n3ds" ]
-        [ "todo-tree"                   "Gruntfuggly"    "0.0.226"        "0yrc9qbdk7zznd823bqs1g6n2i5xrda0f9a7349kknj9wp1mqgqn" ]
-        [ "iceworks-time-master"        "iceworks-team"  "1.0.4"          "05k7icssa7llbp4a44kny0556hvimmdh6fm394y5rh86bxqq0iq3" ]
-        [ "suteppu"                     "Itsakaseru"     "1.0.1"          "1z0zkznwwm0z1vyq2wsw9rf1kg8pfpb3rl7glx0zp3aq8sxvnfsf" ]
-        [ "vscode-sort"                 "henriiik"       "0.2.5"          "0sam2qfa596dcbabx3alrwsgm56a8wzb65dp45yv172kcaam5yd6" ]
-        [ "slint"                       "Slint"          "1.10.0"         "1c6bailn562zsh7wzx8jjj0y8mdzxj3sqgym5x5liw93b11kv3i3" ]
-        [ "remote-explorer"             "ms-vscode"      "0.5.2025021709" "02lnijwl92lq3rhv4f0kbp1bjfniipigih1myl5xmrwsp85n88xl" ]
-        [ "ols"                         "DanielGavin"    "0.1.34"         "0rl6mjkabgbwc0vnm96ax1jhjh5rrky0i1w40fhs1zqyfd83mrsx" ]
-        [ "vscode-lowercase"            "ruiquelhas"     "1.0.1"          "03kwbnc25rfzsr7lzgkycwxnifv4nx04rfcvmfcqqhacx74g14gs" ]
-        [ "vsliveshare"                 "MS-vsliveshare" "1.0.5948"       "0rhwjar2c6bih1c5w4w8gdgpc6f18669gzycag5w9s35bv6bvsr8" ] # Live Share
-        [ "inline-html-indent"          "vulkd"          "0.0.1"          "0mh7kpis821088g5qmzay76zrgvgbikl9v2jdjs3mdfkbh2rfl6s" ]
-        [ "vuerd-vscode"                "dineug"         "2.0.5"          "1agcayiz8p7n05x6wm817gdj3fwmxkdxbsf5alx4jbp1msi6qwwh" ] # ERD editor
-#       [ "chatgpt-copilot"             "feiskyer"       "4.8.4"          "0766vq07gjxgh4xpflzmrcx55i6b9w4hk5zg8yirvgfjscv5gvxv" ]
-        [ "vscode-apl-language-client"  "OptimaSystems"  "0.0.9"          "050nn7f6gfzskq1yavqdw77rgl1lxs3p8dqkzrmmliqh5kqh2gr8" ]
-        [ "vscode-apl-language"         "OptimaSystems"  "0.0.7"          "003n637vskbi4wypm8qwdy4fa9skp19w6kli1bgc162gzcbswhia" ]
-        [ "vscode-autohotkey-plus-plus" "mark-wiemer"    "6.7.0"          "10sf0qf0sqc5ifjf9vg2fyh7akz7swrilz6aifvyswzglglmca19" ]
-        [ "i3"                          "dcasella"       "1.0.0"          "0z7qj6bwch1cxr6pab2i3yqk5id8k14mjlvl6i9f0cmdsxqkmci5" ]
+        { name=I x 0;                   publisher=I x 1; version=I x 2; sha256=I x 3; } ) [
+        [ "bqn"                         "mk12"           "latest" "1wk1a2n1dy6k5pzxmjl6pcscn87m85kxxca552kvhalymk2bwkv2" ]
+        [ "newline"                     "chang196700"    "latest" "0xijg1nqlrlwkl4ls21hzikr30iz8fd98ynpbmhhdxrkm3iccqa1" ]
+        [ "tws"                         "jkiviluoto"     "latest" "0aj58iasgnmd2zb7zxz587k9mfmykjwrb8h7hfvpkmh76s9bj4y5" ] # Trailing white space
+        [ "toggle-zen-mode"             "fudd"           "latest" "0whmbpnin1r1qnq45fpz7ayp51d4lilvbnv7llqd6jplx5b4n3ds" ]
+        [ "todo-tree"                   "Gruntfuggly"    "latest" "0yrc9qbdk7zznd823bqs1g6n2i5xrda0f9a7349kknj9wp1mqgqn" ]
+        [ "iceworks-time-master"        "iceworks-team"  "latest" "05k7icssa7llbp4a44kny0556hvimmdh6fm394y5rh86bxqq0iq3" ]
+        [ "suteppu"                     "Itsakaseru"     "latest" "1z0zkznwwm0z1vyq2wsw9rf1kg8pfpb3rl7glx0zp3aq8sxvnfsf" ]
+        [ "vscode-sort"                 "henriiik"       "latest" "0sam2qfa596dcbabx3alrwsgm56a8wzb65dp45yv172kcaam5yd6" ]
+        [ "slint"                       "Slint"          "latest" "1yshm7x6dalg4xw7ykwj736sq0dknnhm8j2wvjxqj5mcp43dxlzh" ]
+        [ "remote-explorer"             "ms-vscode"      "latest" "02lnijwl92lq3rhv4f0kbp1bjfniipigih1myl5xmrwsp85n88xl" ]
+        [ "ols"                         "DanielGavin"    "latest" "0rl6mjkabgbwc0vnm96ax1jhjh5rrky0i1w40fhs1zqyfd83mrsx" ]
+        [ "vscode-lowercase"            "ruiquelhas"     "latest" "03kwbnc25rfzsr7lzgkycwxnifv4nx04rfcvmfcqqhacx74g14gs" ]
+        [ "vsliveshare"                 "MS-vsliveshare" "latest" "0rhwjar2c6bih1c5w4w8gdgpc6f18669gzycag5w9s35bv6bvsr8" ] # Live Share
+        [ "inline-html-indent"          "vulkd"          "latest" "0mh7kpis821088g5qmzay76zrgvgbikl9v2jdjs3mdfkbh2rfl6s" ]
+        [ "vuerd-vscode"                "dineug"         "latest" "1agcayiz8p7n05x6wm817gdj3fwmxkdxbsf5alx4jbp1msi6qwwh" ] # ERD editor
+#       [ "chatgpt-copilot"             "feiskyer"       "latest" "0766vq07gjxgh4xpflzmrcx55i6b9w4hk5zg8yirvgfjscv5gvxv" ]
+        [ "vscode-apl-language-client"  "OptimaSystems"  "latest" "050nn7f6gfzskq1yavqdw77rgl1lxs3p8dqkzrmmliqh5kqh2gr8" ]
+        [ "vscode-apl-language"         "OptimaSystems"  "latest" "003n637vskbi4wypm8qwdy4fa9skp19w6kli1bgc162gzcbswhia" ]
+        [ "vscode-autohotkey-plus-plus" "mark-wiemer"    "latest" "10sf0qf0sqc5ifjf9vg2fyh7akz7swrilz6aifvyswzglglmca19" ]
+        [ "i3"                          "dcasella"       "latest" "0z7qj6bwch1cxr6pab2i3yqk5id8k14mjlvl6i9f0cmdsxqkmci5" ]
       ]);
     })
     (pkgs.stdenv.mkDerivation {
@@ -135,12 +136,8 @@ in
 
       # Customize build for maximum performance.
       buildFlags = [
-        "o3"
-        "notui=1"
         "REPLXX=1"
-        "f=-march=znver4"
-        "target_from_cc=1"
-      ];
+      ]; # 10000 +´∘↕•_timed 1000000 #  0.000192240469
 
       # Set up local copies of required submodules.
       preBuild = ''
@@ -172,7 +169,7 @@ in
     })
   ];
 
-  # managing dotfiles through 'home.file'.
+  # manages dotfiles
   home.file = {
   };
 

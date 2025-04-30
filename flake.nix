@@ -2,13 +2,12 @@
   description = "A very basic flake";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 #    sops-nix.url = "github:Mic92/sops-nix";
     nix-watch.url = "github:Cloud-Scythe-Labs/nix-watch";
-    nix-watch.flake = true;
     nix-watch.inputs.nixpkgs.follows = "nixpkgs";
 
     brian-i3-config.url = "github:Brian-ED/brian-i3-config";
