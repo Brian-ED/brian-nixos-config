@@ -3,11 +3,12 @@
 let
   nix-watch = i.nix-watch.packages.${pkgs.system}.default;
   home-manager = i.home-manager.packages.${pkgs.system}.home-manager;
-  usernme = "brian";
+  nixos-conf-editor = i.nixos-conf-editor.packages.${pkgs.system}.nixos-conf-editor;
+  username = "brian";
 in
 {
-  home.username = usernme;
-  home.homeDirectory = "/home/${usernme}";
+  home.username = username;
+  home.homeDirectory = "/home/${username}";
   home.stateVersion = "24.11"; # You should not change this value, even if you update Home Manager
   home.keyboard = null;
 
@@ -25,40 +26,39 @@ in
 
   # Install Nix packages
   home.packages = with pkgs; [
-    home-manager    # Have home manager manage itself.
-    xorg.xkbcomp    # Temporary for messing with my keyboard settings
-    xorg.xev        # I use this for testing button presses on i3
-    xorg.xbacklight # Modify device brightness, xrandr can only modify software brightness.
-    sops            # Encrypted secrets viewer and editor. TODO: Is it supposed to replace KeePassXC?
-    gnome-clocks    # Needed a timer
-    keepassxc       # Password manager. TODO: Needs to be configured
-    baobab          # Drive space tree-like view
-    restic          # Backup the borgBackup folder at drive/backup-brian-Lenovo-Yoga-C940-14IIL-LinuxMintCinamon
-    obsidian        # Unfree package. Can only use for non-profit.
-    nodejs_23       # Javascript interpreter
-    pgadmin4        # Postgresql for database connection
-    haruna          # Video player
-    light           # My i3 config uses this
-    elixir          # I want to try out elixer to develop concurrent applications
-    gh              # github commands
-    libllvm         # Playing around with llvm IR
-    pet             # Snippet manager, not exactly sure what that means
-    qutebrowser     # browser with loads of shortcuts
-    lxappearance    # Icons for i3 and dark mode maybe?
-    ghostty         # Terminal emulator
-    audacious       # For playing music
-    nil             # Nix langauge server
-    rustc cargo     # Rust stuff
-    zig zls         # Zig stuff
+    nixos-conf-editor # Editor for this configuration
+    home-manager      # Have home manager manage itself.
+    xorg.xkbcomp      # Temporary for messing with my keyboard settings
+    xorg.xev          # I use this for testing button presses on i3
+    xorg.xbacklight   # Modify device brightness, xrandr can only modify software brightness.
+    sops              # Encrypted secrets viewer and editor. TODO: Is it supposed to replace KeePassXC?
+    gnome-clocks      # Needed a timer
+    keepassxc         # Password manager. TODO: Needs to be configured
+    baobab            # Drive space tree-like view
+    restic            # Backup the borgBackup folder at drive/backup-brian-Lenovo-Yoga-C940-14IIL-LinuxMintCinamon
+    obsidian          # Unfree package. Can only use for non-profit.
+    nodejs_23         # Javascript interpreter
+    pgadmin4          # Postgresql for database connection
+    haruna            # Video player
+    light             # My i3 config uses this
+    elixir            # I want to try out elixer to develop concurrent applications
+    gh                # github commands
+    libllvm           # Playing around with llvm IR
+    pet               # Snippet manager, not exactly sure what that means
+    qutebrowser       # browser with loads of shortcuts
+    lxappearance      # Icons for i3 and dark mode maybe?
+    ghostty           # Terminal emulator
+    audacious         # For playing music
+    nil               # Nix langauge server
+    rustc cargo       # Rust stuff
+    zig zls           # Zig stuff
     i3status-rust
-    firefox-devedition
-    firefox
+    firefox firefox-devedition
     nemo
     xclip
     xed-editor
     gnome-system-monitor
-    # Python with scientific libraries
-    (
+    ( # Python with scientific libraries
       python3.withPackages (p: with p;[
         numpy matplotlib sympy pandas # Me want very much. Used often.
         jupyter ipython ipykernel # Jupiter and dependencies
@@ -136,15 +136,19 @@ in
 
       # Customize build for maximum performance.
       buildFlags = [
+        "notui=1"
         "REPLXX=1"
-      ]; # 10000 +´∘↕•_timed 1000000 #  0.000192240469
-
+        "o3n"
+        "REPLXX=1"
+        "target_from_cc=1"
+      ];
       # Set up local copies of required submodules.
       preBuild = ''
         mkdir -p build/{singeliLocal,bytecodeLocal,replxxLocal}
         cp -r build/singeliSubmodule/* build/singeliLocal/
         cp -r build/bytecodeSubmodule/* build/bytecodeLocal/
         cp -r build/replxxSubmodule/* build/replxxLocal/
+        unset NIX_ENFORCE_NO_NATIVE
       '';
 
       postPatch = ''
@@ -189,10 +193,10 @@ in
       NRO = "sudo nixos-rebuild switch --flake ~/nixos/#brians-laptop";
       fix-nix-hash = "nix hash convert --hash-algo sha256 --to nix32 $1"; # give in format sha256-...=
       RN = "sudo nixos-rebuild switch --flake ~/nixos/#brians-laptop && HR";
-      RH = "home-manager switch --flake ~/nixos/#brian";
+      RH = "${home-manager}/bin/home-manager switch --flake ~/nixos/#brian";
       NR = "sudo nixos-rebuild switch --flake ~/nixos/#brians-laptop && HR";
-      HR = "home-manager switch --flake ~/nixos/#brian";
-      P = "pwd | xclip -selection clipboard";
+      HR = "${home-manager}/bin/home-manager switch --flake ~/nixos/#brian";
+      P = "pwd | ${pkgs.xclip}/bin/xclip -selection clipboard";
     };
   };
 

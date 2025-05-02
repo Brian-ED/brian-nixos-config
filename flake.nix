@@ -4,6 +4,8 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
+    nixos-conf-editor.url = "github:snowfallorg/nixos-conf-editor";
+
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 #    sops-nix.url = "github:Mic92/sops-nix";
@@ -32,19 +34,19 @@
 
   };
 
-  outputs = i: let
+  outputs = inputs: let
     system = "x86_64-linux";
-    pkgs = i.nixpkgs.legacyPackages.${system};
+    pkgs = inputs.nixpkgs.legacyPackages.${system};
   in {
-    homeConfigurations.brian = i.home-manager.lib.homeManagerConfiguration {
+    homeConfigurations.brian = inputs.home-manager.lib.homeManagerConfiguration {
       inherit pkgs;
       modules = [ ./home.nix ];
-      extraSpecialArgs = i;
+      extraSpecialArgs = inputs;
     };
 
-    nixosConfigurations.brians-laptop = i.nixpkgs.lib.nixosSystem {
+    nixosConfigurations.brians-laptop = inputs.nixpkgs.lib.nixosSystem {
       inherit system;
-      specialArgs = {inputs = i;};
+      specialArgs = {inherit inputs;};
       modules = [
         ./hardware-configuration.nix # Include the results of the hardware scan
         ./configuration.nix
