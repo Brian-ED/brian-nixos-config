@@ -46,7 +46,7 @@ in
     libllvm           # Playing around with llvm IR
     pet               # Snippet manager, not exactly sure what that means
     qutebrowser       # browser with loads of shortcuts
-    lxappearance      # Icons for i3 and dark mode maybe?
+    lxappearance      # GTK theme switcher, useful for i3
     ghostty           # Terminal emulator
     audacious         # For playing music
     nil               # Nix langauge server
@@ -58,6 +58,11 @@ in
     xclip
     xed-editor
     gnome-system-monitor
+    pavucontrol        # Audio interface
+    brightnessctl      # For i3 brightness without sudo
+    llvmPackages_19.clangWithLibcAndBasicRtAndLibcxx # Will remove later, temporary till I fix permission issues with using zig for building with make.
+    arc-theme          # Dark theme related: Arc-Dark GTK theme
+    gnome-themes-extra # Dark theme related: Includes Adwaita-dark
     ( # Python with scientific libraries
       python3.withPackages (p: with p;[
         numpy matplotlib sympy pandas # Me want very much. Used often.
@@ -132,14 +137,13 @@ in
       buildInputs       = [ pkgs.libffi ];
 
       # Set the system C compiler
-      makeFlags = [ "CC=${pkgs.stdenv.cc.targetPrefix}cc" ];
+      makeFlags = [ "CC=${llvmPackages_19.clangWithLibcAndBasicRtAndLibcxx}/bin/clang" ];
 
       # Customize build for maximum performance.
       buildFlags = [
         "notui=1"
         "REPLXX=1"
         "o3n"
-        "REPLXX=1"
         "target_from_cc=1"
       ];
       # Set up local copies of required submodules.
@@ -184,11 +188,66 @@ in
     EDITOR = "codium";
   };
 
+  gtk = {
+    enable = true;
+    theme = {
+      name = "Arc-Dark";
+      package = pkgs.arc-theme;
+    };
+
+    iconTheme = {
+      name = "Papirus-Dark";  # Optional: use a matching dark icon set
+      package = pkgs.papirus-icon-theme;
+    };
+
+    cursorTheme = {
+      name = "Adwaita";       # Optional: default cursor
+      package = pkgs.gnome-themes-extra;
+    };
+  };
+  # Dark mode for apps that respect XSettings
+  xdg = {
+    enable = true;
+    mime.enable = true;
+  };
+  services.xsettingsd = {
+    enable = true;
+    settings = {
+      "Net/ThemeName" = "Arc-Dark";
+      "Net/IconThemeName" = "Papirus-Dark";
+      "Gtk/CursorThemeName" = "Adwaita";
+    };
+  };
+
+
+  # gtk-theme-name="Sierra-compact-light"
+  # gtk-icon-theme-name="ePapirus"
+  # gtk-font-name="Ubuntu 11"
+  # gtk-cursor-theme-name="Deepin"
+  # gtk-cursor-theme-size=0
+  # gtk-toolbar-style=GTK_TOOLBAR_BOTH
+  # gtk-toolbar-icon-size=GTK_ICON_SIZE_LARGE_TOOLBAR
+  # gtk-button-images=1
+  # gtk-menu-images=1
+  # gtk-enable-event-sounds=1
+  # gtk-enable-input-feedback-sounds=1
+  # gtk-xft-antialias=1
+  # gtk-xft-hinting=1
+  # gtk-xft-hintstyle="hintfull"
+  # gtk-xft-rgba="rgb"
+  # gtk-modules="gail:atk-bridge"
+
+  # gtk-cursor-theme-name = "Adwaita"
+  # gtk-icon-theme-name = "Papirus-Dark"
+  # gtk-theme-name = "Arc-Dark"
+
+
+
+
   programs.bash = {
     enable = true;
     shellAliases = {
       code = "codium";
-      clang = "${pkgs.zig}/bin/zig cc";
       nix-watch = "${nix-watch}/bin/nix-watch";
       NRO = "sudo nixos-rebuild switch --flake ~/nixos/#brians-laptop";
       fix-nix-hash = "nix hash convert --hash-algo sha256 --to nix32 $1"; # give in format sha256-...=

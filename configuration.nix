@@ -111,8 +111,7 @@
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
-      # If you want to use JACK applications, uncomment this
-      #jack.enable = true;
+      jack.enable = false; # Used for audio work, which I don't do.
 
       # use the example session manager (no others are packaged yet so this is enabled by default,
       # no need to redefine it in your config for now)
@@ -156,28 +155,24 @@
     };
   };
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.brian = {
+  users.users.brian = { # Define a user account. Don't forget to set a password with ‘passwd’.
     isNormalUser = true;
     description = "Brian Ellingsgaard";
-    extraGroups = [ "networkmanager" "wheel"];
+    extraGroups = [ "networkmanager" "wheel" "video"]; # Video added so that i3 can change brightness
   };
 
   # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.allowUnfree = true; # I use this for Obsidian
 
   security = {
     rtkit.enable = true; # Enable sound with pipewire.
-
-    # Set system schedular's priority for @users. Apparently improved swayWM perf, found it in their docs.
-    pam.loginLimits = [ { domain = "@users"; item = "rtprio"; type = "-"; value = 1; } ];
+    pam.loginLimits = [ { domain = "@users"; item = "rtprio"; type = "-"; value = 1; } ]; # Set system schedular's priority for @users. Apparently improved swayWM perf, found it in their docs.
   };
 
   hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [
       intel-media-driver # For Broadwell (2014) or newer processors. LIBVA_DRIVER_NAME=iHD
-      # intel-vaapi-driver # For older processors. LIBVA_DRIVER_NAME=i965
     ];
   };
 
