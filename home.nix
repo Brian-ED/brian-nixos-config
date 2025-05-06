@@ -63,6 +63,7 @@ in
     llvmPackages_19.clangWithLibcAndBasicRtAndLibcxx # Will remove later, temporary till I fix permission issues with using zig for building with make.
     arc-theme          # Dark theme related: Arc-Dark GTK theme
     gnome-themes-extra # Dark theme related: Includes Adwaita-dark
+    simplescreenrecorder
     ( # Python with scientific libraries
       python3.withPackages (p: with p;[
         numpy matplotlib sympy pandas # Me want very much. Used often.
@@ -256,6 +257,7 @@ in
       NR = "sudo nixos-rebuild switch --flake ~/nixos/#brians-laptop && HR";
       HR = "${home-manager}/bin/home-manager switch --flake ~/nixos/#brian";
       P = "pwd | ${pkgs.xclip}/bin/xclip -selection clipboard";
+      ".." = "cd .."; # Hilariously this works
     };
   };
 
