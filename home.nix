@@ -26,7 +26,7 @@ in
 
   # Install Nix packages
   home.packages = with pkgs; [
-    nixos-conf-editor # Editor for this configuration
+#   nixos-conf-editor # Editor for this configuration
     home-manager      # Have home manager manage itself.
     xorg.xkbcomp      # Temporary for messing with my keyboard settings
     xorg.xev          # I use this for testing button presses on i3
@@ -37,7 +37,7 @@ in
     baobab            # Drive space tree-like view
     restic            # Backup the borgBackup folder at drive/backup-brian-Lenovo-Yoga-C940-14IIL-LinuxMintCinamon
     obsidian          # Unfree package. Can only use for non-profit.
-    nodejs_23         # Javascript interpreter
+    nodejs            # Javascript interpreter
     pgadmin4          # Postgresql for database connection
     haruna            # Video player
     light             # My i3 config uses this
