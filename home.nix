@@ -53,6 +53,10 @@ in
     rustc cargo       # Rust stuff
     zig zls           # Zig stuff
     i3status-rust
+    raylib-games
+    xwayland-satellite
+    xwayland-run
+    xorg.xeyes
     firefox firefox-devedition
     nemo
     xclip

@@ -79,7 +79,9 @@
     # Enable touchpad support (enabled default in most desktopManager).
     libinput.enable = true;
 
-    displayManager.defaultSession = "none+i3";
+    displayManager.defaultSession = "plasma";
+
+#    displayManager.defaultSession = "none+i3";
     xserver = {
       videoDrivers = [ "displaylink" "modesetting" "fbdev" ];
 
@@ -106,6 +108,9 @@
     # Enable CUPS to print documents.
     printing.enable = true;
 
+    displayManager.sddm.enable = true;
+    desktopManager.plasma6.enable = true;
+
     pipewire = {
       enable = true;
       alsa.enable = true;
@@ -119,6 +124,12 @@
     };
   };
   environment = {
+
+    plasma6.excludePackages = with pkgs.kdePackages; [
+      plasma-browser-integration
+      konsole
+      oxygen
+    ];
     # List packages installed in system profile. To search, run:
     # $ nix search wget
     systemPackages = [];
@@ -139,6 +150,7 @@
 
   programs = {
     dconf.enable = true; # For i3
+    xwayland.enable = true; # Ensure XWayland is available
 
     # Some programs need SUID wrappers, can be configured further or are started in user sessions.
     mtr.enable = true;
