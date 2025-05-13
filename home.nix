@@ -26,6 +26,7 @@ in
 
   # Install Nix packages
   home.packages = with pkgs; [
+    rustdesk          # Remote control. Useful for helping family.
 #   nixos-conf-editor # Editor for this configuration
     home-manager      # Have home manager manage itself.
     xorg.xkbcomp      # Temporary for messing with my keyboard settings
