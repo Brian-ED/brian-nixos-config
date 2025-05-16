@@ -5,6 +5,11 @@ let
   home-manager = i.home-manager.packages.${pkgs.system}.home-manager;
   nixos-conf-editor = i.nixos-conf-editor.packages.${pkgs.system}.nixos-conf-editor;
   username = "brian";
+  sessionVariables = {
+    EDITOR = "codium";
+    BROWSER = "qutebrowser";
+    TERMINAL = "alacritty";
+  };
 in
 {
   home.username = username;
@@ -26,6 +31,9 @@ in
 
   # Install Nix packages
   home.packages = with pkgs; [
+    alacritty         # My chosen terminal. Loads quickly, and doesn't have a inbuilt-windowmanager to complicate it.
+    xdotool           # Useful for automating tasks.
+    rofi              # Used by i3 for fancy UI.
     rustdesk          # Remote control. Useful for helping family.
 #   nixos-conf-editor # Editor for this configuration
     home-manager      # Have home manager manage itself.
@@ -48,13 +56,12 @@ in
     pet               # Snippet manager, not exactly sure what that means
     qutebrowser       # browser with loads of shortcuts
     lxappearance      # GTK theme switcher, useful for i3
-    ghostty           # Terminal emulator
     audacious         # For playing music
     nil               # Nix langauge server
     rustc cargo       # Rust stuff
     zig zls           # Zig stuff
     i3status-rust
-    firefox firefox-devedition
+    firefox
     nemo
     xclip
     xed-editor
@@ -183,13 +190,6 @@ in
   home.file = {
   };
 
-  # Home Manager can also manage your environment variables through
-  # 'home.sessionVariables'. These will be explicitly sourced when using a
-  # shell provided by Home Manager.
-  home.sessionVariables = {
-    EDITOR = "codium";
-  };
-
   gtk = {
     enable = true;
     theme = {
@@ -247,6 +247,7 @@ in
 
 
   programs.bash = {
+    initExtra = pkgs.lib.concatStrings (pkgs.lib.mapAttrsToList (n: v: "export ${n}=\"${v}\"\n") sessionVariables); # I couldn't get home.sessionVariables working. Found this solution here: https://github.com/nix-community/home-manager/issues/1011
     enable = true;
     shellAliases = {
       code = "codium";
@@ -262,7 +263,6 @@ in
     };
   };
 
-  # git
   programs.git = {
     enable = true;
     userName = "Brian-ED";
