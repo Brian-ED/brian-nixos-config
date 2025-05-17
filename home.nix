@@ -5,6 +5,7 @@ let
   home-manager = i.home-manager.packages.${pkgs.system}.home-manager;
   nixos-conf-editor = i.nixos-conf-editor.packages.${pkgs.system}.nixos-conf-editor;
   username = "brian";
+  homrDir = "/home/${username}";
   sessionVariables = {
     EDITOR = "codium";
     BROWSER = "qutebrowser";
@@ -12,8 +13,34 @@ let
   };
 in
 {
+  imports = [ i.nvf.homeManagerModules.default ];
+  programs.nvf = {
+    enable = true;
+    # your settings need to go into the settings attribute set
+    # most settings are documented in the appendix
+    settings = {
+      vim = {
+        viAlias = false;
+        vimAlias = true;
+        lsp = {
+          enable = true;
+        };
+        languages = {
+          rust    .enable = true;
+          nix     .enable = true;
+          clang   .enable = true; # C/C++
+          ts      .enable = true; # JS/TS
+          python  .enable = true;
+          zig     .enable = true;
+          markdown.enable = true;
+          html    .enable = true;
+        };
+      };
+    };
+  };
+
   home.username = username;
-  home.homeDirectory = "/home/${username}";
+  home.homeDirectory = homrDir;
   home.stateVersion = "24.11"; # You should not change this value, even if you update Home Manager
   home.keyboard = null;
 
@@ -188,7 +215,17 @@ in
 
   # manages dotfiles
   home.file = {
+    "${homrDir}/.config/qutebrowser/config.py" = {
+      enable = true;
+      text = pkgs.lib.concatStringsSep "\n" [
+        ''config.set("colors.webpage.darkmode.enabled", True)''
+        ''config.set('content.cookies.accept', 'no-3rdparty', 'chrome-devtools://*')''
+        ''config.load_autoconfig(False)'' # Qutebrowser errors if you don't enable this when auto-generating a config, since otherwise it's able to edit it with GUI
+      ];
+    };
   };
+
+  home = {inherit sessionVariables;};
 
   gtk = {
     enable = true;
