@@ -94,6 +94,7 @@
 
       windowManager.i3.enable = true;
       windowManager.i3.configFile = if false then "${brian-i3-config}/config" else "/home/brian/brian-i3-config/config";
+      windowManager.i3.extraPackages = [];
 
       # Configure keymap in X11
       xkb = {
@@ -138,6 +139,7 @@
   };
 
   programs = {
+    i3lock.enable = true;
     dconf.enable = true; # For i3
 
     # Some programs need SUID wrappers, can be configured further or are started in user sessions.

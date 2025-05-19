@@ -5,7 +5,7 @@ let
   home-manager = i.home-manager.packages.${pkgs.system}.home-manager;
   nixos-conf-editor = i.nixos-conf-editor.packages.${pkgs.system}.nixos-conf-editor;
   username = "brian";
-  homrDir = "/home/${username}";
+  homeDir = "/home/${username}";
   sessionVariables = {
     EDITOR = "codium";
     BROWSER = "qutebrowser";
@@ -40,7 +40,7 @@ in
   };
 
   home.username = username;
-  home.homeDirectory = homrDir;
+  home.homeDirectory = homeDir;
   home.stateVersion = "24.11"; # You should not change this value, even if you update Home Manager
   home.keyboard = null;
 
@@ -58,6 +58,7 @@ in
 
   # Install Nix packages
   home.packages = with pkgs; [
+    xcolor            # color pick shortcut for i3
     alacritty         # My chosen terminal. Loads quickly, and doesn't have a inbuilt-windowmanager to complicate it.
     xdotool           # Useful for automating tasks.
     rofi              # Used by i3 for fancy UI.
@@ -87,18 +88,19 @@ in
     nil               # Nix langauge server
     rustc cargo       # Rust stuff
     zig zls           # Zig stuff
-    i3status-rust
     firefox
     nemo
     xclip
+    unzip
     xed-editor
     gnome-system-monitor
     pavucontrol        # Audio interface
     brightnessctl      # For i3 brightness without sudo
-    llvmPackages_19.clangWithLibcAndBasicRtAndLibcxx # Will remove later, temporary till I fix permission issues with using zig for building with make.
+    llvmPackages_19.clangWithLibcAndBasicRtAndLibcxx llvmPackages_19.clang-manpages # Will remove later, temporary till I fix permission issues with using zig for building with make.
     arc-theme          # Dark theme related: Arc-Dark GTK theme
     gnome-themes-extra # Dark theme related: Includes Adwaita-dark
-    simplescreenrecorder
+    simplescreenrecorder # My favorite recording software
+    (import ./cbqn.nix pkgs) bqn386 # BQN interpreter and font
     ( # Python with scientific libraries
       python3.withPackages (p: with p;[
         numpy matplotlib sympy pandas # Me want very much. Used often.
@@ -129,7 +131,6 @@ in
 #       github.copilot
 #       github.copilot-chat
         hediet.vscode-drawio
-        ms-vscode.cpptools
       ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace (map (x:
         let I=builtins.elemAt; in
         { name=I x 0;                   publisher=I x 1; version=I x 2; sha256=I x 3; } ) [
@@ -155,67 +156,26 @@ in
         [ "i3"                          "dcasella"       "latest" "0z7qj6bwch1cxr6pab2i3yqk5id8k14mjlvl6i9f0cmdsxqkmci5" ]
       ]);
     })
-    (pkgs.stdenv.mkDerivation {
-      pname = "cbqn";
-      version = "rolling";
-      src = pkgs.fetchFromGitHub {
-        owner = "dzaima";
-        repo = "CBQN";
-        rev = "09642a354f124630996a6ae4e8442089625cd907";
-        hash = "sha256-M1dEB4o+nXXzq/96/PvBKL3sLH84y1XYrv3yknGzhmw=";
-        fetchSubmodules = true;
-      };
-
-      dontConfigure = true;
-      preferLocalBuild = true;
-
-      nativeBuildInputs = [ pkgs.pkg-config ];
-      buildInputs       = [ pkgs.libffi ];
-
-      # Set the system C compiler
-      makeFlags = [ "CC=${llvmPackages_19.clangWithLibcAndBasicRtAndLibcxx}/bin/clang" ];
-
-      # Customize build for maximum performance.
-      buildFlags = [
-        "notui=1"
-        "REPLXX=1"
-        "o3n"
-        "target_from_cc=1"
-      ];
-      # Set up local copies of required submodules.
-      preBuild = ''
-        mkdir -p build/{singeliLocal,bytecodeLocal,replxxLocal}
-        cp -r build/singeliSubmodule/* build/singeliLocal/
-        cp -r build/bytecodeSubmodule/* build/bytecodeLocal/
-        cp -r build/replxxSubmodule/* build/replxxLocal/
-        unset NIX_ENFORCE_NO_NATIVE
-      '';
-
-      postPatch = ''
-        # Remove the SHELL definition from the makefile and fix shebangs.
-        sed -i '/SHELL =/d' makefile
-        patchShebangs build/build
-      '';
-
-      installPhase = ''
-        mkdir -p $out/bin
-        cp BQN $out/bin/
-        ln -sf BQN $out/bin/bqn
-        ln -sf BQN $out/bin/cbqn
-      '';
-
-      meta = {
-        description = "Optimized CBQN interpreter with REPLXX support for AMD Ryzen";
-        homepage    = "https://github.com/dzaima/CBQN";
-        license     = pkgs.lib.licenses.gpl3Only;
-        platforms   = pkgs.lib.platforms.linux;
-      };
-    })
   ];
 
   # manages dotfiles
   home.file = {
-    "${homrDir}/.config/qutebrowser/config.py" = {
+    "${homeDir}/.config/alacritty/alacritty.toml" = {
+      enable = true;
+      text = pkgs.lib.concatStringsSep "\n" [
+        ''font.normal = { family = "BQN386 Unicode", style = "Regular" }'' # Requires bqn386 package
+        ''window.decorations = "None"'' # No difference on i3. Disabled since probably less for alacrety to do.
+        ''scrolling.history = 100000'' # 100,000 is the absolute max according to docs.
+        ''colors.cursor = { text = "CellBackground", cursor = "#7d7d7d" }''
+        "[general]"
+        ''live_config_reload = true''
+        ''ipc_socket = false'' # Disable using "alacritty msg" to tell alacritty to do stuff like "alacritty msg config" to update config
+        "[colors.primary]" ''foreground = "#d8d8d8"'' ''background = "#000000"''
+        ''dim_foreground = "None"'' # If this is set to None, the color is automatically calculated based on the foreground color. It isn't None by default.
+        ''bright_foreground = "None"'' # This color is only used when draw_bold_text_with_bright_colors is true. If this is not set, the normal foreground will be used. It is set by default, but to be consistent with dim_background I'll make an exception and not remove this.
+      ];
+    };
+    "${homeDir}/.config/qutebrowser/config.py" = {
       enable = true;
       text = pkgs.lib.concatStringsSep "\n" [
         ''config.set("colors.webpage.darkmode.enabled", True)''
@@ -257,6 +217,82 @@ in
       "Gtk/CursorThemeName" = "Adwaita";
     };
   };
+
+  programs.i3status-rust = {
+    enable = true;
+    bars.default = {
+      blocks = [
+        {
+          block = "disk_space";
+          format = "$available⥊";
+          alert = 10.0;
+          info_type = "available";# free" and "used
+          interval = 60;
+          path = "/";
+          warning = 20.0;
+        }
+        {
+          block = "memory";
+          format = "$mem_total_used.eng(w:2)↑";
+        }
+        {
+          block = "battery";
+          format = "$percentage⌹"; # Format while non-charging and non-full
+          full_format = "$percentage⌺"; # ⍠⎕
+          charging_format = "$percentage⌸";
+          interval = 100;
+        }
+        {
+          format = " $icon $utilization ";
+          block = "cpu";
+          interval = 1;
+        }
+        {
+          block = "load";
+          format = " $icon $1m ";
+          interval = 1;
+        }
+        {
+          block = "sound";
+          format = " 🔊 {$volume.eng(w:2) |}";
+        }
+        {
+          block = "time";
+          format = " $timestamp.datetime(f:'%a %d/%m %R') ";
+          interval = 60;
+        }
+        {
+          block = "pomodoro";
+        }
+      ];
+      settings = {
+        theme =  {
+          theme = "solarized-dark";
+          overrides = {
+            idle_bg = "#123456";
+            idle_fg = "#abcdef";
+          };
+        };
+      };
+#      theme = "gruvbox-dark"; # NOT default
+#      icons = "BQN386 Unicode";
+    };
+  };
+
+#tea_timer
+#    Timer
+#temperature
+#    The system temperature
+#time
+#
+#sound
+#    Volume level
+#speedtest
+#
+#rofication
+#    The number of pending notifications in rofication-daemon
+
+
 
 
   # gtk-theme-name="Sierra-compact-light"
