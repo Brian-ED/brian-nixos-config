@@ -143,16 +143,16 @@ in
         [ "suteppu"                     "Itsakaseru"     "latest" "1z0zkznwwm0z1vyq2wsw9rf1kg8pfpb3rl7glx0zp3aq8sxvnfsf" ]
         [ "vscode-sort"                 "henriiik"       "latest" "0sam2qfa596dcbabx3alrwsgm56a8wzb65dp45yv172kcaam5yd6" ]
         [ "slint"                       "Slint"          "latest" "1yshm7x6dalg4xw7ykwj736sq0dknnhm8j2wvjxqj5mcp43dxlzh" ]
-        [ "remote-explorer"             "ms-vscode"      "latest" "02lnijwl92lq3rhv4f0kbp1bjfniipigih1myl5xmrwsp85n88xl" ]
+        [ "remote-explorer"             "ms-vscode"      "latest" "0nzbra88cjf87vqjry3fczjjqs995fzp5m43wqbdidlw83wxpqp6" ]
         [ "ols"                         "DanielGavin"    "latest" "0rl6mjkabgbwc0vnm96ax1jhjh5rrky0i1w40fhs1zqyfd83mrsx" ]
         [ "vscode-lowercase"            "ruiquelhas"     "latest" "03kwbnc25rfzsr7lzgkycwxnifv4nx04rfcvmfcqqhacx74g14gs" ]
         [ "vsliveshare"                 "MS-vsliveshare" "latest" "0rhwjar2c6bih1c5w4w8gdgpc6f18669gzycag5w9s35bv6bvsr8" ] # Live Share
         [ "inline-html-indent"          "vulkd"          "latest" "0mh7kpis821088g5qmzay76zrgvgbikl9v2jdjs3mdfkbh2rfl6s" ]
-        [ "vuerd-vscode"                "dineug"         "latest" "1agcayiz8p7n05x6wm817gdj3fwmxkdxbsf5alx4jbp1msi6qwwh" ] # ERD editor
+        [ "vuerd-vscode"                "dineug"         "latest" "1n74fwpp0qpqjv42ni05j2h8c7dcf5brramm8s2b7a0q8m5fjk6z" ] # ERD editor
 #       [ "chatgpt-copilot"             "feiskyer"       "latest" "0766vq07gjxgh4xpflzmrcx55i6b9w4hk5zg8yirvgfjscv5gvxv" ]
         [ "vscode-apl-language-client"  "OptimaSystems"  "latest" "050nn7f6gfzskq1yavqdw77rgl1lxs3p8dqkzrmmliqh5kqh2gr8" ]
         [ "vscode-apl-language"         "OptimaSystems"  "latest" "003n637vskbi4wypm8qwdy4fa9skp19w6kli1bgc162gzcbswhia" ]
-        [ "vscode-autohotkey-plus-plus" "mark-wiemer"    "latest" "10sf0qf0sqc5ifjf9vg2fyh7akz7swrilz6aifvyswzglglmca19" ]
+        [ "vscode-autohotkey-plus-plus" "mark-wiemer"    "latest" "1i7gqxsgyf18165m2j6wb0ps1h6iniy89jhvhy89hnzm2i95a0ck" ]
         [ "i3"                          "dcasella"       "latest" "0z7qj6bwch1cxr6pab2i3yqk5id8k14mjlvl6i9f0cmdsxqkmci5" ]
       ]);
     })
