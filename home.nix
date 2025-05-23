@@ -217,83 +217,67 @@ in
       "Gtk/CursorThemeName" = "Adwaita";
     };
   };
-
-  programs.i3status-rust = {
-    enable = true;
-    bars.default = {
-      blocks = [
-        {
-          block = "disk_space";
-          format = "$available⥊";
-          alert = 10.0;
-          info_type = "available";# free" and "used
-          interval = 60;
-          path = "/";
-          warning = 20.0;
-        }
-        {
-          block = "memory";
-          format = "$mem_total_used.eng(w:2)↑";
-        }
-        {
-          block = "battery";
-          format = "$percentage⌹"; # Format while non-charging and non-full
-          full_format = "$percentage⌺"; # ⍠⎕
-          charging_format = "$percentage⌸";
-          interval = 100;
-        }
-        {
-          format = " $icon $utilization ";
-          block = "cpu";
-          interval = 1;
-        }
-        {
-          block = "load";
-          format = " $icon $1m ";
-          interval = 1;
-        }
-        {
-          block = "sound";
-          format = " 🔊 {$volume.eng(w:2) |}";
-        }
-        {
-          block = "time";
-          format = " $timestamp.datetime(f:'%a %d/%m %R') ";
-          interval = 60;
-        }
-        {
-          block = "pomodoro";
-        }
-      ];
-      settings = {
-        theme =  {
-          theme = "solarized-dark";
-          overrides = {
-            idle_bg = "#123456";
-            idle_fg = "#abcdef";
-          };
-        };
-      };
-#      theme = "gruvbox-dark"; # NOT default
-#      icons = "BQN386 Unicode";
+  programs.i3status = {
+    enableDefault = false; # Whether or not to enable the default configuration.   boolean
+    enable = true; # Whether to enable i3status.  boolean
+    general = {
+      colors = true;
+      interval = 5;
     };
+    modules = let
+      Indices = l: pkgs.lib.range 0 (builtins.length l);
+      format = l: builtins.listToAttrs (
+        pkgs.lib.zipListsWith
+          (nameSetting: i: {
+            name = builtins.elemAt nameSetting 0;
+            value = {
+              position = (builtins.length l) - i; # This len-index is just flipping the list, so top down is right to left on i3status.
+              settings = builtins.elemAt nameSetting 1;
+            };
+          })
+          l (Indices l));
+    in format [ # Modules to add to i3status {file}`config` file. See {manpage}`i3status(1)` for options.   attribute set of (submodule)
+      ["tztime local" {
+        format = "%Y-%m-%d %H:%M:%S";
+      }]
+      ["volume master" {
+        format = "♪ %volume";
+        format_muted = "♪ %volume"; # Turns yellow, so no need to have a different format
+        device = "pulse:alsa_output.pci-0000_00_1f.3-platform-skl_hda_dsp_generic.HiFi__Speaker__sink"; # Find device name by finding ID of main sink device via `wpctl status` on the * row, then `wpctl inspect TheIDYouFound` and find "node.name = ...", and "..."" is your device name that you put after "pulse:"" here.
+      }]
+      ["battery all" {
+        format = "%status %percentage %remaining";
+      }]
+      ["load" {
+        format = "%5min";
+#       format = "%1min";  # Default
+      }]
+      ["memory" {
+        format = "%used";
+#       format = "%used | %available"; # Default
+        threshold_degraded = "10%";
+#       threshold_degraded = "1G"; # Default
+        format_degraded = "MEMORY: %free";
+#       format_degraded = "MEMORY < %available"; # Default
+      }]
+      ["disk /" {
+      }]
+      ["read_file uptime" {
+        path = "/proc/uptime";
+      }]
+      ["ipv6" {
+        format_down = "";
+      }]
+      ["wireless _first_" {
+        format_up = "W:%quality %ip";
+        format_down = "";
+      }]
+      ["ethernet _first_" {
+        format_up = "E: %ip (%speed)";
+        format_down = "";
+      }]
+    ];
   };
-
-#tea_timer
-#    Timer
-#temperature
-#    The system temperature
-#time
-#
-#sound
-#    Volume level
-#speedtest
-#
-#rofication
-#    The number of pending notifications in rofication-daemon
-
-
-
 
   # gtk-theme-name="Sierra-compact-light"
   # gtk-icon-theme-name="ePapirus"
@@ -333,6 +317,33 @@ in
       HR = "${home-manager}/bin/home-manager switch --flake ~/nixos/#brian";
       P = "pwd | ${pkgs.xclip}/bin/xclip -selection clipboard";
       ".." = "cd .."; # Hilariously this works
+    };
+  };
+
+  programs.thunderbird = {
+    enable = true;
+    profiles = {
+      "Brian Ellingsgaard" = {
+        isDefault = true;
+        search = {
+          default = "ddg";
+          force = true;
+          order = ["ddg" "google"];
+          privateDefault = "ddg";
+        };
+        settings = {};
+        # Custom Thunderbird user chrome CSS.
+        userChrome = ''
+        /* Hide tab bar in Thunderbird */
+          #tabs-toolbar {
+            visibility: collapse !important;
+          }
+        '';
+        userContent = ''
+          /* Hide scrollbar on Thunderbird pages */
+          *{scrollbar-width:none !important}
+        '';
+      };
     };
   };
 
