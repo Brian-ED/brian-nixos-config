@@ -81,6 +81,8 @@
 
     displayManager.defaultSession = "none+i3";
     xserver = {
+      excludePackages = [ pkgs.xterm ];
+
       videoDrivers = [ "displaylink" "modesetting" "fbdev" ];
 
       enable = true; # Enable the X11 windowing system.
