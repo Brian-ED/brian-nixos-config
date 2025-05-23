@@ -148,13 +148,6 @@
       enable = true;
       enableSSHSupport = true;
     };
-
-    thunderbird = {
-      enable = true;
-      policies = {
-        DefaultDownloadDirectory = "${config.users.users.brian.home}/Downloads";
-      };
-    };
   };
 
   users.users.brian = { # Define a user account. Don't forget to set a password with ‘passwd’.
