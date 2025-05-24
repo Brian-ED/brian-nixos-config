@@ -63,6 +63,7 @@ in
     xdotool           # Useful for automating tasks.
     rofi              # Used by i3 for fancy UI.
     rustdesk          # Remote control. Useful for helping family.
+    fd
 #   nixos-conf-editor # Editor for this configuration
     home-manager      # Have home manager manage itself.
     xorg.xkbcomp      # Temporary for messing with my keyboard settings
@@ -317,6 +318,7 @@ in
       HR = "${home-manager}/bin/home-manager switch --flake ~/nixos/#brian";
       P = "pwd | ${pkgs.xclip}/bin/xclip -selection clipboard";
       ".." = "cd .."; # Hilariously this works
+      find = "${pkgs.fd}/bin/fd $@";
     };
   };
 
