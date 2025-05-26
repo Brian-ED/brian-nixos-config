@@ -319,6 +319,7 @@ in
       P = "pwd | ${pkgs.xclip}/bin/xclip -selection clipboard";
       ".." = "cd .."; # Hilariously this works
       find = "${pkgs.fd}/bin/fd $@";
+      net = "nmcli dev wifi && nmcli dev wifi connect --ask"; # Find a network to connect to
     };
   };
 
