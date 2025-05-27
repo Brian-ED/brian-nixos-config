@@ -50,10 +50,31 @@ in
 #    '';
 #  };
 
+  home.keyboard = { # Keyboard configuration. Set to `null` to disable Home Manager keyboard management.
+    layout  = "fo,bqn";  # Keyboard layout. If `null`, then the system configuration will be used. This defaults to `null` for state version ≥ 19.09 and `"us"` otherwise.
+    model   = "";  # Keyboard model.
+    options = [ "grp:lswitch" ];  # X keyboard options; layout switching goes here.
+    variant =  ""; # X keyboard variant. If `null`, then the system configuration will be used. This defaults to `null` for state version ≥ 19.09 and `""` otherwise.
+  };
+
+  home.language = { #  Language configuration. All options are null or string
+    address     = "da_DK.UTF-8"; # The language to use for addresses.
+    base        = "da_DK.UTF-8"; # The language to use unless overridden by a more specific option.
+    collate     = "da_DK.UTF-8"; # The language to use for collation (alphabetical ordering).
+    ctype       = "da_DK.UTF-8"; # Character classification category.
+    measurement = "da_DK.UTF-8"; # The language to use for measurement values.
+    messages    = "da_DK.UTF-8"; # The language to use for messages, application UI languages, etc.
+    monetary    = "da_DK.UTF-8"; # The language to use for formatting currencies and money amounts.
+    name        = "da_DK.UTF-8"; # The language to use for personal names.
+    numeric     = "da_DK.UTF-8"; # The language to use for numerical values.
+    paper       = "da_DK.UTF-8"; # The language to use for paper sizes.
+    telephone   = "da_DK.UTF-8"; # The language to use for telephone numbers.
+    time        = "da_DK.UTF-8"; # The language to use for formatting times.
+  };
+
   home.username = username;
   home.homeDirectory = homeDir;
   home.stateVersion = "24.11"; # You should not change this value, even if you update Home Manager
-  home.keyboard = null;
 
   nixpkgs.config.allowUnfree = true;
 
