@@ -1,5 +1,5 @@
 # TODO get home manager to manage files ~/.gtkrc-2.0
-{ pkgs, ... }@i:
+{ pkgs, lib, ... }@i:
 let
   nix-watch = i.nix-watch.packages.${pkgs.system}.default;
   home-manager = i.home-manager.packages.${pkgs.system}.home-manager;
@@ -163,7 +163,10 @@ in
   home.file = {
     "${homeDir}/.config/alacritty/alacritty.toml" = {
       enable = true;
-      text = pkgs.lib.concatStringsSep "\n" [
+      # onChange   # Shell commands to run when file has changed between generations. The script will be run *after* the new files have been linked into place. Note, this code is always run when `recursive` is enabled.   strings concatenated with "\n"
+      # recursive  # If the file source is a directory, then this option determines whether the directory should be recursively linked to the target location. This option has no effect if the source is a file. If `false` (the default) then the target will be a symbolic link to the source directory. If `true` then the target will be a directory structure matching the source's but whose leafs are symbolic links to the files of the source directory.   boolean
+      # source     # Path of the source file or directory. If .text is non-null then this option will automatically point to a file containing that text.   path
+      text = lib.concatStringsSep "\n" [
         ''font.normal = { family = "BQN386 Unicode", style = "Regular" }'' # Requires bqn386 package
         ''window.decorations = "None"'' # No difference on i3. Disabled since probably less for alacrety to do.
         ''scrolling.history = 100000'' # 100,000 is the absolute max according to docs.
@@ -178,7 +181,8 @@ in
     };
     "${homeDir}/.config/qutebrowser/config.py" = {
       enable = true;
-      text = pkgs.lib.concatStringsSep "\n" [
+      executable = true;
+      text = lib.concatStringsSep "\n" [
         ''config.set("colors.webpage.darkmode.enabled", True)''
         ''config.set('content.cookies.accept', 'no-3rdparty', 'chrome-devtools://*')''
         ''config.load_autoconfig(False)'' # Qutebrowser errors if you don't enable this when auto-generating a config, since otherwise it's able to edit it with GUI
@@ -226,9 +230,9 @@ in
       interval = 5;
     };
     modules = let
-      Indices = l: pkgs.lib.range 0 (builtins.length l);
+      Indices = l: lib.range 0 (builtins.length l);
       format = l: builtins.listToAttrs (
-        pkgs.lib.zipListsWith
+        lib.zipListsWith
           (nameSetting: i: {
             name = builtins.elemAt nameSetting 0;
             value = {
@@ -305,7 +309,7 @@ in
 
 
   programs.bash = {
-    initExtra = pkgs.lib.concatStrings (pkgs.lib.mapAttrsToList (n: v: "export ${n}=\"${v}\"\n") sessionVariables); # I couldn't get home.sessionVariables working. Found this solution here: https://github.com/nix-community/home-manager/issues/1011
+    initExtra = lib.concatStrings (lib.mapAttrsToList (n: v: "export ${n}=\"${v}\"\n") sessionVariables); # I couldn't get home.sessionVariables working. Found this solution here: https://github.com/nix-community/home-manager/issues/1011
     enable = true;
     shellAliases = {
       code = "codium";
