@@ -39,6 +39,17 @@ in
     };
   };
 
+# TODO: want to setup a list of repositories for my projects and clone then if missing, automatically. Also, warn when a repository is removed from the list but still exists with state (autodelete if no state exists).
+#  home.activation = { # It's complicated, refer to: https://home-manager-options.extranix.com/?query=home.activation&release=release-25.05
+#    makeRepo = lib.hm.dag.entryAfter [ "writeBoundary" "installPackages" "git" ] ''
+#      if [ ! -d ${homeDir}/repo ]; then
+#        run ${pkgs.git}/bin/git clone https://github.com/Brian-ED/brian-nixos-config ${homeDir}/repo
+#        run cd ${homeDir}/repo
+#        run touch ${homeDir}/repo/bla
+#      fi
+#    '';
+#  };
+
   home.username = username;
   home.homeDirectory = homeDir;
   home.stateVersion = "24.11"; # You should not change this value, even if you update Home Manager
