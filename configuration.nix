@@ -28,6 +28,7 @@
     hostName = "brians-laptop"; # Define your hostname.
 
     # wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+    networkmanager.enable = true; # Enable networking
 
     # Configure network proxy if necessary
     # proxy.default = "http://user:password@proxy:port/";
@@ -41,9 +42,6 @@
       allowedUDPPorts = [];
     };
   };
-
-  # Enable networking
-  networking.networkmanager.enable = true;
 
   # Set your time zone.
   time.timeZone = "Europe/Copenhagen";
