@@ -39,16 +39,26 @@ in
     };
   };
 
-# TODO: want to setup a list of repositories for my projects and clone then if missing, automatically. Also, warn when a repository is removed from the list but still exists with state (autodelete if no state exists).
-#  home.activation = { # It's complicated, refer to: https://home-manager-options.extranix.com/?query=home.activation&release=release-25.05
-#    makeRepo = lib.hm.dag.entryAfter [ "writeBoundary" "installPackages" "git" ] ''
-#      if [ ! -d ${homeDir}/repo ]; then
-#        run ${pkgs.git}/bin/git clone https://github.com/Brian-ED/brian-nixos-config ${homeDir}/repo
-#        run cd ${homeDir}/repo
-#        run touch ${homeDir}/repo/bla
-#      fi
-#    '';
-#  };
+  # Sets up repositories for my projects, cloning only if missing, automatically
+  # TODO: warn when a repository is removed from the list but still exists with state (autodelete if no state exists).
+  home.activation = { # It's complicated, refer to: https://home-manager-options.extranix.com/?query=home.activation&release=release-25.05
+    makeRepo = let
+      proj = "${homeDir}/proj";
+    in lib.hm.dag.entryAfter [ "writeBoundary" "installPackages" "git" ] ''
+      if [ ! -d ${proj} ]; then
+        run mkdir ${proj}
+      fi
+      if [ ! -d ${proj}/brian-nixos-config ]; then
+        run ${pkgs.git}/bin/git clone https://github.com/Brian-ED/brian-nixos-config ${proj}/brian-nixos-config
+      fi
+      if [ ! -d ${proj}/brian-i3-config ]; then
+        run ${pkgs.git}/bin/git clone https://github.com/Brian-ED/brian-i3-config ${proj}/brian-i3-config
+      fi
+      if [ ! -d ${homeDir}/.config/i3 ]; then
+        run ln -s ${proj}/brian-i3-config ${homeDir}/.config/i3
+      fi
+    '';
+  };
 
   home.keyboard = { # Keyboard configuration. Set to `null` to disable Home Manager keyboard management.
     layout  = "fo,bqn";  # Keyboard layout. If `null`, then the system configuration will be used. This defaults to `null` for state version ≥ 19.09 and `"us"` otherwise.
@@ -103,7 +113,7 @@ in
 
   # Install Nix packages
   home.packages = with pkgs; [
-    xcolor            # color pick shortcut for i3
+    xcolor            # color-pick shortcut for i3
     alacritty         # My chosen terminal. Loads quickly, and doesn't have a inbuilt-windowmanager to complicate it.
     xdotool           # Useful for automating tasks.
     rofi              # Used by i3 for fancy UI.

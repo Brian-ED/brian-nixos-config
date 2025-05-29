@@ -80,7 +80,7 @@
 
 
       windowManager.i3.enable = true;
-      windowManager.i3.configFile = if false then "${inputs.brian-i3-config}/config" else "/home/brian/brian-i3-config/config";
+      windowManager.i3.configFile = "${inputs.brian-i3-config}/config";
       windowManager.i3.extraPackages = [];
     };
 
