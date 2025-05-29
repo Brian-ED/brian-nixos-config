@@ -151,21 +151,6 @@
     ];
   };
 
-  fileSystems = let
-    options = ["noatime" "nodiratime" "discard"];
-  in {
-    "/mnt/0AD47A53D47A414D" = {
-      device = "/dev/disk/by-uuid/0AD47A53D47A414D";
-      fsType = "ntfs";
-      inherit options;
-    };
-    "/mnt/linux-mint" = {
-      device = "/dev/disk/by-uuid/3cd525e2-0864-4559-a882-5af643a62d00";
-      fsType = "ext4";
-      inherit options;
-    };
-  };
-
   # Cleanup coredumps
   systemd.coredump.extraConfig = "MaxUse=250m";
 

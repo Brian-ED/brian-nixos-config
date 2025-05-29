@@ -4,26 +4,43 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 {
-  imports =
-    [ (modulesPath + "/installer/scan/not-detected.nix")
-    ];
+  imports = [
+    (modulesPath + "/installer/scan/not-detected.nix")
+  ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" ];
-  boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-intel" ];
-  boot.extraModulePackages = [ ];
-
-  fileSystems."/" =
-    { device = "/dev/disk/by-uuid/f60e26dd-b472-47dc-95a3-399f1b160103";
-      fsType = "ext4";
+  boot = {
+    initrd = {
+      availableKernelModules = [ "xhci_pci" "nvme" ];
+      kernelModules = [ ];
     };
+    kernelModules = [ "kvm-intel" ];
+    extraModulePackages = [ ];
+  };
 
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/6879-D61A";
+  fileSystems = let
+    options = ["noatime" "nodiratime" "discard"];
+  in {
+    "/" = {
+      device = "/dev/disk/by-uuid/f60e26dd-b472-47dc-95a3-399f1b160103";
+      fsType = "ext4";
+      options = [ "noatime" "nodiratime" "discard" ];
+    };
+    "/boot" = {
+      device = "/dev/disk/by-uuid/6879-D61A";
       fsType = "vfat";
       options = [ "fmask=0077" "dmask=0077" ];
     };
-  fileSystems."/".options = [ "noatime" "nodiratime" "discard" ];
+    "/mnt/0AD47A53D47A414D" = {
+      device = "/dev/disk/by-uuid/0AD47A53D47A414D";
+      fsType = "ntfs";
+      inherit options;
+    };
+    "/mnt/linux-mint" = {
+      device = "/dev/disk/by-uuid/3cd525e2-0864-4559-a882-5af643a62d00";
+      fsType = "ext4";
+      inherit options;
+    };
+  };
 
   swapDevices = [ ];
 
