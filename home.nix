@@ -1,9 +1,9 @@
 # TODO get home manager to manage files ~/.gtkrc-2.0
-{ pkgs, lib, ... }@i:
+{ pkgs, lib, inputs, ...}:
 let
-  nix-watch = i.nix-watch.packages.${pkgs.system}.default;
-  home-manager = i.home-manager.packages.${pkgs.system}.home-manager;
-  nixos-conf-editor = i.nixos-conf-editor.packages.${pkgs.system}.nixos-conf-editor;
+  nix-watch = inputs.nix-watch.packages.${pkgs.system}.default;
+  home-manager = inputs.home-manager.packages.${pkgs.system}.home-manager;
+  nixos-conf-editor = inputs.nixos-conf-editor.packages.${pkgs.system}.nixos-conf-editor;
   username = "brian";
   homeDir = "/home/${username}";
   sessionVariables = {
@@ -13,7 +13,7 @@ let
   };
 in
 {
-  imports = [ i.nvf.homeManagerModules.default ];
+  imports = [ inputs.nvf.homeManagerModules.default ];
   programs.nvf = {
     enable = true;
     # your settings need to go into the settings attribute set

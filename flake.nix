@@ -29,7 +29,7 @@
     homeConfigurations.brian = inputs.home-manager.lib.homeManagerConfiguration {
       inherit pkgs;
       modules = [ ./home.nix ];
-      extraSpecialArgs = inputs;
+      extraSpecialArgs = {inherit inputs;};
     };
 
     nixosConfigurations.brians-laptop = inputs.nixpkgs.lib.nixosSystem {
