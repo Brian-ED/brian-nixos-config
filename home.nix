@@ -128,7 +128,7 @@ in
     gnome-clocks      # Needed a timer
     keepassxc         # Password manager. TODO: Needs to be configured
     baobab            # Drive space tree-like view
-    restic            # Backup the borgBackup folder at drive/backup-brian-Lenovo-Yoga-C940-14IIL-LinuxMintCinamon
+    restic            # Backup the borgBackup folder at drive/backup-brian-Lenovo-Yoga-C940-14IIL-LinuxMintCinamon # TODO: Set up borg backup
     obsidian          # Unfree package. Can only use for non-profit.
     nodejs            # Javascript interpreter
     pgadmin4          # Postgresql for database connection
