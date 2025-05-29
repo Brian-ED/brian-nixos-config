@@ -177,7 +177,6 @@ in
         formulahendry.code-runner
         vscode-extensions."13xforever".language-x86-64-assembly
         bradlc.vscode-tailwindcss
-        rust-lang.rust-analyzer
         ms-vscode-remote.remote-ssh-edit
         ms-vscode-remote.remote-ssh
         ms-python.debugpy
