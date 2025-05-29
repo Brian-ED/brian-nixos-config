@@ -102,9 +102,48 @@
   environment = {
     # List packages installed in system profile. To search, run:
     # $ nix search wget
-    systemPackages = [
+    systemPackages = with pkgs; [ # These are duplicates from home, TODO: Simplify the shared pkgs list
+      xcolor            # color-pick shortcut for i3
+      alacritty         # My chosen terminal. Loads quickly, and doesn't have a inbuilt-windowmanager to complicate it.
+      xdotool           # Useful for automating tasks.
+      rofi              # Used by i3 for fancy UI.
+      xorg.xkbcomp      # Temporary for messing with my keyboard settings
+      xorg.xev          # I use this for testing button presses on i3
+      xorg.xbacklight   # Modify device brightness, xrandr can only modify software brightness.
+      sops              # Encrypted secrets viewer and editor. TODO: Is it supposed to replace KeePassXC?
+      gnome-clocks      # Needed a timer
+      keepassxc         # Password manager. TODO: Needs to be configured
+      baobab            # Drive space tree-like view
+      restic            # Backup the borgBackup folder at drive/backup-brian-Lenovo-Yoga-C940-14IIL-LinuxMintCinamon
+      obsidian          # Unfree package. Can only use for non-profit.
+      nodejs            # Javascript interpreter
+      pgadmin4          # Postgresql for database connection
+      haruna            # Video player
+      light             # My i3 config uses this
+      elixir            # I want to try out elixer to develop concurrent applications
+      gh                # github commands
+      libllvm           # Playing around with llvm IR
+      pet               # Snippet manager, not exactly sure what that means
+      qutebrowser       # browser with loads of shortcuts
+      lxappearance      # GTK theme switcher, useful for i3
+      audacious         # For playing music
+      nil               # Nix langauge server
+      zig zls           # Zig stuff
+      firefox
+      nemo
+      xclip
+      unzip
+      xed-editor
+      gnome-system-monitor
+      pavucontrol        # Audio interface
+      brightnessctl      # For i3 brightness without sudo
+      llvmPackages_19.clangWithLibcAndBasicRtAndLibcxx llvmPackages_19.clang-manpages # Will remove later, temporary till I fix permission issues with using zig for building with make.
+      arc-theme          # Dark theme related: Arc-Dark GTK theme
+      gnome-themes-extra # Dark theme related: Includes Adwaita-dark
+      simplescreenrecorder # My favorite recording software
+      (import ./cbqn.nix pkgs) bqn386 # BQN interpreter and font
+    ] ++ [ # The rest is extra packages not found in home
       pkgs.git
-      pkgs.alacritty
       inputs.home-manager.packages.${pkgs.system}.home-manager
     ];
     sessionVariables = { LIBVA_DRIVER_NAME = "iHD"; }; # Optionally, set the environment variable
