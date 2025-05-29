@@ -104,6 +104,7 @@
     # $ nix search wget
     systemPackages = [
       pkgs.git
+      pkgs.alacritty
       inputs.home-manager.packages.${pkgs.system}.home-manager
     ];
     sessionVariables = { LIBVA_DRIVER_NAME = "iHD"; }; # Optionally, set the environment variable
@@ -135,6 +136,7 @@
 
   users.users.brian = { # Define a user account. Don't forget to set a password with ‘passwd’.
     isNormalUser = true;
+    initialPassword = "ChangeThisASAP123";
     description = "Brian Ellingsgaard";
     extraGroups = [ "networkmanager" "wheel" "video"]; # Video added so that i3 can change brightness
   };
