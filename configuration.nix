@@ -102,7 +102,10 @@
   environment = {
     # List packages installed in system profile. To search, run:
     # $ nix search wget
-    systemPackages = [];
+    systemPackages = [
+      pkgs.git
+      inputs.home-manager.packages.${pkgs.system}.home-manager
+    ];
     sessionVariables = { LIBVA_DRIVER_NAME = "iHD"; }; # Optionally, set the environment variable
     pathsToLink = [ "/libexec" ]; # For i3
     etc = {
