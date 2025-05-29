@@ -190,7 +190,7 @@ in
       ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace (map (x:
         let I=builtins.elemAt; in
         { name=I x 0;                   publisher=I x 1; version=I x 2; sha256=I x 3; } ) [
-        [ "bqn"                         "mk12"           "latest" "1wk1a2n1dy6k5pzxmjl6pcscn87m85kxxca552kvhalymk2bwkv2" ]
+        [ "bqn"                         "mk12"           "latest" "0bnpc1xw5gs362sk213r0n2p37zd08m6jgj61jh3y098wni6say8" ]
         [ "newline"                     "chang196700"    "latest" "0xijg1nqlrlwkl4ls21hzikr30iz8fd98ynpbmhhdxrkm3iccqa1" ]
         [ "tws"                         "jkiviluoto"     "latest" "0aj58iasgnmd2zb7zxz587k9mfmykjwrb8h7hfvpkmh76s9bj4y5" ] # Trailing white space
         [ "toggle-zen-mode"             "fudd"           "latest" "0whmbpnin1r1qnq45fpz7ayp51d4lilvbnv7llqd6jplx5b4n3ds" ]
