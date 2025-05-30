@@ -10,6 +10,7 @@ let
     EDITOR = "codium";
     BROWSER = "qutebrowser";
     TERMINAL = "alacritty";
+    NH_FLAKE = "${homeDir}/nixos";
   };
 in
 {
@@ -101,18 +102,9 @@ in
 
   nixpkgs.config.allowUnfree = true;
 
-  services.home-manager.autoExpire = {
-    enable = true;
-    timestamp = "-30 days";
-    frequency = "monthly";
-    store = {
-      cleanup = true;
-      options = "--delete-older-than 30d";
-    };
-  };
-
   # Install Nix packages
   home.packages = with pkgs; [
+    bat fzf eza zoxide nushell
     xcolor            # color-pick shortcut for i3
     alacritty         # My chosen terminal. Loads quickly, and doesn't have a inbuilt-windowmanager to complicate it.
     xdotool           # Useful for automating tasks.
@@ -137,7 +129,7 @@ in
     elixir            # I want to try out elixer to develop concurrent applications
     gh                # github commands
     libllvm           # Playing around with llvm IR
-    pet               # Snippet manager, not exactly sure what that means
+    pet               # Snippet manager, not exactly sure what that means # TODO: Figure this out
     qutebrowser       # browser with loads of shortcuts
     lxappearance      # GTK theme switcher, useful for i3
     audacious         # For playing music
@@ -360,24 +352,40 @@ in
   # gtk-theme-name = "Arc-Dark"
 
 
-
+  programs.nh = {
+    enable = true;
+    clean = {
+      enable = true; # periodic garbage collection for user profile
+      dates = "weekly"; # How often cleanup is performed. The format is described in {manpage}`systemd.time(7)`
+      extraArgs = "--keep 5 --keep-since 3d"; # Options given to nh clean when the service is run automatically. See `nh clean all --help` for more information.
+    };
+  };
 
   programs.bash = {
     initExtra = lib.concatStrings (lib.mapAttrsToList (n: v: "export ${n}=\"${v}\"\n") sessionVariables); # I couldn't get home.sessionVariables working. Found this solution here: https://github.com/nix-community/home-manager/issues/1011
     enable = true;
-    shellAliases = {
+    shellAliases = let
+      NRO = "${pkgs.nh}/bin/nh os   switch ${homeDir}/proj/brian-nixos-config";
+      HR  = "${pkgs.nh}/bin/nh home switch ${homeDir}/proj/brian-nixos-config";
+      NROQ = "sudo nixos-rebuild switch --flake ${homeDir}/proj/brian-nixos-config/#brians-laptop";
+      HRQ = "${home-manager}/bin/home-manager switch --flake ${homeDir}/proj/brian-nixos-config/#brian";
+    in {
       code = "codium";
       nix-watch = "${nix-watch}/bin/nix-watch";
-      NRO = "sudo nixos-rebuild switch --flake ~/nixos/#brians-laptop";
       fix-nix-hash = "nix hash convert --hash-algo sha256 --to nix32 $1"; # give in format sha256-...=
-      RN = "sudo nixos-rebuild switch --flake ~/nixos/#brians-laptop && HR";
-      RH = "${home-manager}/bin/home-manager switch --flake ~/nixos/#brian";
-      NR = "sudo nixos-rebuild switch --flake ~/nixos/#brians-laptop && HR";
-      HR = "${home-manager}/bin/home-manager switch --flake ~/nixos/#brian";
+      inherit NRO  HR
+              NROQ HRQ;
+      NR = "${NRO} && ${HR}";
+      NRQ = "${NROQ} && ${HRQ}";
       P = "pwd | ${pkgs.xclip}/bin/xclip -selection clipboard";
       ".." = "cd .."; # Hilariously this works
       find = "${pkgs.fd}/bin/fd $@";
       net = "nmcli dev wifi && nmcli dev wifi connect --ask"; # Find a network to connect to
+      cat = "${pkgs.bat}/bin/bat $@";
+      # Not sure what to map this to: ''fzf --height 50% --layout reverse --info inline --preview 'bat --color=always --style=full,-grid --line-range=:500 {}' --preview-window right,70%,border-none'';
+      l   = "${pkgs.eza}/bin/eza --color=always --all --classify=always --long --color=always --absolute=on --header --git --git-repos --time-style=relative --total-size --no-permissions --no-user --sort extension --icons";
+      ls  = "${pkgs.eza}/bin/eza --color=always --all --classify=always --across --icons";
+      lsr = "${pkgs.eza}/bin/eza --color=always --all --classify=always --across --tree --icons";
     };
   };
 

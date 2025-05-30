@@ -9,7 +9,7 @@
     settings = {
       experimental-features = [ "nix-command" "flakes" ];
       warn-dirty = false;
-
+      trusted-users = [ "brian" ];
       nix-path = lib.mapAttrsToList (n: _: "${n}=flake:${n}") inputs; # For disabling channels
       flake-registry = ""; # ensures flakes are truly self-contained
     };
