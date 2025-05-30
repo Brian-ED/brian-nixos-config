@@ -137,7 +137,6 @@
       qutebrowser       # browser with loads of shortcuts
       lxappearance      # GTK theme switcher, useful for i3
       audacious         # For playing music
-      nil               # Nix langauge server
       zig zls           # Zig stuff
       firefox
       nemo
