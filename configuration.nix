@@ -38,7 +38,7 @@
       enable = true;
 
       # Open ports in the firewall.
-      allowedTCPPorts = [];
+      allowedTCPPorts = [ 22 ];
       allowedUDPPorts = [];
     };
   };
@@ -51,8 +51,18 @@
   services = {
 
     # Enable the OpenSSH daemon.
-    openssh.enable = false;
-
+    openssh = {
+      enable = true;
+      ports = [ 22 ];
+      settings = {
+        PasswordAuthentication = true;
+        AllowUsers = null; # Allows all users by default. Can be [ "user1" "user2" ]
+        UseDns = true;
+        X11Forwarding = false;
+        PermitRootLogin = "prohibit-password"; # "yes", "without-password", "prohibit-password", "forced-commands-only", "no"
+      };
+    };
+    fail2ban.enable = true; # Security for ssh, ratelimiting and such
 
     # Firefox settings (Haven't looked into it yet)
     # firefox-syncserver = {
