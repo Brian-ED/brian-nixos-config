@@ -47,7 +47,8 @@
   time.timeZone = "Europe/Copenhagen";
 
   # Select internationalisation properties.
-  i18n.defaultLocale = "en_DK.UTF-8";
+  i18n.defaultLocale = "da_DK.UTF-8";
+
   services = {
 
     # Enable the OpenSSH daemon.
