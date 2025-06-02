@@ -313,9 +313,6 @@ in
       }]
       ["disk /" {
       }]
-      ["read_file uptime" {
-        path = "/proc/uptime";
-      }]
       ["ipv6" {
         format_down = "";
       }]
