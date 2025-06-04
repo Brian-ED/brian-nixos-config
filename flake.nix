@@ -43,6 +43,7 @@
       };
       lifebook = inputs.nixpkgs.lib.nixosSystem {
         inherit system;
+        specialArgs = {inherit inputs;};
         modules = [
           ./hardware/lifebook-AH512.nix
           ./configuration.nix
