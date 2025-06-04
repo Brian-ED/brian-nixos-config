@@ -32,13 +32,22 @@
       extraSpecialArgs = {inherit inputs;};
     };
 
-    nixosConfigurations.brians-laptop = inputs.nixpkgs.lib.nixosSystem {
-      inherit system;
-      specialArgs = {inherit inputs;};
-      modules = [
-        ./hardware-configuration.nix # Include the results of the hardware scan
-        ./configuration.nix
-      ];
+    nixosConfigurations = {
+      brians-laptop = inputs.nixpkgs.lib.nixosSystem {
+        inherit system;
+        specialArgs = {inherit inputs;};
+        modules = [
+          ./hardware/lenovo-C940-14IIL.nix # Include the results of the hardware scan
+          ./configuration.nix
+        ];
+      };
+      lifebook = inputs.nixpkgs.lib.nixosSystem {
+        inherit system;
+        modules = [
+          ./hardware/lifebook-AH512.nix
+          ./configuration.nix
+        ];
+      };
     };
   };
 }
