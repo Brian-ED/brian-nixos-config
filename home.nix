@@ -52,6 +52,9 @@ in
       if [ ! -d ${proj}/brian-nixos-config ]; then
         run ${pkgs.git}/bin/git clone https://github.com/Brian-ED/brian-nixos-config ${proj}/brian-nixos-config
       fi
+      if [ ! -d ${proj}/rayed-bqn ]; then
+        run ${pkgs.git}/bin/git clone https://github.com/Brian-ED/rayed-bqn ${proj}/rayed-bqn
+      fi
       if [ ! -d ${proj}/brian-i3-config ]; then
         run ${pkgs.git}/bin/git clone https://github.com/Brian-ED/brian-i3-config ${proj}/brian-i3-config
       fi
