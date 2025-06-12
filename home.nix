@@ -40,6 +40,16 @@ in
     };
   };
 
+  services.home-manager.autoExpire = {
+    enable = true;
+    timestamp = "-30 days";
+    frequency = "monthly";
+    store = {
+      cleanup = true;
+      options = "--delete-older-than 30d";
+    };
+  };
+
   # Sets up repositories for my projects, cloning only if missing, automatically
   # TODO: warn when a repository is removed from the list but still exists with state (autodelete if no state exists).
   home.activation = { # It's complicated, refer to: https://home-manager-options.extranix.com/?query=home.activation&release=release-25.05
@@ -354,11 +364,6 @@ in
 
   programs.nh = {
     enable = true;
-    clean = {
-      enable = true; # periodic garbage collection for user profile
-      dates = "weekly"; # How often cleanup is performed. The format is described in {manpage}`systemd.time(7)`
-      extraArgs = "--keep 5 --keep-since 3d"; # Options given to nh clean when the service is run automatically. See `nh clean all --help` for more information.
-    };
   };
 
   programs.bash = {
