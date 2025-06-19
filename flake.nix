@@ -16,9 +16,15 @@
     brian-i3-config.url = "github:Brian-ED/brian-i3-config";
     brian-i3-config.flake = false;
 
+    nil = {
+      url="github:oxalica/nil";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     nvf = {
       url = "github:notashelf/nvf";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nil.follows = "nil";
     };
   };
 

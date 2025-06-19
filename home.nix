@@ -4,6 +4,7 @@ let
   nix-watch = inputs.nix-watch.packages.${pkgs.system}.default;
   home-manager = inputs.home-manager.packages.${pkgs.system}.home-manager;
   nixos-conf-editor = inputs.nixos-conf-editor.packages.${pkgs.system}.nixos-conf-editor;
+  nil = inputs.nil.packages.${pkgs.system}.nil;
   username = "brian";
   homeDir = "/home/${username}";
   sessionVariables = {
@@ -116,7 +117,10 @@ in
   nixpkgs.config.allowUnfree = true;
 
   # Install Nix packages
-  home.packages = with pkgs; [
+  home.packages = [
+    nil               # Nix langauge server
+    home-manager      # Have home manager manage itself.
+  ] ++ (with pkgs; [
     bat fzf eza zoxide nushell
     xcolor            # color-pick shortcut for i3
     alacritty         # My chosen terminal. Loads quickly, and doesn't have a inbuilt-windowmanager to complicate it.
@@ -125,7 +129,6 @@ in
     rustdesk          # Remote control. Useful for helping family.
     fd
 #   nixos-conf-editor # Editor for this configuration
-    home-manager      # Have home manager manage itself.
     xorg.xkbcomp      # Temporary for messing with my keyboard settings
     xorg.xev          # I use this for testing button presses on i3
     xorg.xbacklight   # Modify device brightness, xrandr can only modify software brightness.
@@ -146,7 +149,6 @@ in
     qutebrowser       # browser with loads of shortcuts
     lxappearance      # GTK theme switcher, useful for i3
     audacious         # For playing music
-    nil               # Nix langauge server
     rustc cargo       # Rust stuff
     zig zls           # Zig stuff
     firefox
@@ -154,6 +156,7 @@ in
     xclip
     unzip
     xed-editor
+    (agda.withPackages (p: [ p.standard-library ]))
     gnome-system-monitor
     pavucontrol        # Audio interface
     brightnessctl      # For i3 brightness without sudo
@@ -188,6 +191,7 @@ in
         jnoortheen.nix-ide
         ritwickdey.liveserver
         eamodio.gitlens
+        banacorn.agda-mode
 #       github.copilot
 #       github.copilot-chat
         hediet.vscode-drawio
@@ -216,7 +220,7 @@ in
         [ "i3"                          "dcasella"       "latest" "0z7qj6bwch1cxr6pab2i3yqk5id8k14mjlvl6i9f0cmdsxqkmci5" ]
       ]);
     })
-  ];
+  ]);
 
   # manages dotfiles
   home.file = {
@@ -247,6 +251,20 @@ in
         ''config.load_autoconfig(False)'' # Qutebrowser errors if you don't enable this when auto-generating a config, since otherwise it's able to edit it with GUI
       ];
     };
+
+    "${homeDir}/.config/agda/libraries" = {
+      enable = true;
+      text = ''
+        ${pkgs.agdaPackages.standard-library.outPath}/standard-library.agda-lib
+      '';
+    };
+    "${homeDir}/.config/agda/defaults" = {
+      enable = true;
+      text = ''
+        standard-library
+      '';
+    };
+
   };
 
   home = {inherit sessionVariables;};
