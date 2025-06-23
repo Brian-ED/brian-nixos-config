@@ -140,7 +140,7 @@ in
 #   Singeli
 #   kiwix-tools_linux
     kiwix-tools # I use this for reading wikipedia offline
-#   chat # iirc a matrix client. Maybe dzaimas?
+#   chat # dzaimas matrix client
 #   fsnav  # File system navigator
     libreoffice-qt6-fresh
     qbittorrent-enhanced # BitTorrent client
