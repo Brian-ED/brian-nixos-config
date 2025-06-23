@@ -52,41 +52,55 @@ in
   };
 
   # Sets up repositories for my projects, cloning only if missing, automatically
+  # TODO: Only try cloning if connected to wifi
   # TODO: warn when a repository is removed from the list but still exists with state (autodelete if no state exists).
-  home.activation = { # It's complicated, refer to: https://home-manager-options.extranix.com/?query=home.activation&release=release-25.05
-    makeRepo = let
-      proj = "${homeDir}/proj";
-    in lib.hm.dag.entryAfter [ "writeBoundary" "installPackages" "git" ] ''
-      if [ ! -d ${proj} ]; then
-        run mkdir ${proj}
+  home.activation.makeRepos = let # It's complicated, refer to: https://home-manager-options.extranix.com/?query=home.activation&release=release-25.05
+    proj = "${homeDir}/proj";
+    B = "https://github.com/Brian-ED/";
+    repositories_I_play_with = {
+      brian-nixos-config     = { path = proj ; repo = "${B}brian-nixos-config"    ;};
+      rayed-bqn              = { path = proj ; repo = "${B}rayed-bqn"             ;};
+      brian-i3-config        = { path = proj ; repo = "${B}brian-i3-config"       ;};
+#     raylib-bqn             = { path = proj ; repo = "${B}raylib-bqn"            ;};
+#     odin-fun               = { path = proj ; repo = "${B}odin-fun"              ;};
+#     infGraphSolver         = { path = proj ; repo = "${B}infGraphSolver"        ;};
+      bqnserver              = { path = proj ; repo = "${B}bqnserver"             ;};
+#     "Brian-ED.github.io"   = { path = proj ; repo = "${B}Brian-ED.github.io"    ;};
+#     morselight             = { path = proj ; repo = "${B}morselight"            ;};
+#     chorded-ascii          = { path = proj ; repo = "${B}chorded-ascii"         ;};
+#     rayed-bqn-docs         = { path = proj ; repo = "${B}rayed-bqn-docs"        ;};
+#     rust_tictactoe         = { path = proj ; repo = "${B}rust_tictactoe"        ;};
+#     raylib-scope-info      = { path = proj ; repo = "${B}raylib-scope-info"     ;};
+#     rayed-start-menu       = { path = proj ; repo = "${B}rayed-start-menu"      ;};
+#     consistent_vocabulary  = { path = proj ; repo = "https://github.com//consistent_vocabulary" ;};
+    };
+    cloneCommands = lib.mapAttrsToList (name: {path, repo}: ''
+      if [ ! -d ${path}/${name} ]; then
+        run ${pkgs.git}/bin/git clone ${repo} ${path}/${name}
       fi
-      if [ ! -d ${proj}/brian-nixos-config ]; then
-        run ${pkgs.git}/bin/git clone https://github.com/Brian-ED/brian-nixos-config ${proj}/brian-nixos-config
-      fi
-      if [ ! -d ${proj}/rayed-bqn ]; then
-        run ${pkgs.git}/bin/git clone https://github.com/Brian-ED/rayed-bqn ${proj}/rayed-bqn
-      fi
-      if [ ! -d ${proj}/brian-i3-config ]; then
-        run ${pkgs.git}/bin/git clone https://github.com/Brian-ED/brian-i3-config ${proj}/brian-i3-config
-      fi
-      if [ ! -d ${homeDir}/.config/i3 ]; then
-        run ln -s ${proj}/brian-i3-config ${homeDir}/.config/i3
-      fi
-    '';
-  };
+    '') repositories_I_play_with;
+  in lib.hm.dag.entryAfter [ "writeBoundary" "installPackages" "git" ] ''
+    if [ ! -d ${proj} ]; then
+      run mkdir ${proj}
+    fi
+    ${lib.concatStrings cloneCommands}
+    if [ ! -d ${homeDir}/.config/i3 ]; then
+      run ln -s ${proj}/brian-i3-config ${homeDir}/.config/i3
+    fi
+  '';
 
   home.keyboard = { # Keyboard configuration. Set to `null` to disable Home Manager keyboard management.
-    layout  = "fo,bqn";  # Keyboard layout. If `null`, then the system configuration will be used. This defaults to `null` for state version ≥ 19.09 and `"us"` otherwise.
-    model   = "";  # Keyboard model.
+    layout  = "fo,bqn";  # If `null`, then the system configuration will be used. This defaults to `null` for state version ≥ 19.09 and `"us"` otherwise.
+    model   = "";
     options = [ "grp:lswitch" ];  # X keyboard options; layout switching goes here.
     variant =  ""; # X keyboard variant. If `null`, then the system configuration will be used. This defaults to `null` for state version ≥ 19.09 and `""` otherwise.
   };
 
   home.pointerCursor = { # Cursor configuration. Top-level options declared under this submodule are backend independent options. Options declared under namespaces such as `x11` are backend specific options. By default, only backend independent cursor configurations are generated. If you need configurations for specific backends, you can toggle them via the enable option. For example, [](#opt-home.pointerCursor.x11.enable) will enable x11 cursor configurations. Note that this will merely generate the cursor configurations. To apply the configurations, the relevant subsytems must also be configured. For example, [](#opt-home.pointerCursor.gtk.enable) will generate the gtk cursor configuration, but [](#opt-gtk.enable) needs to be set for it to be applied
     enable = true; # Whether to enable cursor config generation
-    dotIcons.enable = true; # TODO: Try true # Whether to enable `.icons` config generation for {option}`home.pointerCursor`
-    gtk.enable = true; # TODO: Whether to enable gtk config generation for {option}`home.pointerCursor`
-    name = "Vanilla-DMZ"; # TODO: try "Vanilla-DMZ" # The cursor name within the package
+    dotIcons.enable = true; # TODO: Try true # Whether to enable `.icons` config generation for `home.pointerCursor`
+    gtk.enable = true; # TODO: Whether to enable gtk config generation for `home.pointerCursor`
+    name = "Vanilla-DMZ";  # The cursor name within the package
     package = pkgs.vanilla-dmz; # Package providing the cursor theme
     size = 32; # The cursor size
     x11 = {
@@ -121,6 +135,16 @@ in
     nil               # Nix langauge server
     home-manager      # Have home manager manage itself.
   ] ++ (with pkgs; [
+#   youtube-dl # TODO: Get working with i3 config
+#   ZealOS
+#   Singeli
+#   kiwix-tools_linux
+    kiwix-tools # I use this for reading wikipedia offline
+#   chat # iirc a matrix client. Maybe dzaimas?
+#   fsnav  # File system navigator
+    libreoffice-qt6-fresh
+    qbittorrent-enhanced # BitTorrent client
+    pastel # Command-line tool to generate, analyze, convert and manipulate colors
     bat fzf eza zoxide nushell
     xcolor            # color-pick shortcut for i3
     alacritty         # My chosen terminal. Loads quickly, and doesn't have a inbuilt-windowmanager to complicate it.
@@ -407,8 +431,8 @@ in
       cat = "${pkgs.bat}/bin/bat $@";
       # Not sure what to map this to: ''fzf --height 50% --layout reverse --info inline --preview 'bat --color=always --style=full,-grid --line-range=:500 {}' --preview-window right,70%,border-none'';
       l   = "${pkgs.eza}/bin/eza --color=always --all --classify=always --long --color=always --absolute=on --header --git --git-repos --time-style=relative --total-size --no-permissions --no-user --sort extension --icons";
-      ls  = "${pkgs.eza}/bin/eza --color=always --all --classify=always --across --icons";
-      lsr = "${pkgs.eza}/bin/eza --color=always --all --classify=always --across --tree --icons";
+      ls  = "${pkgs.eza}/bin/eza --color=always --classify=always --across --icons";
+      lsr = "${pkgs.eza}/bin/eza --color=always --classify=always --across --tree --icons";
     };
   };
 
