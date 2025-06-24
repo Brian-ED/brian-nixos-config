@@ -425,6 +425,7 @@ in
       NR = "${NRO} && ${HR}";
       NRQ = "${NROQ} && ${HRQ}";
       P = "pwd | ${pkgs.xclip}/bin/xclip -selection clipboard";
+      lo = "${pkgs.libreoffice-qt6-fresh}/bin/libreoffice";
       ".." = "cd .."; # Hilariously this works
       find = "${pkgs.fd}/bin/fd $@";
       net = "nmcli dev wifi && nmcli dev wifi connect --ask"; # Find a network to connect to
@@ -433,6 +434,7 @@ in
       l   = "${pkgs.eza}/bin/eza --color=always --all --classify=always --long --color=always --absolute=on --header --git --git-repos --time-style=relative --total-size --no-permissions --no-user --sort extension --icons";
       ls  = "${pkgs.eza}/bin/eza --color=always --classify=always --across --icons";
       lsr = "${pkgs.eza}/bin/eza --color=always --classify=always --across --tree --icons";
+      mv = "mv --update=none-fail"; # Accidentally deleted a file while moving it. Now, I get an error when moving a file that replaces another file.
     };
   };
 
@@ -465,6 +467,7 @@ in
 
   programs.git = {
     enable = true;
+    # initDefaultBranch = "main"; # TODO: Check what the option name is. "initDefaultBranch" is a guess.
     userName = "Brian-ED";
     userEmail = "brianellingsgaard9@gmail.com";
   };
