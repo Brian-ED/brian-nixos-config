@@ -1,6 +1,6 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
+# and in the NixOS manual (accessible by running ‘nixos-help’)
 {pkgs, lib, inputs, ... }:
 {
   nix = {
@@ -25,9 +25,9 @@
   };
 
   networking = {
-    hostName = "brians-laptop"; # Define your hostname.
+    hostName = "brians-laptop"; # Define your hostname
 
-    # wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+    # wireless.enable = true;  # Enables wireless support via wpa_supplicant
     networkmanager.enable = true; # Enable networking
 
     # Configure network proxy if necessary
@@ -37,21 +37,21 @@
     firewall = {
       enable = true;
 
-      # Open ports in the firewall.
+      # Open ports in the firewall
       allowedTCPPorts = [ 22 ];
       allowedUDPPorts = [];
     };
   };
 
-  # Set your time zone.
+  # Set your time zone
   time.timeZone = "Europe/Copenhagen";
 
-  # Select internationalisation properties.
+  # Select internationalisation properties
   i18n.defaultLocale = "da_DK.UTF-8";
 
   services = {
 
-    # Enable the OpenSSH daemon.
+    # Enable the OpenSSH daemon
     openssh = {
       enable = true;
       ports = [ 22 ];
@@ -72,7 +72,7 @@
     #   singleNode.enable = true;
     # };
 
-    # Enable touchpad support (enabled default in most desktopManager).
+    # Enable touchpad support (enabled default in most desktopManager)
     libinput.enable = true;
 
     displayManager.defaultSession = "none+i3";
@@ -81,7 +81,7 @@
 
       videoDrivers = [ "displaylink" "modesetting" "fbdev" ];
 
-      enable = true; # Enable the X11 windowing system.
+      enable = true; # Enable the X11 windowing system
 
       # For i3
       desktopManager = {
@@ -95,7 +95,7 @@
       windowManager.i3.extraPackages = [];
     };
 
-    # Enable CUPS to print documents.
+    # Enable CUPS to print documents
     printing.enable = true;
 
     pipewire = {
@@ -103,7 +103,7 @@
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
-      jack.enable = false; # Used for audio work, which I don't do.
+      jack.enable = false; # Used for audio work, which I don't do
 
       # use the example session manager (no others are packaged yet so this is enabled by default,
       # no need to redefine it in your config for now)
@@ -115,18 +115,18 @@
     # $ nix search wget
     systemPackages = with pkgs; [ # These are duplicates from home, TODO: Simplify the shared pkgs list
       xcolor            # color-pick shortcut for i3
-      alacritty         # My chosen terminal. Loads quickly, and doesn't have a inbuilt-windowmanager to complicate it.
-      xdotool           # Useful for automating tasks.
-      rofi              # Used by i3 for fancy UI.
+      alacritty         # My chosen terminal. Loads quickly, and doesn't have a inbuilt-windowmanager to complicate it
+      xdotool           # Useful for automating tasks
+      rofi              # Used by i3 for fancy UI
       xorg.xkbcomp      # Temporary for messing with my keyboard settings
       xorg.xev          # I use this for testing button presses on i3
-      xorg.xbacklight   # Modify device brightness, xrandr can only modify software brightness.
+      xorg.xbacklight   # Modify device brightness, xrandr can only modify software brightness
       sops              # Encrypted secrets viewer and editor. TODO: Is it supposed to replace KeePassXC?
       gnome-clocks      # Needed a timer
       keepassxc         # Password manager. TODO: Needs to be configured
       baobab            # Drive space tree-like view
       restic            # Backup the borgBackup folder at drive/backup-brian-Lenovo-Yoga-C940-14IIL-LinuxMintCinamon
-      obsidian          # Unfree package. Can only use for non-profit.
+      obsidian          # Unfree package. Can only use for non-profit
       nodejs            # Javascript interpreter
       pgadmin4          # Postgresql for database connection
       haruna            # Video player
@@ -147,7 +147,7 @@
       gnome-system-monitor
       pavucontrol        # Audio interface
       brightnessctl      # For i3 brightness without sudo
-      llvmPackages_19.clangWithLibcAndBasicRtAndLibcxx llvmPackages_19.clang-manpages # Will remove later, temporary till I fix permission issues with using zig for building with make.
+      llvmPackages_19.clangWithLibcAndBasicRtAndLibcxx llvmPackages_19.clang-manpages # Will remove later, temporary till I fix permission issues with using zig for building with make
       arc-theme          # Dark theme related: Arc-Dark GTK theme
       gnome-themes-extra # Dark theme related: Includes Adwaita-dark
       simplescreenrecorder # My favorite recording software
@@ -175,7 +175,7 @@
     i3lock.enable = true;
     dconf.enable = true; # For i3
 
-    # Some programs need SUID wrappers, can be configured further or are started in user sessions.
+    # Some programs need SUID wrappers, can be configured further or are started in user sessions
     mtr.enable = true;
     gnupg.agent = {
       enable = true;
@@ -183,7 +183,7 @@
     };
   };
 
-  users.users.brian = { # Define a user account. Don't forget to set a password with ‘passwd’.
+  users.users.brian = { # Define a user account. Don't forget to set a password with ‘passwd’
     isNormalUser = true;
     initialPassword = "ChangeThisASAP123";
     description = "Brian Ellingsgaard";
@@ -194,8 +194,8 @@
   nixpkgs.config.allowUnfree = true; # I use this for Obsidian
 
   security = {
-    rtkit.enable = true; # Enable sound with pipewire.
-    pam.loginLimits = [ { domain = "@users"; item = "rtprio"; type = "-"; value = 1; } ]; # Set system schedular's priority for @users. Apparently improved swayWM perf, found it in their docs.
+    rtkit.enable = true; # Enable sound with pipewire
+    pam.loginLimits = [ { domain = "@users"; item = "rtprio"; type = "-"; value = 1; } ]; # Set system schedular's priority for @users. Apparently improved swayWM perf, found it in their docs
   };
 
   hardware.graphics = {
@@ -213,7 +213,7 @@
   # on your system were taken. It‘s perfectly fine and recommended to leave
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
+  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html)
   system.stateVersion = "24.05"; # Did you read the comment?
 
 }
