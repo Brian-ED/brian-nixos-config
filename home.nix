@@ -138,7 +138,6 @@ in
 #   youtube-dl # TODO: Get working with i3 config
 #   ZealOS
 #   Singeli
-#   kiwix-tools_linux
     kiwix-tools # I use this for reading wikipedia offline
 #   chat # dzaimas matrix client
 #   fsnav  # File system navigator
