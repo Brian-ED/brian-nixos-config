@@ -49,7 +49,14 @@
   # Select internationalisation properties
   i18n.defaultLocale = "da_DK.UTF-8";
 
+  virtualisation.docker.enable = true;
+
   services = {
+
+    cron = { # For Pelican
+      enable = true;
+      systemCronJobs = [ "* * * * * php /var/www/pelican/artisan schedule:run >> /dev/null 2>&1" ];
+    };
 
     # Enable the OpenSSH daemon
     openssh = {
@@ -187,7 +194,7 @@
     isNormalUser = true;
     initialPassword = "ChangeThisASAP123";
     description = "Brian Ellingsgaard";
-    extraGroups = [ "networkmanager" "wheel" "video"]; # Video added so that i3 can change brightness
+    extraGroups = [ "networkmanager" "wheel" "video" "www-data"]; # Video added so that i3 can change brightness. # www-data is for Pelican
   };
 
   # Allow unfree packages
@@ -207,6 +214,48 @@
 
   # Cleanup coredumps
   systemd.coredump.extraConfig = "MaxUse=250m";
+
+  systemd.services = {
+    wings = { # For Pelican
+      enable = true;
+      unitConfig = {
+        Description = "Wings Daemon";
+        After = "docker.service";
+        Requires = "docker.service";
+        PartOf = "docker.service";
+      };
+      serviceConfig = {
+        User="root";
+        WorkingDirectory=/etc/pelican;
+        LimitNOFILE=4096;
+        PIDFile=/var/run/wings/daemon.pid;
+        ExecStart=/usr/local/bin/wings;
+        Restart="on-failure";
+        StartLimitInterval=180;
+        StartLimitBurst=30;
+        RestartSec=5;
+      };
+      wantedBy=["multi-user.target"];
+    };
+
+    pelican-queue =  { # For Pelican
+      enable = true;
+
+      unitConfig = {
+        Description="Pelican Queue Service";
+        StartLimitIntervalSec=180;
+      };
+      serviceConfig = {
+        User = "www-data";
+        Group = "www-data";
+        Restart = "always";
+        ExecStart = "/usr/bin/php $basePath/artisan queue:work --tries=3";
+        StartLimitBurst=30;
+        RestartSec=5;
+      };
+      wantedBy=["multi-user.target"];
+    };
+  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
