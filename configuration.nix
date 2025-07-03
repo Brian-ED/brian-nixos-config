@@ -223,15 +223,15 @@
         After = "docker.service";
         Requires = "docker.service";
         PartOf = "docker.service";
+        StartLimitIntervalSec=180;
       };
       serviceConfig = {
         User="root";
-        WorkingDirectory=/etc/pelican;
+        WorkingDirectory="/etc/pelican";
         LimitNOFILE=4096;
-        PIDFile=/var/run/wings/daemon.pid;
-        ExecStart=/usr/local/bin/wings;
+        PIDFile="/var/run/wings/daemon.pid";
+        ExecStart="/home/brian/server-installed-mc/wings";
         Restart="on-failure";
-        StartLimitInterval=180;
         StartLimitBurst=30;
         RestartSec=5;
       };
@@ -249,7 +249,7 @@
         User = "www-data";
         Group = "www-data";
         Restart = "always";
-        ExecStart = "/usr/bin/php $basePath/artisan queue:work --tries=3";
+        ExecStart = "/usr/bin/php /var/www/pelican/artisan queue:work --tries=3";
         StartLimitBurst=30;
         RestartSec=5;
       };
