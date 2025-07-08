@@ -141,6 +141,7 @@ in
     kiwix-tools # I use this for reading wikipedia offline
 #   chat # dzaimas matrix client
 #   fsnav  # File system navigator
+    (dyalog.override { acceptLicense = true; }) ride # Dyalog APL stuff
     libreoffice-qt6-fresh
     qbittorrent-enhanced # BitTorrent client
     pastel # Command-line tool to generate, analyze, convert and manipulate colors

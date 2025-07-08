@@ -30,7 +30,7 @@
       fsType = "vfat";
       options = [ "fmask=0077" "dmask=0077" ];
     };
-    "/mnt/0AD47A53D47A414D" = {
+    "/mnt/windows" = {
       device = "/dev/disk/by-uuid/0AD47A53D47A414D";
       fsType = "ntfs";
       inherit options;
