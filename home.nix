@@ -178,8 +178,9 @@ in
     audacious         # For playing music
     rustc cargo       # Rust stuff
     zig zls           # Zig stuff
-    firefox
-    nemo
+    firefox           # Web browser
+    nemo              # File explorer
+    ffmpeg            # This is a dependency of my youtube song downloader for my playlist, which is used by the I3 shortcut $mod+Control+Shift+m
     xclip
     unzip
     xed-editor
@@ -194,6 +195,7 @@ in
     (import ./cbqn.nix pkgs) bqn386 # BQN interpreter and font
     ( # Python with scientific libraries
       python3.withPackages (p: with p;[
+        yt-dlp-light pyperclip # These are dependencies of my youtube song downloader for my playlist, which is used by the I3 shortcut $mod+Control+Shift+m
         numpy matplotlib sympy pandas # Me want very much. Used often
         jupyter ipython ipykernel # Jupiter and dependencies
         mpmath # Arbitrary precision math
