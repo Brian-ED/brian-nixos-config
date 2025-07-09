@@ -472,7 +472,10 @@ in
 
   programs.git = {
     enable = true;
-    # initDefaultBranch = "main"; # TODO: Check what the option name is. "initDefaultBranch" is a guess
+    extraConfig.safe.directory = [
+      "/mnt/windows/Users/brian/raylib-apl"
+      "/mnt/windows/Users/brian/temp-c-raylib"
+    ];
     userName = "Brian-ED";
     userEmail = "brianellingsgaard9@gmail.com";
   };
