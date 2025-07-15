@@ -235,8 +235,8 @@ in
         [ "iceworks-time-master"        "iceworks-team"  "latest" "05k7icssa7llbp4a44kny0556hvimmdh6fm394y5rh86bxqq0iq3" ]
         [ "suteppu"                     "Itsakaseru"     "latest" "1z0zkznwwm0z1vyq2wsw9rf1kg8pfpb3rl7glx0zp3aq8sxvnfsf" ]
         [ "vscode-sort"                 "henriiik"       "latest" "0sam2qfa596dcbabx3alrwsgm56a8wzb65dp45yv172kcaam5yd6" ]
-        [ "slint"                       "Slint"          "latest" "1yshm7x6dalg4xw7ykwj736sq0dknnhm8j2wvjxqj5mcp43dxlzh" ]
-        [ "remote-explorer"             "ms-vscode"      "latest" "0nzbra88cjf87vqjry3fczjjqs995fzp5m43wqbdidlw83wxpqp6" ]
+        [ "slint"                       "Slint"          "latest" "0fqzclajjagfzs3bjx6m6vnl4jhrcrnhy4cd5yaz4dz2i10cka9f" ]
+        [ "remote-explorer"             "ms-vscode"      "latest" "0k1kj0hn57kmd9sxx6vyr0hypvz64mkw52fb5824v8r8fmjvjwz5" ]
         [ "ols"                         "DanielGavin"    "latest" "0rl6mjkabgbwc0vnm96ax1jhjh5rrky0i1w40fhs1zqyfd83mrsx" ]
         [ "vscode-lowercase"            "ruiquelhas"     "latest" "03kwbnc25rfzsr7lzgkycwxnifv4nx04rfcvmfcqqhacx74g14gs" ]
         [ "vsliveshare"                 "MS-vsliveshare" "latest" "0rhwjar2c6bih1c5w4w8gdgpc6f18669gzycag5w9s35bv6bvsr8" ] # Live Share
@@ -285,6 +285,7 @@ in
       enable = true;
       text = ''
         ${pkgs.agdaPackages.standard-library.outPath}/standard-library.agda-lib
+        ${homeDir}/proj/agda-lib/agda-lib.agda-lib
       '';
     };
     "${homeDir}/.config/agda/defaults" = {
