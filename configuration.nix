@@ -216,45 +216,6 @@
   systemd.coredump.extraConfig = "MaxUse=250m";
 
   systemd.services = {
-    wings = { # For Pelican
-      enable = true;
-      unitConfig = {
-        Description = "Wings Daemon";
-        After = "docker.service";
-        Requires = "docker.service";
-        PartOf = "docker.service";
-        StartLimitIntervalSec=180;
-      };
-      serviceConfig = {
-        User="root";
-        WorkingDirectory="/etc/pelican";
-        LimitNOFILE=4096;
-        PIDFile="/var/run/wings/daemon.pid";
-        ExecStart="/home/brian/server-installed-mc/wings";
-        Restart="on-failure";
-        StartLimitBurst=30;
-        RestartSec=5;
-      };
-      wantedBy=["multi-user.target"];
-    };
-
-    pelican-queue =  { # For Pelican
-      enable = true;
-
-      unitConfig = {
-        Description="Pelican Queue Service";
-        StartLimitIntervalSec=180;
-      };
-      serviceConfig = {
-        User = "www-data";
-        Group = "www-data";
-        Restart = "always";
-        ExecStart = "/usr/bin/php /var/www/pelican/artisan queue:work --tries=3";
-        StartLimitBurst=30;
-        RestartSec=5;
-      };
-      wantedBy=["multi-user.target"];
-    };
   };
 
   # This value determines the NixOS release from which the default
