@@ -61,18 +61,11 @@ in
       brian-nixos-config     = { path = proj ; repo = "${B}brian-nixos-config"    ;};
       rayed-bqn              = { path = proj ; repo = "${B}rayed-bqn"             ;};
       brian-i3-config        = { path = proj ; repo = "${B}brian-i3-config"       ;};
-#     raylib-bqn             = { path = proj ; repo = "${B}raylib-bqn"            ;};
-#     odin-fun               = { path = proj ; repo = "${B}odin-fun"              ;};
-#     infGraphSolver         = { path = proj ; repo = "${B}infGraphSolver"        ;};
+      raylib-bqn             = { path = proj ; repo = "${B}raylib-bqn"            ;};
       bqnserver              = { path = proj ; repo = "${B}bqnserver"             ;};
-#     "Brian-ED.github.io"   = { path = proj ; repo = "${B}Brian-ED.github.io"    ;};
-#     morselight             = { path = proj ; repo = "${B}morselight"            ;};
-#     chorded-ascii          = { path = proj ; repo = "${B}chorded-ascii"         ;};
-#     rayed-bqn-docs         = { path = proj ; repo = "${B}rayed-bqn-docs"        ;};
-#     rust_tictactoe         = { path = proj ; repo = "${B}rust_tictactoe"        ;};
-#     raylib-scope-info      = { path = proj ; repo = "${B}raylib-scope-info"     ;};
-#     rayed-start-menu       = { path = proj ; repo = "${B}rayed-start-menu"      ;};
-#     consistent_vocabulary  = { path = proj ; repo = "https://github.com//consistent_vocabulary" ;};
+      "Brian-ED.github.io"   = { path = proj ; repo = "${B}Brian-ED.github.io"    ;};
+      rayed-bqn-docs         = { path = proj ; repo = "${B}rayed-bqn-docs"        ;};
+      consistent_vocabulary  = { path = proj ; repo = "https://github.com//consistent_vocabulary" ;};
     };
     cloneCommands = lib.mapAttrsToList (name: {path, repo}: ''
       if [ ! -d ${path}/${name} ]; then
@@ -473,9 +466,10 @@ in
 
   programs.git = {
     enable = true;
-    extraConfig.safe.directory = [
-      "/mnt/windows/Users/brian/raylib-apl"
-      "/mnt/windows/Users/brian/temp-c-raylib"
+    extraConfig.safe.directory = let winUser = "/mnt/windows/Users/brian"; in [
+      "${winUser}/raylib-apl"
+      "${winUser}/raylib-apl/imports/c-header-to-bqn-ffi"
+      "${winUser}/temp-c-raylib"
     ];
     userName = "Brian-ED";
     userEmail = "brianellingsgaard9@gmail.com";
