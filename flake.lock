@@ -297,7 +297,24 @@
         "nix-watch": "nix-watch",
         "nixos-conf-editor": "nixos-conf-editor",
         "nixpkgs": "nixpkgs",
-        "nvf": "nvf"
+        "nvf": "nvf",
+        "singeli": "singeli"
+      }
+    },
+    "singeli": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1752444927,
+        "narHash": "sha256-YGngqp3lcdDwd5mzKe27ZxqlNluu1fNF/svVF4Jwodo=",
+        "owner": "mlochbaum",
+        "repo": "Singeli",
+        "rev": "dc050f506ff86e514a23c5d7d98ae8b571258f60",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mlochbaum",
+        "repo": "Singeli",
+        "type": "github"
       }
     },
     "snowfall-lib": {

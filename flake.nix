@@ -16,6 +16,9 @@
     brian-i3-config.url = "github:Brian-ED/brian-i3-config";
     brian-i3-config.flake = false;
 
+    singeli.url = "github:mlochbaum/Singeli";
+    singeli.flake = false;
+
     nil = {
       url="github:oxalica/nil";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -44,7 +47,7 @@
         modules = [
           ./hardware/lenovo-C940-14IIL.nix # Include the results of the hardware scan
           ./configuration.nix
-        ];
+        ] ++ (if false then [ ./optional/vm.nix ] else []) ;
       };
       lifebook = inputs.nixpkgs.lib.nixosSystem {
         inherit system;

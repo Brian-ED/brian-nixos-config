@@ -12,6 +12,7 @@ let
     BROWSER = "qutebrowser";
     TERMINAL = "alacritty";
     NH_FLAKE = "${homeDir}/nixos";
+    SINGELI_PATH = inputs.singeli;
   };
 in
 {
@@ -103,18 +104,18 @@ in
   };
 
   home.language = { #  Language configuration. All options are null or string
-    address     = "da_DK.UTF-8"; # The language to use for addresses
-    base        = "da_DK.UTF-8"; # The language to use unless overridden by a more specific option
-    collate     = "da_DK.UTF-8"; # The language to use for collation (alphabetical ordering)
-    ctype       = "da_DK.UTF-8"; # Character classification category
-    measurement = "da_DK.UTF-8"; # The language to use for measurement values
-    messages    = "da_DK.UTF-8"; # The language to use for messages, application UI languages, etc
-    monetary    = "da_DK.UTF-8"; # The language to use for formatting currencies and money amounts
-    name        = "da_DK.UTF-8"; # The language to use for personal names
-    numeric     = "da_DK.UTF-8"; # The language to use for numerical values
-    paper       = "da_DK.UTF-8"; # The language to use for paper sizes
-    telephone   = "da_DK.UTF-8"; # The language to use for telephone numbers
-    time        = "da_DK.UTF-8"; # The language to use for formatting times
+    address     = "en_US.UTF-8"; # The language to use for addresses
+    base        = "en_US.UTF-8"; # The language to use unless overridden by a more specific option
+    collate     = "en_US.UTF-8"; # The language to use for collation (alphabetical ordering)
+    ctype       = "en_US.UTF-8"; # Character classification category
+    measurement = "en_US.UTF-8"; # The language to use for measurement values
+    messages    = "en_US.UTF-8"; # The language to use for messages, application UI languages, etc
+    monetary    = "en_US.UTF-8"; # The language to use for formatting currencies and money amounts
+    name        = "en_US.UTF-8"; # The language to use for personal names
+    numeric     = "en_US.UTF-8"; # The language to use for numerical values
+    paper       = "en_US.UTF-8"; # The language to use for paper sizes
+    telephone   = "en_US.UTF-8"; # The language to use for telephone numbers
+    time        = "en_US.UTF-8"; # The language to use for formatting times
   };
 
   home.username = username;
@@ -128,12 +129,8 @@ in
     nil               # Nix langauge server
     home-manager      # Have home manager manage itself
   ] ++ (with pkgs; [
-#   youtube-dl # TODO: Get working with i3 config
 #   ZealOS
-#   Singeli
     kiwix-tools # I use this for reading wikipedia offline
-#   chat # dzaimas matrix client
-#   fsnav  # File system navigator
     (dyalog.override { acceptLicense = true; }) ride # Dyalog APL stuff
     libreoffice-qt6-fresh
     qbittorrent-enhanced # BitTorrent client
@@ -434,6 +431,7 @@ in
       ls  = "${pkgs.eza}/bin/eza --color=always --classify=always --across --icons";
       lsr = "${pkgs.eza}/bin/eza --color=always --classify=always --across --tree --icons";
       mv = "mv --update=none-fail"; # Accidentally deleted a file while moving it. Now, I get an error when moving a file that replaces another file
+      d = "nix develop";
     };
   };
 
