@@ -133,6 +133,7 @@ in
     kiwix-tools # I use this for reading wikipedia offline
     (dyalog.override { acceptLicense = true; }) ride # Dyalog APL stuff
     libreoffice-qt6-fresh
+    wireguard-tools
     qbittorrent-enhanced # BitTorrent client
     pastel # Command-line tool to generate, analyze, convert and manipulate colors
     bat fzf eza zoxide nushell
