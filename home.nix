@@ -57,16 +57,16 @@ in
   # TODO: warn when a repository is removed from the list but still exists with state (autodelete if no state exists)
   home.activation.makeRepos = let # It's complicated, refer to: https://home-manager-options.extranix.com/?query=home.activation&release=release-25.05
     proj = "${homeDir}/proj";
-    B = "https://github.com/Brian-ED/";
+    G = "https://github.com";
     repositories_I_play_with = {
-      brian-nixos-config     = { path = proj ; repo = "${B}brian-nixos-config"    ;};
-      rayed-bqn              = { path = proj ; repo = "${B}rayed-bqn"             ;};
-      brian-i3-config        = { path = proj ; repo = "${B}brian-i3-config"       ;};
-      raylib-bqn             = { path = proj ; repo = "${B}raylib-bqn"            ;};
-      bqnserver              = { path = proj ; repo = "${B}bqnserver"             ;};
-      "Brian-ED.github.io"   = { path = proj ; repo = "${B}Brian-ED.github.io"    ;};
-      rayed-bqn-docs         = { path = proj ; repo = "${B}rayed-bqn-docs"        ;};
-      consistent_vocabulary  = { path = proj ; repo = "https://github.com//consistent_vocabulary" ;};
+      brian-nixos-config     = { path = proj ; repo = "${G}/Brian-ED/brian-nixos-config"    ;};
+      rayed-bqn              = { path = proj ; repo = "${G}/Brian-ED/rayed-bqn"             ;};
+      brian-i3-config        = { path = proj ; repo = "${G}/Brian-ED/brian-i3-config"       ;};
+      raylib-bqn             = { path = proj ; repo = "${G}/Brian-ED/raylib-bqn"            ;};
+      bqnserver              = { path = proj ; repo = "${G}/Brian-ED/bqnserver"             ;};
+      "Brian-ED.github.io"   = { path = proj ; repo = "${G}/Brian-ED/Brian-ED.github.io"    ;};
+      rayed-bqn-docs         = { path = proj ; repo = "${G}/Brian-ED/rayed-bqn-docs"        ;};
+      consistent_vocabulary  = { path = proj ; repo = "${G}/M1kiMinaj/consistent_vocabulary";};
     };
     cloneCommands = lib.mapAttrsToList (name: {path, repo}: ''
       if [ ! -d ${path}/${name} ]; then
@@ -433,6 +433,8 @@ in
       lsr = "${pkgs.eza}/bin/eza --color=always --classify=always --across --tree --icons";
       mv = "mv --update=none-fail"; # Accidentally deleted a file while moving it. Now, I get an error when moving a file that replaces another file
       d = "nix develop";
+      win = "cd /mnt/windows/Users/brian";
+      min = "cd /mnt/linux-mint/home/brian";
     };
   };
 
