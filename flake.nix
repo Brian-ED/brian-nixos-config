@@ -47,6 +47,7 @@
         modules = [
           ./hardware/lenovo-C940-14IIL.nix # Include the results of the hardware scan
           ./configuration.nix
+          ./unsafe-config.nix
         ] ++ (if false then [ ./optional/vm.nix ] else []) ;
       };
       lifebook = inputs.nixpkgs.lib.nixosSystem {
