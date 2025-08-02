@@ -58,6 +58,14 @@
           ./configuration.nix
         ];
       };
+      remote-server = inputs.nixpkgs.lib.nixosSystem {
+        inherit system;
+        specialArgs = {inherit inputs;};
+        modules = [
+          ./hardware/qemu.nix
+          ./qemu-config.nix
+        ];
+      };
     };
   };
 }
