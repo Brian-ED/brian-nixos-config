@@ -8,6 +8,39 @@ let
   username = "brian";
   homeDir = "/home/${username}";
   sessionVariables = {
+
+    # Define the terminal prompt
+    # Old: [brian@brians-laptop:~/proj/brian-nixos-config]$
+    # New: ~/proj/brian-nixos-config$
+    PS1 =let
+      # https://en.wikipedia.org/wiki/ANSI_escape_code
+      ESCSeq = x: Wrap"\\033[${builtins.concatStringsSep";"x}m";
+      Wrap = x:"\\[${x}\\]";
+      effect = {
+        normal = "0";
+        bold = "1";
+        dim = "2";
+        italic = "3";
+        Underline = "4";
+        # ...
+      };
+      color = {
+        # ...
+        green = "32";
+        # ...
+      };
+      WindowTitle = x: Wrap"\\e]0;${x}\\a";
+      path = "\\w";
+      user = "\\u";
+    in
+      WindowTitle path
+    + ESCSeq[effect.bold color.green]
+    + "\n"
+    + ''\$(if [ \"\$USER\" = \"${lib.escapeShellArg username}\" ]; then echo; else echo \"\$USER:\"; fi)''
+    + ''\$(if [ \"\$USER\" = \"${lib.escapeShellArg username}\" -o \"\$HOME\" = \"\$PWD\" ]; then echo; else echo \":\"; fi)''
+    + ''\$(if [ \"\$HOME\" = \"\$PWD\" ]; then echo; else dirs; fi)''
+    + "$ " + ESCSeq[effect.normal];
+
     EDITOR = "codium";
     BROWSER = "qutebrowser";
     TERMINAL = "alacritty";
@@ -227,7 +260,7 @@ in
         [ "suteppu"                     "Itsakaseru"     "latest" "1z0zkznwwm0z1vyq2wsw9rf1kg8pfpb3rl7glx0zp3aq8sxvnfsf" ]
         [ "vscode-sort"                 "henriiik"       "latest" "0sam2qfa596dcbabx3alrwsgm56a8wzb65dp45yv172kcaam5yd6" ]
         [ "slint"                       "Slint"          "latest" "0fqzclajjagfzs3bjx6m6vnl4jhrcrnhy4cd5yaz4dz2i10cka9f" ]
-        [ "remote-explorer"             "ms-vscode"      "latest" "0k1kj0hn57kmd9sxx6vyr0hypvz64mkw52fb5824v8r8fmjvjwz5" ]
+        [ "remote-explorer"             "ms-vscode"      "latest" "1f5qm8ql60ja5qn5s7mccdhanfvfkvs9zii6dc39fvka7nc3bsh9" ]
         [ "ols"                         "DanielGavin"    "latest" "0rl6mjkabgbwc0vnm96ax1jhjh5rrky0i1w40fhs1zqyfd83mrsx" ]
         [ "vscode-lowercase"            "ruiquelhas"     "latest" "03kwbnc25rfzsr7lzgkycwxnifv4nx04rfcvmfcqqhacx74g14gs" ]
         [ "vsliveshare"                 "MS-vsliveshare" "latest" "0rhwjar2c6bih1c5w4w8gdgpc6f18669gzycag5w9s35bv6bvsr8" ] # Live Share
@@ -238,6 +271,7 @@ in
         [ "vscode-apl-language"         "OptimaSystems"  "latest" "003n637vskbi4wypm8qwdy4fa9skp19w6kli1bgc162gzcbswhia" ]
         [ "vscode-autohotkey-plus-plus" "mark-wiemer"    "latest" "1i7gqxsgyf18165m2j6wb0ps1h6iniy89jhvhy89hnzm2i95a0ck" ]
         [ "i3"                          "dcasella"       "latest" "0z7qj6bwch1cxr6pab2i3yqk5id8k14mjlvl6i9f0cmdsxqkmci5" ]
+        [ "idris-vscode"                "meraymond"      "latest" "0yam13n021lmc93m8rpw96ksci0jshfrlnnfdk1q9yqrxydy6320" ]
       ]);
     })
   ]);
@@ -422,8 +456,14 @@ in
       NR = "${NRO} && ${HR}";
       NRQ = "${NROQ} && ${HRQ}";
       P = "pwd | ${pkgs.xclip}/bin/xclip -selection clipboard";
+      clip = "${pkgs.xclip}/bin/xclip -selection clipboard";
       lo = "${pkgs.libreoffice-qt6-fresh}/bin/libreoffice";
       ".." = "cd .."; # Hilariously this works
+      ".," = "cd ..";
+      ",." = "cd ~";
+      "_" = "cd - >> /dev/null";
+      apl = ''setxkbmap -layout fo,apl -option grp:lswitch'';
+      bqn = ''setxkbmap -layout fo,bqn -option grp:lswitch'';
       find = "${pkgs.fd}/bin/fd $@";
       net = "nmcli dev wifi && nmcli dev wifi connect --ask"; # Find a network to connect to
       cat = "${pkgs.bat}/bin/bat $@";
