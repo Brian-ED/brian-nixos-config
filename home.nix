@@ -10,7 +10,9 @@ let
   sessionVariables = {
 
     # Define the terminal prompt
+    # Old: \n\[\033[1;32m\][\[\e]0;\u@\h: \w\a\]\u@\h:\w]\$\[\033[0m\]
     # Old: [brian@brians-laptop:~/proj/brian-nixos-config]$
+    # New: \[\e]0;\w\a\]\[\033[1;32m\]$(if [ "$USER" = "brian" ]; then echo; else echo "$USER:"; fi)$(if [ "$USER" = "brian" -o "$HOME" = "$PWD" ]; then echo; else echo ":"; fi)$(if [ "$HOME" = "$PWD" ]; then echo; else dirs; fi)$ \[\033[0m\]
     # New: ~/proj/brian-nixos-config$
     PS1 =let
       # https://en.wikipedia.org/wiki/ANSI_escape_code
@@ -32,10 +34,9 @@ let
       WindowTitle = x: Wrap"\\e]0;${x}\\a";
       path = "\\w";
       user = "\\u";
-    in
-      WindowTitle path
+    in "\n"
+    + WindowTitle path
     + ESCSeq[effect.bold color.green]
-    + "\n"
     + ''\$(if [ \"\$USER\" = \"${lib.escapeShellArg username}\" ]; then echo; else echo \"\$USER:\"; fi)''
     + ''\$(if [ \"\$USER\" = \"${lib.escapeShellArg username}\" -o \"\$HOME\" = \"\$PWD\" ]; then echo; else echo \":\"; fi)''
     + ''\$(if [ \"\$HOME\" = \"\$PWD\" ]; then echo; else dirs; fi)''
@@ -82,6 +83,26 @@ in
     store = {
       cleanup = true;
       options = "--delete-older-than 30d";
+    };
+  };
+
+  services.restic2 = {
+    enable = true;
+    backups.localbackup = {
+      insecureNoPassword = true;
+      repository = "/mnt/hard-drive/restic-backup";
+      paths = [
+        "/home"
+      ];
+      exclude = [
+        "/home/*/.cache"
+      ];
+      pruneOpts = [
+        "--keep-daily 7"
+        "--keep-weekly 5"
+        "--keep-monthly 12"
+        "--keep-yearly 75"
+      ];
     };
   };
 
@@ -162,14 +183,20 @@ in
     nil               # Nix langauge server
     home-manager      # Have home manager manage itself
   ] ++ (with pkgs; [
+    (writeShellScriptBin "mount-hard-drive" ''
+      sudo cryptsetup luksOpen /dev/disk/by-uuid/41782a7f-3269-433b-8beb-c74fba89ef2d a
+      sudo mount /dev/mapper/a /mnt/hard-drive
+    '')
 #   ZealOS
     kiwix-tools # I use this for reading wikipedia offline
     (dyalog.override { acceptLicense = true; }) ride # Dyalog APL stuff
     libreoffice-qt6-fresh
+    duf              # Disk utility
+    cryptsetup       # For decrypting my LUKS encrypted harddrive
     wireguard-tools
     qbittorrent-enhanced # BitTorrent client
-    pastel # Command-line tool to generate, analyze, convert and manipulate colors
-    bat fzf eza zoxide nushell
+    pastel            # Command-line tool to generate, analyze, convert and manipulate colors
+    bat fzf eza zoxide nushell # Some things I've been trying to improve the terminal. Bad so far.
     xcolor            # color-pick shortcut for i3
     alacritty         # My chosen terminal. Loads quickly, and doesn't have a inbuilt-windowmanager to complicate it
     xdotool           # Useful for automating tasks
@@ -187,7 +214,6 @@ in
     gnome-clocks      # Needed a timer
     keepassxc         # Password manager. TODO: Needs to be configured
     baobab            # Drive space tree-like view
-    restic            # Backup the borgBackup folder at drive/backup-brian-Lenovo-Yoga-C940-14IIL-LinuxMintCinamon # TODO: Set up borg backup
     obsidian          # Unfree package. Can only use for non-profit
     nodejs            # Javascript interpreter
     pgadmin4          # Postgresql for database connection
@@ -462,8 +488,9 @@ in
       ".," = "cd ..";
       ",." = "cd ~";
       "_" = "cd - >> /dev/null";
-      apl = ''setxkbmap -layout fo,apl -option grp:lswitch'';
-      bqn = ''setxkbmap -layout fo,bqn -option grp:lswitch'';
+      mintEmail = "${pkgs.thunderbird}/bin/thunderbird --profile /mnt/linux-mint/home/brian/.thunderbird/v5k5cfgq.default-release $@";
+      aplkeys = "setxkbmap -layout fo,apl -option grp:lswitch";
+      bqnkeys = "setxkbmap -layout fo,bqn -option grp:lswitch";
       find = "${pkgs.fd}/bin/fd $@";
       net = "nmcli dev wifi && nmcli dev wifi connect --ask"; # Find a network to connect to
       cat = "${pkgs.bat}/bin/bat $@";

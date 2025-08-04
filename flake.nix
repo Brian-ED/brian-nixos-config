@@ -36,7 +36,7 @@
   in {
     homeConfigurations.brian = inputs.home-manager.lib.homeManagerConfiguration {
       inherit pkgs;
-      modules = [ ./home.nix ];
+      modules = [ ./home.nix ./restic-temp.nix ];
       extraSpecialArgs = {inherit inputs;};
     };
 
