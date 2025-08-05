@@ -231,8 +231,9 @@ in
     firefox           # Web browser
     nemo              # File explorer
     ffmpeg            # This is a dependency of my youtube song downloader for my playlist, which is used by the I3 shortcut $mod+Control+Shift+m
-    xclip
+    xclip             # Clipboard utility
     unzip
+    pinta             # Basic drawing program
     xed-editor
     (agda.withPackages (p: [ p.standard-library ]))
     gnome-system-monitor
