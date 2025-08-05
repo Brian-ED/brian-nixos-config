@@ -1,5 +1,5 @@
 # TODO get home manager to manage files ~/.gtkrc-2.0
-{ pkgs, lib, inputs, ...}:
+{ pkgs, pkgs-stable, lib, inputs, ...}:
 let
   nix-watch = inputs.nix-watch.packages.${pkgs.system}.default;
   home-manager = inputs.home-manager.packages.${pkgs.system}.home-manager;
@@ -233,7 +233,7 @@ in
     ffmpeg            # This is a dependency of my youtube song downloader for my playlist, which is used by the I3 shortcut $mod+Control+Shift+m
     xclip             # Clipboard utility
     unzip
-    pinta             # Basic drawing program
+    pkgs-stable.mypaint     # Basic drawing program
     xed-editor
     (agda.withPackages (p: [ p.standard-library ]))
     gnome-system-monitor

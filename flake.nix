@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-25.05";
 
     nixos-conf-editor.url = "github:snowfallorg/nixos-conf-editor";
     nixos-conf-editor.inputs.nixpkgs.follows = "nixpkgs";
@@ -33,11 +34,12 @@
   outputs = inputs: let
     system = "x86_64-linux";
     pkgs = inputs.nixpkgs.legacyPackages.${system};
+    pkgs-stable = inputs.nixpkgs-stable.legacyPackages.${system};
   in {
     homeConfigurations.brian = inputs.home-manager.lib.homeManagerConfiguration {
       inherit pkgs;
       modules = [ ./home.nix ./restic-temp.nix ];
-      extraSpecialArgs = {inherit inputs;};
+      extraSpecialArgs = {inherit inputs; inherit pkgs-stable; };
     };
 
     nixosConfigurations = {
