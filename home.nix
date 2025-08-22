@@ -193,6 +193,7 @@ in
     libreoffice-qt6-fresh
     duf              # Disk utility
     cryptsetup       # For decrypting my LUKS encrypted harddrive
+    prismlauncher    # Minecraft launcher
     wireguard-tools
     qbittorrent-enhanced # BitTorrent client
     pastel            # Command-line tool to generate, analyze, convert and manipulate colors
@@ -213,6 +214,7 @@ in
     sops              # Encrypted secrets viewer and editor. TODO: Is it supposed to replace KeePassXC?
     gnome-clocks      # Needed a timer
     keepassxc         # Password manager. TODO: Needs to be configured
+    rlwrap            # Useful to make Dyalog be a more classic repl
     baobab            # Drive space tree-like view
     obsidian          # Unfree package. Can only use for non-profit
     nodejs            # Javascript interpreter
@@ -413,8 +415,7 @@ in
         format = "%status %percentage %remaining";
       }]
       ["load" {
-        format = "%5min";
-#       format = "%1min";  # Default
+        format = "load %1min";
       }]
       ["memory" {
         format = "%used";
@@ -485,11 +486,11 @@ in
       P = "pwd | ${pkgs.xclip}/bin/xclip -selection clipboard";
       clip = "${pkgs.xclip}/bin/xclip -selection clipboard";
       lo = "${pkgs.libreoffice-qt6-fresh}/bin/libreoffice";
-      ".." = "cd .."; # Hilariously this works
-      ".," = "cd ..";
-      ",." = "cd ~";
+      "." = "cd .."; # Hilariously this works
+      "," = "cd ~";
       "_" = "cd - >> /dev/null";
-      mintEmail = "${pkgs.thunderbird}/bin/thunderbird --profile /mnt/linux-mint/home/brian/.thunderbird/v5k5cfgq.default-release $@";
+      mclocal= "prismlauncher --launch 1.21.8 --world 'Sorter Showcase v1.2'";
+      mintemail = "${pkgs.thunderbird}/bin/thunderbird --profile /mnt/linux-mint/home/brian/.thunderbird/v5k5cfgq.default-release $@";
       aplkeys = "setxkbmap -layout fo,apl -option grp:lswitch";
       bqnkeys = "setxkbmap -layout fo,bqn -option grp:lswitch";
       find = "${pkgs.fd}/bin/fd $@";

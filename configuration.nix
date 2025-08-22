@@ -120,7 +120,7 @@
   environment = {
     # Apparently dyalogscript's /bin/dyalogscript is better than "/usr/bin/env dyalogscript".
     # This enables it
-    #bindyalogscript = "${pkgs.dyalog.override { acceptLicense = true; }}/bin/dyalogscript";
+    bindyalogscript = "${pkgs.dyalog.override { acceptLicense = true; }}/bin/dyalogscript";
 
     # List packages installed in system profile. To search, run:
     # $ nix search wget

@@ -14,6 +14,13 @@
       mkdir -m 0755 -p /bin
       ln -sfn ${config.environment.bindyalogscript} /bin/.dyalogscript.tmp
       mv /bin/.dyalogscript.tmp /bin/dyalogscript # atomically replace /usr/bin/env
+
+      mkdir -m 0755 -p /usr/bin
+      ln -sfn ${config.environment.bindyalogscript} /usr/bin/.dyalogscript.tmp
+      mv /usr/bin/.dyalogscript.tmp /usr/bin/dyalogscript # atomically replace /usr/bin/env
     ''
-    else "rm -f /bin/dyalogscript";
+    else ''
+      rm -f /bin/dyalogscript
+      rm -f /usr/bin/dyalogscript
+    '';
 }

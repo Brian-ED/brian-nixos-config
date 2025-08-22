@@ -5,30 +5,14 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-25.05";
 
-    nixos-conf-editor.url = "github:snowfallorg/nixos-conf-editor";
-    nixos-conf-editor.inputs.nixpkgs.follows = "nixpkgs";
+    brian-i3-config = { url = "github:Brian-ED/brian-i3-config"; flake = false; };
+    singeli         = { url = "github:mlochbaum/Singeli"       ; flake = false; };
 
-    home-manager.url = "github:nix-community/home-manager";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
-#    sops-nix.url = "github:Mic92/sops-nix";
-    nix-watch.url = "github:Cloud-Scythe-Labs/nix-watch";
-    nix-watch.inputs.nixpkgs.follows = "nixpkgs";
-
-    brian-i3-config.url = "github:Brian-ED/brian-i3-config";
-    brian-i3-config.flake = false;
-
-    singeli.url = "github:mlochbaum/Singeli";
-    singeli.flake = false;
-
-    nil = {
-      url="github:oxalica/nil";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    nvf = {
-      url = "github:notashelf/nvf";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    nixos-conf-editor = { url = "github:snowfallorg/nixos-conf-editor"; inputs.nixpkgs.follows = "nixpkgs"; };
+    home-manager      = { url = "github:nix-community/home-manager"   ; inputs.nixpkgs.follows = "nixpkgs"; };
+    nix-watch         = { url = "github:Cloud-Scythe-Labs/nix-watch"  ; inputs.nixpkgs.follows = "nixpkgs"; };
+    nil               = { url = "github:oxalica/nil"                  ; inputs.nixpkgs.follows = "nixpkgs"; };
+    nvf               = { url = "github:notashelf/nvf"                ; inputs.nixpkgs.follows = "nixpkgs"; };
   };
 
   outputs = inputs: let
