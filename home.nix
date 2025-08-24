@@ -574,8 +574,8 @@ in
   programs.git = {
     enable = true;
     extraConfig.safe.directory = let winUser = "/mnt/windows/Users/brian"; in [
-      "${winUser}/raylib-apl"
-      "${winUser}/raylib-apl/imports/c-header-to-bqn-ffi"
+      "${winUser}/raylibAPL"
+      "${winUser}/raylibAPL/imports/c-header-to-bqn-ffi"
       "${winUser}/temp-c-raylib"
     ];
     userName = "Brian-ED";
