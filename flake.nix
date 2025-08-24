@@ -10,6 +10,7 @@
 
     nixos-conf-editor = { url = "github:snowfallorg/nixos-conf-editor"; inputs.nixpkgs.follows = "nixpkgs"; };
     home-manager      = { url = "github:nix-community/home-manager"   ; inputs.nixpkgs.follows = "nixpkgs"; };
+    nixGL             = { url = "github:nix-community/nixGL"          ; inputs.nixpkgs.follows = "nixpkgs"; };
     nix-watch         = { url = "github:Cloud-Scythe-Labs/nix-watch"  ; inputs.nixpkgs.follows = "nixpkgs"; };
     nil               = { url = "github:oxalica/nil"                  ; inputs.nixpkgs.follows = "nixpkgs"; };
     nvf               = { url = "github:notashelf/nvf"                ; inputs.nixpkgs.follows = "nixpkgs"; };
@@ -17,7 +18,10 @@
 
   outputs = inputs: let
     system = "x86_64-linux";
-    pkgs = inputs.nixpkgs.legacyPackages.${system};
+    pkgs = import inputs.nixpkgs {
+      inherit system;
+      overlays = [ inputs.nixGL.overlay ];
+    };
     pkgs-stable = inputs.nixpkgs-stable.legacyPackages.${system};
   in {
     homeConfigurations.brian = inputs.home-manager.lib.homeManagerConfiguration {

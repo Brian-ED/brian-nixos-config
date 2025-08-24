@@ -1,12 +1,23 @@
 # TODO get home manager to manage files ~/.gtkrc-2.0
 { pkgs, pkgs-stable, lib, inputs, ...}:
 let
-  nix-watch = inputs.nix-watch.packages.${pkgs.system}.default;
-  home-manager = inputs.home-manager.packages.${pkgs.system}.home-manager;
+  nix-watch         = inputs.nix-watch        .packages.${pkgs.system}.default;
+  home-manager      = inputs.home-manager     .packages.${pkgs.system}.home-manager;
   nixos-conf-editor = inputs.nixos-conf-editor.packages.${pkgs.system}.nixos-conf-editor;
   nil = inputs.nil.packages.${pkgs.system}.nil;
+  cbqn-native = (import ./cbqn.nix pkgs);
   username = "brian";
   homeDir = "/home/${username}";
+
+  # Python with scientific libraries
+  python3 = pkgs.python3.withPackages (p: with p;[
+    yt-dlp-light pyperclip # These are dependencies of my youtube song downloader for my playlist, which is used by the I3 shortcut $mod+Control+Shift+m
+    numpy matplotlib sympy pandas # Me want very much. Used often
+    jupyter ipython ipykernel # Jupiter and dependencies
+    mpmath # Arbitrary precision math
+    scipy # Lots of mathy functions like eigenvalues and curve fitting
+  ]);
+
   sessionVariables = {
 
     # Define the terminal prompt
@@ -42,12 +53,34 @@ let
     + ''\$(if [ \"\$HOME\" = \"\$PWD\" ]; then echo; else dirs; fi)''
     + "$ " + ESCSeq[effect.normal];
 
+    # For running the java application singeliPlayground
+    GSETTINGS_SCHEMA_DIR = "${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}/glib-2.0/schemas";
+    _JAVA_OPTIONS = "-Dawt.useSystemAAFontSettings=lcd";
+
     EDITOR = "codium";
     BROWSER = "qutebrowser";
     TERMINAL = "alacritty";
     NH_FLAKE = "${homeDir}/nixos";
     SINGELI_PATH = inputs.singeli;
   };
+
+  # Used for shell aliases and shell scripts
+  NRO = "${pkgs.nh}/bin/nh os   switch ${homeDir}/proj/brian-nixos-config";
+  HR  = "${pkgs.nh}/bin/nh home switch ${homeDir}/proj/brian-nixos-config";
+  NROQ = "sudo nixos-rebuild switch --flake ${homeDir}/proj/brian-nixos-config/#brians-laptop";
+  HRQ = "${home-manager}/bin/home-manager switch --flake ${homeDir}/proj/brian-nixos-config/#brian";
+  parallelCmdsScript = name: cmd1: cmd2: pkgs.writeShellScriptBin name ''
+      ${cmd1} &
+      pid1=$!
+      tmpfile=$(mktemp)
+      ${pkgs.expect}/bin/unbuffer ${cmd2} > $tmpfile
+      pid2=$!
+      wait $pid1
+      wait $pid2
+      cat "$tmpfile"
+      rm "$tmpfile"
+    '';
+
 in
 {
   imports = [ inputs.nvf.homeManagerModules.default ];
@@ -108,7 +141,7 @@ in
 
   # Sets up repositories for my projects, cloning only if missing, automatically
   # TODO: Only try cloning if connected to wifi
-  # TODO: warn when a repository is removed from the list but still exists with state (autodelete if no state exists)
+  # TODO: warn when a repository is removed from the list but still exists with state (autodelete if no state exists). State includes hidden files, new files, and non-default files found in .git folder.
   home.activation.makeRepos = let # It's complicated, refer to: https://home-manager-options.extranix.com/?query=home.activation&release=release-25.05
     proj = "${homeDir}/proj";
     G = "https://github.com";
@@ -132,6 +165,11 @@ in
       run mkdir ${proj}
     fi
     ${lib.concatStrings cloneCommands}
+    if [ ! -d ${proj}/singeliPlayground ]; then
+      run ${pkgs.git}/bin/git clone "${G}/dzaima/singeliPlayground" ${proj}/singeliPlayground
+      git="${pkgs.git}/bin/git"
+      run ${python3}/bin/python3 ${proj}/singeliPlayground/build.py
+    fi
     if [ ! -d ${homeDir}/.config/i3 ]; then
       run ln -s ${proj}/brian-i3-config ${homeDir}/.config/i3
     fi
@@ -182,10 +220,25 @@ in
   home.packages = [
     nil               # Nix langauge server
     home-manager      # Have home manager manage itself
+    python3
   ] ++ (with pkgs; [
+    jdk24 # javac for SingeliPlayground
     (writeShellScriptBin "mount-hard-drive" ''
       sudo cryptsetup luksOpen /dev/disk/by-uuid/41782a7f-3269-433b-8beb-c74fba89ef2d a
       sudo mount /dev/mapper/a /mnt/hard-drive
+    '')
+    (parallelCmdsScript "NR" NRO HR)
+    (parallelCmdsScript "NRQ" NROQ HRQ)
+    (writeShellScriptBin "sing" ''
+      if [ ! $@ == "" ]; then
+        mkdir --parents out
+        ${cbqn-native}/bin/bqn ${inputs.singeli}/singeli --out out/out.c --deplog out/log.txt $@
+        ${llvmPackages_19.clangWithLibcAndBasicRtAndLibcxx}/bin/clang out/out.c -o out/a.out
+        out/a.out
+        rmdir out 2>/dev/null
+      else
+        ${cbqn-native}/bin/bqn ${inputs.singeli}/singeli --help
+      fi
     '')
 #   ZealOS
     kiwix-tools # I use this for reading wikipedia offline
@@ -245,18 +298,7 @@ in
     arc-theme          # Dark theme related: Arc-Dark GTK theme
     gnome-themes-extra # Dark theme related: Includes Adwaita-dark
     simplescreenrecorder # My favorite recording software
-    (import ./cbqn.nix pkgs) bqn386 # BQN interpreter and font
-    ( # Python with scientific libraries
-      python3.withPackages (p: with p;[
-        yt-dlp-light pyperclip # These are dependencies of my youtube song downloader for my playlist, which is used by the I3 shortcut $mod+Control+Shift+m
-        numpy matplotlib sympy pandas # Me want very much. Used often
-        jupyter ipython ipykernel # Jupiter and dependencies
-        mpmath # Arbitrary precision math
-        scipy # Lots of mathy functions like eigenvalues and curve fitting
-        scikit-learn # AI
-      ])
-    )
-
+    cbqn-native bqn386 # BQN interpreter and font
     (vscode-with-extensions.override {
       vscode = vscodium;
       vscodeExtensions = with vscode-extensions; [
@@ -470,19 +512,12 @@ in
   programs.bash = {
     initExtra = lib.concatStrings (lib.mapAttrsToList (n: v: "export ${n}=\"${v}\"\n") sessionVariables); # I couldn't get home.sessionVariables working. Found this solution here: https://github.com/nix-community/home-manager/issues/1011
     enable = true;
-    shellAliases = let
-      NRO = "${pkgs.nh}/bin/nh os   switch ${homeDir}/proj/brian-nixos-config";
-      HR  = "${pkgs.nh}/bin/nh home switch ${homeDir}/proj/brian-nixos-config";
-      NROQ = "sudo nixos-rebuild switch --flake ${homeDir}/proj/brian-nixos-config/#brians-laptop";
-      HRQ = "${home-manager}/bin/home-manager switch --flake ${homeDir}/proj/brian-nixos-config/#brian";
-    in {
+    shellAliases = {
       code = "codium";
       nix-watch = "${nix-watch}/bin/nix-watch";
       fix-nix-hash = "nix hash convert --hash-algo sha256 --to nix32 $1"; # give in format sha256-...=
       inherit NRO  HR
               NROQ HRQ;
-      NR = "${NRO} && ${HR}";
-      NRQ = "${NROQ} && ${HRQ}";
       P = "pwd | ${pkgs.xclip}/bin/xclip -selection clipboard";
       clip = "${pkgs.xclip}/bin/xclip -selection clipboard";
       lo = "${pkgs.libreoffice-qt6-fresh}/bin/libreoffice";
@@ -498,12 +533,14 @@ in
       cat = "${pkgs.bat}/bin/bat $@";
       # Not sure what to map this to: ''fzf --height 50% --layout reverse --info inline --preview 'bat --color=always --style=full,-grid --line-range=:500 {}' --preview-window right,70%,border-none'';
       l   = "${pkgs.eza}/bin/eza --color=always --all --classify=always --long --color=always --absolute=on --header --git --git-repos --time-style=relative --total-size --no-permissions --no-user --sort extension --icons";
-      ls  = "${pkgs.eza}/bin/eza --color=always --classify=always --across --icons";
-      lsr = "${pkgs.eza}/bin/eza --color=always --classify=always --across --tree --icons";
+      ls  = "${pkgs.eza}/bin/eza --color=always       --classify=always --across                                                                                                                                      --icons";
+      lsr = "${pkgs.eza}/bin/eza --color=always       --classify=always --across --tree                                                                                                                               --icons";
       mv = "mv --update=none-fail"; # Accidentally deleted a file while moving it. Now, I get an error when moving a file that replaces another file
       d = "nix develop";
       win = "cd /mnt/windows/Users/brian";
       min = "cd /mnt/linux-mint/home/brian";
+      singplay = "${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel ${homeDir}/proj/singeliPlayground/run ${cbqn-native} ${inputs.singeli}";
+      singeli = "${inputs.singeli}/singeli";
     };
   };
 
