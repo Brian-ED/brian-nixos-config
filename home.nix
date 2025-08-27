@@ -241,6 +241,7 @@ in
       fi
     '')
 #   ZealOS
+    gnome-screenshot
     kiwix-tools # I use this for reading wikipedia offline
     (dyalog.override { acceptLicense = true; }) ride # Dyalog APL stuff
     libreoffice-qt6-fresh
