@@ -217,9 +217,18 @@
   };
 
   # Cleanup coredumps
-  systemd.coredump.extraConfig = "MaxUse=250m";
-
-  systemd.services = {
+  systemd = {
+    coredump.extraConfig = "MaxUse=250m";
+    slices.anti-hungry.sliceConfig = {
+      CPUAccounting = true;
+      CPUQuota = "50%";
+      MemoryAccounting = true; # Allow to control with systemd-cgtop
+      MemoryHigh = "50%";
+      MemoryMax = "75%";
+      MemorySwapMax = "50%";
+      MemoryZSwapMax = "50%";
+    };
+    services = {};
   };
 
   # This value determines the NixOS release from which the default
