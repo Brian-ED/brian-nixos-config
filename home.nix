@@ -241,6 +241,8 @@ in
       fi
     '')
 #   ZealOS
+    qbe # Compiler backend
+    qemu # Virtual machines
     gnome-screenshot
     kiwix-tools # I use this for reading wikipedia offline
     (dyalog.override { acceptLicense = true; }) ride # Dyalog APL stuff
@@ -248,7 +250,7 @@ in
     duf              # Disk utility
     cryptsetup       # For decrypting my LUKS encrypted harddrive
     prismlauncher    # Minecraft launcher
-    wireguard-tools
+    #wireguard-tools
     qbittorrent-enhanced # BitTorrent client
     pastel            # Command-line tool to generate, analyze, convert and manipulate colors
     bat fzf eza zoxide nushell # Some things I've been trying to improve the terminal. Bad so far.
@@ -258,27 +260,32 @@ in
     rofi              # Used by i3 for fancy UI
     rustdesk          # Remote control. Useful for helping family
     fd                # Since I forget how to use the `find` command every time, I replaced it with fd, which lists files recursively as a flat list that i can then egrep
-    php               # php is used for alpaca server
-    php84Packages.composer # composer is the php package manager
-    docker_28         # Docker is a dependency of alpaca
-#   nixos-conf-editor # Editor for this configuration
-    xorg.xkbcomp      # Temporary for messing with my keyboard settings
+
+    # Alpaca
+    #php               # php is used for alpaca server
+    #php84Packages.composer # composer is the php package manager
+    #docker_28         # Docker is a dependency of alpaca
+
+    #nixos-conf-editor # Editor for this configuration
+    #xorg.xkbcomp      # Temporary for messing with my keyboard settings
     xorg.xev          # I use this for testing button presses on i3
+    # TODO Do I really need 3 applications for light control on i3?
     xorg.xbacklight   # Modify device brightness, xrandr can only modify software brightness
-    sops              # Encrypted secrets viewer and editor. TODO: Is it supposed to replace KeePassXC?
+    light             # My i3 config uses this
+    brightnessctl      # For i3 brightness without sudo
+    #sops              # Encrypted secrets viewer and editor. TODO: Is it supposed to replace KeePassXC?
     gnome-clocks      # Needed a timer
     keepassxc         # Password manager. TODO: Needs to be configured
     rlwrap            # Useful to make Dyalog be a more classic repl
     baobab            # Drive space tree-like view
     obsidian          # Unfree package. Can only use for non-profit
     nodejs            # Javascript interpreter
-    pgadmin4          # Postgresql for database connection
+    #pgadmin4          # Postgresql for database connection
     haruna            # Video player
-    light             # My i3 config uses this
-    elixir            # I want to try out elixer to develop concurrent applications
-    gh                # github commands
-    libllvm           # Playing around with llvm IR
-    pet               # Snippet manager, not exactly sure what that means # TODO: Figure this out
+    #elixir            # I want to try out elixer to develop concurrent applications
+    #gh                # github commands
+    #libllvm           # Playing around with llvm IR
+    #pet               # Snippet manager, not exactly sure what that means # TODO: Figure this out
     qutebrowser       # browser with loads of shortcuts
     lxappearance      # GTK theme switcher, useful for i3
     audacious         # For playing music
@@ -294,7 +301,6 @@ in
     (agda.withPackages (p: [ p.standard-library ]))
     gnome-system-monitor
     pavucontrol        # Audio interface
-    brightnessctl      # For i3 brightness without sudo
     llvmPackages_19.clangWithLibcAndBasicRtAndLibcxx llvmPackages_19.clang-manpages # Will remove later, temporary till I fix permission issues with using zig for building with make
     arc-theme          # Dark theme related: Arc-Dark GTK theme
     gnome-themes-extra # Dark theme related: Includes Adwaita-dark
@@ -333,17 +339,17 @@ in
         [ "vscode-sort"                 "henriiik"       "latest" "0sam2qfa596dcbabx3alrwsgm56a8wzb65dp45yv172kcaam5yd6" ]
         [ "slint"                       "Slint"          "latest" "0fqzclajjagfzs3bjx6m6vnl4jhrcrnhy4cd5yaz4dz2i10cka9f" ]
         [ "remote-explorer"             "ms-vscode"      "latest" "1f5qm8ql60ja5qn5s7mccdhanfvfkvs9zii6dc39fvka7nc3bsh9" ]
-        [ "ols"                         "DanielGavin"    "latest" "0rl6mjkabgbwc0vnm96ax1jhjh5rrky0i1w40fhs1zqyfd83mrsx" ]
+        #[ "ols"                         "DanielGavin"    "latest" "0rl6mjkabgbwc0vnm96ax1jhjh5rrky0i1w40fhs1zqyfd83mrsx" ] # Odin
         [ "vscode-lowercase"            "ruiquelhas"     "latest" "03kwbnc25rfzsr7lzgkycwxnifv4nx04rfcvmfcqqhacx74g14gs" ]
-        [ "vsliveshare"                 "MS-vsliveshare" "latest" "0rhwjar2c6bih1c5w4w8gdgpc6f18669gzycag5w9s35bv6bvsr8" ] # Live Share
+        #[ "vsliveshare"                 "MS-vsliveshare" "latest" "0rhwjar2c6bih1c5w4w8gdgpc6f18669gzycag5w9s35bv6bvsr8" ] # Live Share
         [ "inline-html-indent"          "vulkd"          "latest" "0mh7kpis821088g5qmzay76zrgvgbikl9v2jdjs3mdfkbh2rfl6s" ]
         [ "vuerd-vscode"                "dineug"         "latest" "1n74fwpp0qpqjv42ni05j2h8c7dcf5brramm8s2b7a0q8m5fjk6z" ] # ERD editor
-#       [ "chatgpt-copilot"             "feiskyer"       "latest" "0766vq07gjxgh4xpflzmrcx55i6b9w4hk5zg8yirvgfjscv5gvxv" ]
+        #[ "chatgpt-copilot"             "feiskyer"       "latest" "0766vq07gjxgh4xpflzmrcx55i6b9w4hk5zg8yirvgfjscv5gvxv" ]
         [ "vscode-apl-language-client"  "OptimaSystems"  "latest" "050nn7f6gfzskq1yavqdw77rgl1lxs3p8dqkzrmmliqh5kqh2gr8" ]
         [ "vscode-apl-language"         "OptimaSystems"  "latest" "003n637vskbi4wypm8qwdy4fa9skp19w6kli1bgc162gzcbswhia" ]
         [ "vscode-autohotkey-plus-plus" "mark-wiemer"    "latest" "1i7gqxsgyf18165m2j6wb0ps1h6iniy89jhvhy89hnzm2i95a0ck" ]
-        [ "i3"                          "dcasella"       "latest" "0z7qj6bwch1cxr6pab2i3yqk5id8k14mjlvl6i9f0cmdsxqkmci5" ]
-        [ "idris-vscode"                "meraymond"      "latest" "0yam13n021lmc93m8rpw96ksci0jshfrlnnfdk1q9yqrxydy6320" ]
+        #[ "i3"                          "dcasella"       "latest" "0z7qj6bwch1cxr6pab2i3yqk5id8k14mjlvl6i9f0cmdsxqkmci5" ]
+        #[ "idris-vscode"                "meraymond"      "latest" "0yam13n021lmc93m8rpw96ksci0jshfrlnnfdk1q9yqrxydy6320" ]
       ]);
     })
   ]);
@@ -525,7 +531,7 @@ in
       "." = "cd .."; # Hilariously this works
       "," = "cd ~";
       "_" = "cd - >> /dev/null";
-      mclocal= "prismlauncher --launch 1.21.8 --world 'Sorter Showcase v1.2'";
+      mclocal = "prismlauncher --launch 1.21.8 --world 'Sorter Showcase v1.2'";
       mintemail = "${pkgs.thunderbird}/bin/thunderbird --profile /mnt/linux-mint/home/brian/.thunderbird/v5k5cfgq.default-release $@";
       aplkeys = "setxkbmap -layout fo,apl -option grp:lswitch";
       bqnkeys = "setxkbmap -layout fo,bqn -option grp:lswitch";
@@ -536,6 +542,7 @@ in
       l   = "${pkgs.eza}/bin/eza --color=always --all --classify=always --long --color=always --absolute=on --header --git --git-repos --time-style=relative --total-size --no-permissions --no-user --sort extension --icons";
       ls  = "${pkgs.eza}/bin/eza --color=always       --classify=always --across                                                                                                                                      --icons";
       lsr = "${pkgs.eza}/bin/eza --color=always       --classify=always --across --tree                                                                                                                               --icons";
+      lsrf = "${pkgs.fd} $@";
       mv = "mv --update=none-fail"; # Accidentally deleted a file while moving it. Now, I get an error when moving a file that replaces another file
       d = "nix develop";
       win = "cd /mnt/windows/Users/brian";
