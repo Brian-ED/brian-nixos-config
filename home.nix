@@ -532,8 +532,8 @@ in
       "_" = "cd - >> /dev/null";
       mclocal = "prismlauncher --launch 1.21.8 --world 'Sorter Showcase v1.2'";
       mintemail = "${pkgs.thunderbird}/bin/thunderbird --profile /mnt/linux-mint/home/brian/.thunderbird/v5k5cfgq.default-release $@";
-      aplkeys = "setxkbmap -layout fo,apl -option grp:lswitch";
-      bqnkeys = "setxkbmap -layout fo,bqn -option grp:lswitch";
+      aplk = "setxkbmap -layout fo,apl -option grp:lswitch";
+      bqnk = "setxkbmap -layout fo,bqn -option grp:lswitch";
       find = "${pkgs.fd}/bin/fd $@";
       net = "nmcli dev wifi && nmcli dev wifi connect --ask"; # Find a network to connect to
       cat = "${pkgs.bat}/bin/bat $@";
