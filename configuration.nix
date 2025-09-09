@@ -51,7 +51,14 @@
 
   virtualisation.docker.enable = true;
 
+  powerManagement.powertop.enable = true; # powertop auto tuning on startup # Disabled usb after some time of incativity, so not usable on desktop
+
   services = {
+    ## Powermanagment
+    tlp.enable = true; # TLP power management daemon
+    upower.enable = true; # DBus service that provides power management support to applications.
+    fail2ban.enable = true; # Security for ssh, ratelimiting and such
+    libinput.enable = true; # Enable touchpad support (enabled default in most desktopManager)
 
     cron = { # For Pelican
       enable = true;
@@ -70,7 +77,6 @@
         PermitRootLogin = "prohibit-password"; # "yes", "without-password", "prohibit-password", "forced-commands-only", "no"
       };
     };
-    fail2ban.enable = true; # Security for ssh, ratelimiting and such
 
     # Firefox settings (Haven't looked into it yet)
     # firefox-syncserver = {
@@ -78,9 +84,6 @@
     #   enable = true;
     #   singleNode.enable = true;
     # };
-
-    # Enable touchpad support (enabled default in most desktopManager)
-    libinput.enable = true;
 
     displayManager.defaultSession = "none+i3";
     xserver = {
@@ -96,10 +99,11 @@
         wallpaper.mode = "center"; # One of "center", "fill", "max", "scale", "tile"
       };
 
-
-      windowManager.i3.enable = true;
-      windowManager.i3.configFile = "${inputs.brian-i3-config}/config";
-      windowManager.i3.extraPackages = [];
+      windowManager.i3 = {
+        enable = true;
+        configFile = "${inputs.brian-i3-config}/config";
+        extraPackages = [];
+      };
     };
 
     # Enable CUPS to print documents
@@ -125,6 +129,8 @@
     # List packages installed in system profile. To search, run:
     # $ nix search wget
     systemPackages = with pkgs; [ # These are duplicates from home, TODO: Simplify the shared pkgs list
+      xviewer           # Image viewer
+      copyq             # clipboard saving
       xcolor            # color-pick shortcut for i3
       alacritty         # My chosen terminal. Loads quickly, and doesn't have a inbuilt-windowmanager to complicate it
       xdotool           # Useful for automating tasks

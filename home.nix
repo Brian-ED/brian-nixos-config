@@ -4,7 +4,8 @@ let
   nix-watch         = inputs.nix-watch        .packages.${pkgs.system}.default;
   home-manager      = inputs.home-manager     .packages.${pkgs.system}.home-manager;
   nixos-conf-editor = inputs.nixos-conf-editor.packages.${pkgs.system}.nixos-conf-editor;
-  nil = inputs.nil.packages.${pkgs.system}.nil;
+  nil               = inputs.nil              .packages.${pkgs.system}.nil;
+  k                 = inputs.k                .packages.${pkgs.system}.k;
   cbqn-native = (import ./cbqn.nix pkgs);
   username = "brian";
   homeDir = "/home/${username}";
@@ -241,6 +242,7 @@ in
       fi
     '')
 #   ZealOS
+    k   # On github: runtimeverification/k. A verification language
     qbe # Compiler backend
     qemu # Virtual machines
     gnome-screenshot

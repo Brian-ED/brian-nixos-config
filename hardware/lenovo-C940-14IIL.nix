@@ -18,7 +18,7 @@
   };
 
   fileSystems = let
-    options = ["noatime" "nodiratime" "discard"];
+    options = ["noatime" "nodiratime" "discard" "nofail"];
   in {
     "/" = {
       device = "/dev/disk/by-uuid/f60e26dd-b472-47dc-95a3-399f1b160103";
