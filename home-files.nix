@@ -160,7 +160,7 @@
           "idris.idrisPath": "/nix/store/7mb2q6ciih9w1sk2yqyvqkfrwvi526wd-idris2-0.7.0/bin/idris2",
           "idris.idris2Mode": true,
           "hediet.vscode-drawio.resizeImages": null,
-          "stripe.cliInstallPath": "${pkgs.stripe-cli.outPath}"
+          "stripe.cliInstallPath": "${pkgs.stripe-cli.outPath}/bin/stripe"
       }
     '';
   };
