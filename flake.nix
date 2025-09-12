@@ -2,8 +2,9 @@
   description = "A very basic flake";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-25.05";
+    nixpkgs.url        = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-25.05"   ;
+    k.url              = "github:runtimeverification/k"       ;
 
     brian-i3-config = { url = "github:Brian-ED/brian-i3-config"; flake = false; };
     singeli         = { url = "github:mlochbaum/Singeli"       ; flake = false; };
@@ -14,7 +15,6 @@
     nix-watch         = { url = "github:Cloud-Scythe-Labs/nix-watch"  ; inputs.nixpkgs.follows = "nixpkgs"       ; };
     nil               = { url = "github:oxalica/nil"                  ; inputs.nixpkgs.follows = "nixpkgs"       ; };
     nvf               = { url = "github:notashelf/nvf"                ; inputs.nixpkgs.follows = "nixpkgs"       ; };
-    k                 = { url = "github:runtimeverification/k"        ; };
   };
 
   outputs = inputs: let
