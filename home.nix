@@ -223,6 +223,7 @@ in
     home-manager      # Have home manager manage itself
     python3
   ] ++ (with pkgs; [
+    stripe-cli
     jdk24 # javac for SingeliPlayground
     (writeShellScriptBin "mount-hard-drive" ''
       sudo cryptsetup luksOpen /dev/disk/by-uuid/41782a7f-3269-433b-8beb-c74fba89ef2d a
@@ -311,6 +312,7 @@ in
     (vscode-with-extensions.override {
       vscode = vscodium;
       vscodeExtensions = with vscode-extensions; [
+        ms-dotnettools.vscode-dotnet-runtime
         ms-python.python # Python extension
         ms-python.vscode-pylance
         ziglang.vscode-zig
@@ -357,50 +359,7 @@ in
   ]);
 
   # manages dotfiles
-  home.file = {
-    "${homeDir}/.config/alacritty/alacritty.toml" = {
-      enable = true;
-      # onChange   # Shell commands to run when file has changed between generations. The script will be run *after* the new files have been linked into place. Note, this code is always run when `recursive` is enabled.   strings concatenated with "\n"
-      # recursive  # If the file source is a directory, then this option determines whether the directory should be recursively linked to the target location. This option has no effect if the source is a file. If `false` (the default) then the target will be a symbolic link to the source directory. If `true` then the target will be a directory structure matching the source's but whose leafs are symbolic links to the files of the source directory.   boolean
-      # source     # Path of the source file or directory. If .text is non-null then this option will automatically point to a file containing that text.   path
-      text = lib.concatStringsSep "\n" [
-        ''font.normal = { family = "BQN386 Unicode", style = "Regular" }'' # Requires bqn386 package
-        ''window.decorations = "None"'' # No difference on i3. Disabled since probably less for alacrety to do
-        ''scrolling.history = 100000'' # 100,000 is the absolute max according to docs
-        ''colors.cursor = { text = "CellBackground", cursor = "#7d7d7d" }''
-        "[general]"
-        ''live_config_reload = true''
-        ''ipc_socket = false'' # Disable using "alacritty msg" to tell alacritty to do stuff like "alacritty msg config" to update config
-        "[colors.primary]" ''foreground = "#d8d8d8"'' ''background = "#000000"''
-        ''dim_foreground = "None"'' # If this is set to None, the color is automatically calculated based on the foreground color. It isn't None by default
-        ''bright_foreground = "None"'' # This color is only used when draw_bold_text_with_bright_colors is true. If this is not set, the normal foreground will be used. It is set by default, but to be consistent with dim_background I'll make an exception and not remove this
-      ];
-    };
-    "${homeDir}/.config/qutebrowser/config.py" = {
-      enable = true;
-      executable = true;
-      text = lib.concatStringsSep "\n" [
-        ''config.set("colors.webpage.darkmode.enabled", True)''
-        ''config.set('content.cookies.accept', 'no-3rdparty', 'chrome-devtools://*')''
-        ''config.load_autoconfig(False)'' # Qutebrowser errors if you don't enable this when auto-generating a config, since otherwise it's able to edit it with GUI
-      ];
-    };
-
-    "${homeDir}/.config/agda/libraries" = {
-      enable = true;
-      text = ''
-        ${pkgs.agdaPackages.standard-library.outPath}/standard-library.agda-lib
-        ${homeDir}/proj/agda-lib/agda-lib.agda-lib
-      '';
-    };
-    "${homeDir}/.config/agda/defaults" = {
-      enable = true;
-      text = ''
-        standard-library
-      '';
-    };
-
-  };
+  home.file = import ./home-files.nix {inherit homeDir lib pkgs;};
 
   home = {inherit sessionVariables;};
 
@@ -533,6 +492,7 @@ in
       "." = "cd .."; # Hilariously this works
       "," = "cd ~";
       "_" = "cd - >> /dev/null";
+      mcsnorri = "prismlauncher --launch 1.21.8-extra --server 198.244.176.195:2009";
       mclocal = "prismlauncher --launch 1.21.8 --world 'Sorter Showcase v1.2'";
       mintemail = "${pkgs.thunderbird}/bin/thunderbird --profile /mnt/linux-mint/home/brian/.thunderbird/v5k5cfgq.default-release $@";
       aplk = "setxkbmap -layout fo,apl -option grp:lswitch";
