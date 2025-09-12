@@ -3,164 +3,196 @@
     enable = true;
     text = ''
       {
-          "files.autoSave": "afterDelay",
-          "git.enableSmartCommit": true,
-          "explorer.confirmDragAndDrop": false,
-          "explorer.confirmDelete": false,
-          "zig.zls.enabled": "on",
-          "prettier.configPath": ".prettierrc",
-          "[javascriptreact]": {
-              "editor.defaultFormatter": "esbenp.prettier-vscode"
+        "agdaMode.connection.commandLineOptions": "-l=/home/brian/proj/agda-lib",
+        "agdaMode.libraryPath": "/home/brian/proj/agda-lib",
+        "bqn.enableBackslashCompletion": false,
+        "code-runner.saveFileBeforeRun": true,
+        "diffEditor.experimental.showMoves": true,
+        "diffEditor.ignoreTrimWhitespace": true,
+        "editor.fontLigatures": false, // "editor.inlayHints.enabled": "off",
+        "editor.maxTokenizationLineLength": 100000,
+        "editor.minimap.enabled": false,
+        "editor.tabSize": 2,
+        "explorer.confirmDelete": false,
+        "explorer.confirmDragAndDrop": false,
+        "files.autoSave": "afterDelay",
+        "files.eol": "\n",
+        "files.insertFinalNewline": true,
+        "files.trimFinalNewlines": true,
+        "git.enableSmartCommit": true,
+        "git.openRepositoryInParentFolders": "never",
+        "githubPullRequests.createOnPublishBranch": "never",
+        "hediet.vscode-drawio.appearance": "dark",
+        "hediet.vscode-drawio.resizeImages": null,
+        "hediet.vscode-drawio.theme": "min",
+        "idris.idris2Mode": true,
+        "idris.idrisPath": "/nix/store/7mb2q6ciih9w1sk2yqyvqkfrwvi526wd-idris2-0.7.0/bin/idris2",
+        "python.createEnvironment.trigger": "off",
+        "stripe.cliInstallPath": "${pkgs.stripe-cli.outPath}/bin/stripe"
+        "terminal.integrated.enableMultiLinePasteWarning": "never",
+        "terminal.integrated.fontSize": 10,
+        "update.showReleaseNotes": false,
+        "window.zoomLevel": 2,
+        "workbench.layoutControl.enabled": false,
+        "workbench.navigationControl.enabled": false,
+        "workbench.panel.showLabels": false,
+        "zig.buildFilePath": "''${workspace}/build.zig",
+        "zig.path": "${pkgs.zig.outPath}",
+        "zig.zigPath": "${pkgs.zig.outPath}/bin/zig",
+        "zig.zls.buildRunnerPath": "${pkgs.zig.outPath}/lib/zig/compilers/build_runner.zig",
+        "zig.zls.enabled": "on",
+        "zig.zls.path": "${pkgs.zls.outPath}/bin/zls",
+        "files.exclude": {
+            "**/.git": true,
+        },
+        "files.autoSaveDelay": 200,
+        "files.associations": {
+          "*.apls": "apl",
+          "*.hide": "apl"
+        },
+        "editor.lineHeight": 1.3,
+        "prettier.configPath": ".prettierrc",
+        "[javascriptreact]": {
+            "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "python.analysis.autoImportCompletions": true,
+        "javascript.updateImportsOnFileMove.enabled": "always",
+        "git.autofetch": true,
+        "code-runner.runInTerminal": true,
+        "git.confirmSync": false,
+        "tws.trimOnSave": false,
+        "tws.highlightTrailingWhiteSpace": true,
+        "diffEditor.ignoreTrimWhitespace": false,
+        "nix.formatterPath": "nixfmt", // or "nixpkgs-fmt" or "alejandra" or "nix3-fmt" or pass full list of args such as  or `["treefmt", "--stdin", "{file}"]`
+        "nix.enableLanguageServer": true,
+        "nix.serverPath": "nil", // or "nixd"
+        "workbench.sideBar.location": "right",
+
+        "code-runner.executorMap": {
+          "ahk": "autohotkey",
+          "apl":"cd $dir && dyalogscript $fileName",
+          "apln":"cd $dir && dyalogscript $fileName",
+          "apls":"cd $dir && dyalogscript $fileName",
+          "applescript": "osascript",
+          "autoit": "autoit3",
+          "bat": "cmd /c",
+          "bqn": "bqn",
+          "c": "cd $dir && gcc $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
+          "clojure": "lein exec",
+          "coffeescript": "coffee",
+          "cpp": "cd $dir && g++ $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
+          "crystal": "crystal",
+          "csharp": "scriptcs",
+          "d": "cd $dir && dmd $fileName && $dir$fileNameWithoutExt",
+          "dart": "dart",
+          "dyalog":"cd $dir && dyalogscript $fileName",
+          "erlang": "escript",
+          "fortran_fixed-form": "cd $dir && gfortran $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
+          "fortran-modern": "cd $dir && gfortran $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
+          "fortran": "cd $dir && gfortran $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
+          "FortranFreeForm": "cd $dir && gfortran $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
+          "fsharp": "fsi",
+          "gleam": "gleam run -m $fileNameWithoutExt"
+          "go": "go run",
+          "groovy": "groovy",
+          "haskell": "runghc",
+          "haxe": "haxe --cwd $dirWithoutTrailingSlash --run $fileNameWithoutExt",
+          "html": "firefox"
+          "java": "cd $dir && javac $fileName && java $fileNameWithoutExt",
+          "javascript": "cd $dir && node $fileName",
+          "julia": "julia",
+          "kit": "kitc --run",
+          "less": "cd $dir && lessc $fileName $fileNameWithoutExt.css",
+          "lisp": "sbcl --script",
+          "lua": "lua",
+          "mojo": "mojo run",
+          "nim": "nim compile --verbosity:0 --hints:off --run",
+          "objective-c": "cd $dir && gcc -framework Cocoa $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
+          "ocaml": "ocaml",
+          "odin":"odin run $dir",
+          "pascal": "cd $dir && fpc $fileName && $dir$fileNameWithoutExt",
+          "perl": "perl",
+          "perl6": "perl6",
+          "php": "php",
+          "pkl": "cd $dir && pkl eval -f yaml $fileName -o $fileNameWithoutExt.yaml",
+          "powershell": "powershell -ExecutionPolicy ByPass -File",
+          "python": "cd $dir && python3 -u $fileName",
+          "r": "Rscript",
+          "racket": "racket",
+          "ruby": "ruby",
+          "rust": "cd $dir && cargo run", // "rust": "cd $dir && rustc $fileName && $dir$fileNameWithoutExt",
+          "sass": "sass --style expanded",
+          "scala": "scala",
+          "scheme": "csi -script",
+          "scss": "scss --style expanded",
+          "shellscript": "bash",
+          "singeli":"cd $dir && ~/Singeli/singeli -p \"\" $fileName",
+          "sml": "cd $dir && sml $fileName",
+          "spwn": "spwn build",
+          "swift": "swift",
+          "typescript": "ts-node",
+          "v": "v run",
+          "vbscript": "cscript //Nologo",
+          "zig": "zig run",
+        },
+        "nix.serverSettings": { // LSP config can be passed via the ``nix.serverSettings.{lsp}`` as shown below.
+          "nil": { // check https://github.com/oxalica/nil/blob/main/docs/configuration.md for all options available
+            // "diagnostics": {
+            //  "ignored": ["unused_binding", "unused_with"],
+            // },
+            "formatting": {
+              "command": ["nixfmt"],
+            },
           },
-          "javascript.updateImportsOnFileMove.enabled": "always",
-          "git.autofetch": true,
-          "files.autoSaveDelay": 200,
-          "code-runner.executorMap": {
-              "bqn": "bqn",
-              "javascript": "node",
-              "java": "cd $dir && javac $fileName && java $fileNameWithoutExt",
-              "c": "cd $dir && gcc $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
-              "zig": "zig run",
-              "cpp": "cd $dir && g++ $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
-              "objective-c": "cd $dir && gcc -framework Cocoa $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
-              "php": "php",
-              "python": "python -u",
-              "perl": "perl",
-              "perl6": "perl6",
-              "ruby": "ruby",
-              "go": "go run",
-              "lua": "lua",
-              "groovy": "groovy",
-              "powershell": "powershell -ExecutionPolicy ByPass -File",
-              "bat": "cmd /c",
-              "shellscript": "bash",
-              "fsharp": "fsi",
-              "csharp": "scriptcs",
-              "vbscript": "cscript //Nologo",
-              "typescript": "ts-node",
-              "coffeescript": "coffee",
-              "scala": "scala",
-              "swift": "swift",
-              "julia": "julia",
-              "crystal": "crystal",
-              "ocaml": "ocaml",
-              "r": "Rscript",
-              "applescript": "osascript",
-              "clojure": "lein exec",
-              "haxe": "haxe --cwd $dirWithoutTrailingSlash --run $fileNameWithoutExt",
-              "rust": "cd $dir && rustc $fileName && $dir$fileNameWithoutExt",
-              "racket": "racket",
-              "scheme": "csi -script",
-              "ahk": "autohotkey",
-              "autoit": "autoit3",
-              "dart": "dart",
-              "pascal": "cd $dir && fpc $fileName && $dir$fileNameWithoutExt",
-              "d": "cd $dir && dmd $fileName && $dir$fileNameWithoutExt",
-              "haskell": "runghc",
-              "nim": "nim compile --verbosity:0 --hints:off --run",
-              "lisp": "sbcl --script",
-              "kit": "kitc --run",
-              "v": "v run",
-              "sass": "sass --style expanded",
-              "scss": "scss --style expanded",
-              "less": "cd $dir && lessc $fileName $fileNameWithoutExt.css",
-              "FortranFreeForm": "cd $dir && gfortran $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
-              "fortran-modern": "cd $dir && gfortran $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
-              "fortran_fixed-form": "cd $dir && gfortran $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
-              "fortran": "cd $dir && gfortran $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
-              "sml": "cd $dir && sml $fileName",
-              "mojo": "mojo run",
-              "erlang": "escript",
-              "spwn": "spwn build",
-              "pkl": "cd $dir && pkl eval -f yaml $fileName -o $fileNameWithoutExt.yaml",
-              "gleam": "gleam run -m $fileNameWithoutExt"
-          },
-          "git.confirmSync": false,
-          "tws.trimOnSave": false,
-          "tws.highlightTrailingWhiteSpace": true,
-          "diffEditor.ignoreTrimWhitespace": false,
-
-
-          "nix.formatterPath": "nixfmt", // or "nixpkgs-fmt" or "alejandra" or "nix3-fmt" or pass full list of args such as  or `["treefmt", "--stdin", "{file}"]`
-
-          "nix.enableLanguageServer": true,
-          "nix.serverPath": "nil", // or "nixd"
-          // LSP config can be passed via the ``nix.serverSettings.{lsp}`` as shown below.
-          "nix.serverSettings": {
-
-            // check https://github.com/oxalica/nil/blob/main/docs/configuration.md for all options available
-            "nil": {
-              // "diagnostics": {
-              //  "ignored": ["unused_binding", "unused_with"],
-              // },
-              "formatting": {
-                "command": ["nixfmt"],
+          "nixd": { // check https://github.com/nix-community/nixd/blob/main/nixd/docs/configuration.md for all nixd config
+            "formatting": {
+              "command": ["nixfmt"],
+            },
+            "options": {
+              // By default, this entry will be read from `import <nixpkgs> { }`.
+              // You can write arbitrary Nix expressions here, to produce valid "options" declaration result.
+              // Tip: for flake-based configuration, utilize `builtins.getFlake`
+              "nixos": {
+                "expr": "(builtins.getFlake \"/absolute/path/to/flake\").nixosConfigurations.<name>.options",
+              },
+              "home-manager": {
+                "expr": "(builtins.getFlake \"/absolute/path/to/flake\").homeConfigurations.<name>.options",
+              },
+              // Tip: use ''${workspaceFolder} variable to define path
+              "nix-darwin": {
+                "expr": "(builtins.getFlake \"''${workspaceFolder}/path/to/flake\").darwinConfigurations.<name>.options",
               },
             },
-            // check https://github.com/nix-community/nixd/blob/main/nixd/docs/configuration.md for all nixd config
-            "nixd": {
-              "formatting": {
-                "command": ["nixfmt"],
-              },
-              "options": {
-                // By default, this entry will be read from `import <nixpkgs> { }`.
-                // You can write arbitrary Nix expressions here, to produce valid "options" declaration result.
-                // Tip: for flake-based configuration, utilize `builtins.getFlake`
-                "nixos": {
-                  "expr": "(builtins.getFlake \"/absolute/path/to/flake\").nixosConfigurations.<name>.options",
-                },
-                "home-manager": {
-                  "expr": "(builtins.getFlake \"/absolute/path/to/flake\").homeConfigurations.<name>.options",
-                },
-                // Tip: use ''${workspaceFolder} variable to define path
-                "nix-darwin": {
-                  "expr": "(builtins.getFlake \"''${workspaceFolder}/path/to/flake\").darwinConfigurations.<name>.options",
-                },
-              },
-            }
-          },
-          "workbench.sideBar.location": "right",
-          "zig.path": "zig",
-          "agdaMode.connection.paths": [
-            "/home/brian/.nix-profile/bin/agda"
-          ],
-          "editor.unicodeHighlight.allowedCharacters": {
-            "ℕ": true,
-            " ": false,
-            "∨": true,
-            "′": true,
-            "ℓ": true,
-            "⊤": true,
-            "×": true,
-            "∣": true,
-            "γ": true,
-            "ℤ": true,
-            "⍳": true,
-            "⍴": true,
-            "𝕨": true,
-            "𝕩": true,
-            "𝕎": true,
-            "𝕏": true,
-            "⍺": true,
-            "˜": true,
-            "´": true,
-            "∪": true
-          },
-          "[bqn]": {
-            "editor.fontFamily": "'BQN386 Unicode', 'monospace', monospace"
-          },
-          "git.openRepositoryInParentFolders": "never",
-          "bqn.enableBackslashCompletion": false,
-          "agdaMode.connection.commandLineOptions": "-l=/home/brian/proj/agda-lib",
-          "agdaMode.libraryPath": "/home/brian/proj/agda-lib",
-          "files.associations": {
-            "*.apls": "apl",
-            "*.hide": "apl"
-          },
-          "idris.idrisPath": "/nix/store/7mb2q6ciih9w1sk2yqyvqkfrwvi526wd-idris2-0.7.0/bin/idris2",
-          "idris.idris2Mode": true,
-          "hediet.vscode-drawio.resizeImages": null,
-          "stripe.cliInstallPath": "${pkgs.stripe-cli.outPath}/bin/stripe"
+          }
+        },
+        "agdaMode.connection.paths": [
+          "/home/brian/.nix-profile/bin/agda"
+        ],
+        "editor.unicodeHighlight.allowedCharacters": {
+          "ℕ": true,
+          " ": false,
+          "∨": true,
+          "′": true,
+          "ℓ": true,
+          "⊤": true,
+          "×": true,
+          "∣": true,
+          "γ": true,
+          "ℤ": true,
+          "⍳": true,
+          "⍴": true,
+          "𝕨": true,
+          "𝕩": true,
+          "𝕎": true,
+          "𝕏": true,
+          "⍺": true,
+          "˜": true,
+          "´": true,
+          "∪": true
+        },
+        "[bqn]": {
+          "editor.fontFamily": "'BQN386 Unicode', 'monospace', monospace"
+        },
       }
     '';
   };
