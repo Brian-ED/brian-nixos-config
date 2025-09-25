@@ -6,7 +6,7 @@ let
   nixos-conf-editor = inputs.nixos-conf-editor.packages.${pkgs.system}.nixos-conf-editor;
   nil               = inputs.nil              .packages.${pkgs.system}.nil;
   k                 = inputs.k                .packages.${pkgs.system}.k;
-  cbqn-native = (import ./cbqn.nix pkgs);
+  cbqn-native = (import ./pkgs/cbqn.nix pkgs);
   username = "brian";
   homeDir = "/home/${username}";
 
@@ -17,6 +17,7 @@ let
     jupyter ipython ipykernel # Jupiter and dependencies
     mpmath # Arbitrary precision math
     scipy # Lots of mathy functions like eigenvalues and curve fitting
+    (p.callPackage ./pkgs/automata.nix {cached-method = p.callPackage ./pkgs/cached-method.nix {};})
   ]);
 
   sessionVariables = {

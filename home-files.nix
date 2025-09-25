@@ -77,7 +77,7 @@
           "autoit": "autoit3",
           "bat": "cmd /c",
           "bqn": "bqn",
-          "c": "cd $dir && gcc $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
+          "c": "cd $dir && cc $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
           "clojure": "lein exec",
           "coffeescript": "coffee",
           "cpp": "cd $dir && g++ $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",

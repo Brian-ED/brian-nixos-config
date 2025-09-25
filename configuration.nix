@@ -168,7 +168,7 @@
       arc-theme          # Dark theme related: Arc-Dark GTK theme
       gnome-themes-extra # Dark theme related: Includes Adwaita-dark
       simplescreenrecorder # My favorite recording software
-      (import ./cbqn.nix pkgs) bqn386 # BQN interpreter and font
+      (import ./pkgs/cbqn.nix pkgs) bqn386 # BQN interpreter and font
     ] ++ [ # The rest is extra packages not found in home
       pkgs.git
       inputs.home-manager.packages.${pkgs.system}.home-manager
