@@ -343,7 +343,7 @@ in
         [ "iceworks-time-master"        "iceworks-team"  "latest" "05k7icssa7llbp4a44kny0556hvimmdh6fm394y5rh86bxqq0iq3" ]
         [ "suteppu"                     "Itsakaseru"     "latest" "1z0zkznwwm0z1vyq2wsw9rf1kg8pfpb3rl7glx0zp3aq8sxvnfsf" ]
         [ "vscode-sort"                 "henriiik"       "latest" "0sam2qfa596dcbabx3alrwsgm56a8wzb65dp45yv172kcaam5yd6" ]
-        [ "slint"                       "Slint"          "latest" "004n0mqwxln3az58sn5m4irvaxfanqj7g5vm1fj009xaq2cqdv0s" ]
+        [ "slint"                       "Slint"          "latest" "0zq1ld07rgrgkmy066ds0p3yalyr9f8kwysazhvxqv9wsfdwjwqv" ]
         [ "remote-explorer"             "ms-vscode"      "latest" "10rsnl5yk08mhcwg5j7s2xsawd7v2ilcgg2rm9v904v3nd2qi8xv" ]
         #[ "ols"                         "DanielGavin"    "latest" "0rl6mjkabgbwc0vnm96ax1jhjh5rrky0i1w40fhs1zqyfd83mrsx" ] # Odin
         [ "vscode-lowercase"            "ruiquelhas"     "latest" "03kwbnc25rfzsr7lzgkycwxnifv4nx04rfcvmfcqqhacx74g14gs" ]

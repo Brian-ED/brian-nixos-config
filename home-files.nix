@@ -59,6 +59,7 @@
         "javascript.updateImportsOnFileMove.enabled": "always",
         "git.autofetch": true,
         "code-runner.runInTerminal": true,
+        "code-runner.respectShebang": false,
         "git.confirmSync": false,
         "tws.trimOnSave": false,
         "tws.highlightTrailingWhiteSpace": true,
