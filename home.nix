@@ -482,6 +482,8 @@ in
     initExtra = lib.concatStrings (lib.mapAttrsToList (n: v: "export ${n}=\"${v}\"\n") sessionVariables); # I couldn't get home.sessionVariables working. Found this solution here: https://github.com/nix-community/home-manager/issues/1011
     enable = true;
     shellAliases = {
+      volup = "wpctl set-volume $(wpctl status | egrep '\\*.*Speaker'  | grep -oE '[0-9]+' | head -n 1) 10%+";
+      addsong = "${python3}/bin/yt-dlp --format 251 $@";
       code = "codium";
       nix-watch = "${nix-watch}/bin/nix-watch";
       fix-nix-hash = "nix hash convert --hash-algo sha256 --to nix32 $1"; # give in format sha256-...=

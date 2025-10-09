@@ -3,6 +3,10 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’)
 {pkgs, lib, inputs, ... }:
 {
+  swapDevices = [{
+    device = "/var/lib/swapfile";
+    size = 16*1024; # 16 GB
+  }];
   nix = {
     channel.enable = false;
     nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") inputs; # For disabling channels
