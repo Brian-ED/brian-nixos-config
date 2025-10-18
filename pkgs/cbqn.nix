@@ -17,7 +17,7 @@ pkgs: pkgs.stdenv.mkDerivation {
   buildInputs       = [ pkgs.libffi ];
 
   # Set the system C compiler
-  makeFlags = [ "CC=${pkgs.llvmPackages_19.clangWithLibcAndBasicRtAndLibcxx}/bin/clang" ];
+  makeFlags = [ "CC=${pkgs.llvmPackages.clangWithLibcAndBasicRtAndLibcxx}/bin/clang" ];
 
   # Customize build for maximum performance.
   buildFlags = [
