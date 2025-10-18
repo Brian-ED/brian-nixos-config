@@ -19,6 +19,10 @@
 
   outputs = inputs: let
     system = "x86_64-linux";
+    win = "/mnt/windows";
+    min = "/mnt/linux-mint";
+    winUser = "${win}/Users/brian";
+    minUser = "${min}/home/brian";
     pkgs = import inputs.nixpkgs {
       inherit system;
       overlays = [ inputs.nixGL.overlay ];
@@ -28,13 +32,13 @@
     homeConfigurations.brian = inputs.home-manager.lib.homeManagerConfiguration {
       inherit pkgs;
       modules = [ ./home.nix ./pkgs/restic-temp.nix ];
-      extraSpecialArgs = {inherit inputs; inherit pkgs-stable; };
+      extraSpecialArgs = {inherit inputs pkgs-stable winUser minUser; };
     };
 
     nixosConfigurations = {
       brians-laptop = inputs.nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = {inherit inputs;};
+        specialArgs = {inherit inputs win min;};
         modules = [
           ./hardware/lenovo-C940-14IIL.nix # Include the results of the hardware scan
           ./configuration.nix

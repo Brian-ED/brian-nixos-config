@@ -1,5 +1,5 @@
 # TODO get home manager to manage files ~/.gtkrc-2.0
-{ pkgs, pkgs-stable, lib, inputs, ...}:
+{ pkgs, pkgs-stable, lib, inputs, winUser, minUser, ...}:
 let
   nix-watch         = inputs.nix-watch        .packages.${pkgs.system}.default;
   home-manager      = inputs.home-manager     .packages.${pkgs.system}.home-manager;
@@ -225,7 +225,7 @@ in
     python3
   ] ++ (with pkgs; [
     stripe-cli
-    jdk24 # javac for SingeliPlayground
+    jdk25 # javac for SingeliPlayground
     (writeShellScriptBin "mount-hard-drive" ''
       sudo cryptsetup luksOpen /dev/disk/by-uuid/41782a7f-3269-433b-8beb-c74fba89ef2d a
       sudo mount /dev/mapper/a /mnt/hard-drive
@@ -483,7 +483,7 @@ in
     enable = true;
     shellAliases = {
       volup = "wpctl set-volume $(wpctl status | egrep '\\*.*Speaker'  | grep -oE '[0-9]+' | head -n 1) 10%+";
-      addsong = "${python3}/bin/yt-dlp --format 251 $@";
+      addsong = "${python3}/bin/yt-dlp --format 251 --paths ${winUser}/Music/ $@";
       code = "codium";
       nix-watch = "${nix-watch}/bin/nix-watch";
       fix-nix-hash = "nix hash convert --hash-algo sha256 --to nix32 $1"; # give in format sha256-...=
@@ -497,7 +497,7 @@ in
       "_" = "cd - >> /dev/null";
       mcsnorri = "prismlauncher --launch 1.21.8-extra --server 198.244.176.195:2009";
       mclocal = "prismlauncher --launch 1.21.8 --world 'Sorter Showcase v1.2'";
-      mintemail = "${pkgs.thunderbird}/bin/thunderbird --profile /mnt/linux-mint/home/brian/.thunderbird/v5k5cfgq.default-release $@";
+      mintemail = "${pkgs.thunderbird}/bin/thunderbird --profile ${minUser}/.thunderbird/v5k5cfgq.default-release $@";
       aplk = "setxkbmap -layout fo,apl -option grp:lswitch";
       bqnk = "setxkbmap -layout fo,bqn -option grp:lswitch";
       find = "${pkgs.fd}/bin/fd $@";
@@ -510,8 +510,8 @@ in
       lsrf = "${pkgs.fd} $@";
       mv = "mv --update=none-fail"; # Accidentally deleted a file while moving it. Now, I get an error when moving a file that replaces another file
       d = "nix develop";
-      win = "cd /mnt/windows/Users/brian";
-      min = "cd /mnt/linux-mint/home/brian";
+      win = "cd ${winUser}";
+      min = "cd ${minUser}";
       singplay = "${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel ${homeDir}/proj/singeliPlayground/run ${cbqn-native} ${inputs.singeli}";
       singeli = "${inputs.singeli}/singeli";
     };
@@ -546,7 +546,7 @@ in
 
   programs.git = {
     enable = true;
-    extraConfig.safe.directory = let winUser = "/mnt/windows/Users/brian"; in [
+    extraConfig.safe.directory = [
       "${winUser}/raylibAPL"
       "${winUser}/raylibAPL/imports/c-header-to-bqn-ffi"
       "${winUser}/temp-c-raylib"

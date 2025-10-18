@@ -64,11 +64,6 @@
     fail2ban.enable = true; # Security for ssh, ratelimiting and such
     libinput.enable = true; # Enable touchpad support (enabled default in most desktopManager)
 
-    cron = { # For Pelican
-      enable = true;
-      systemCronJobs = [ "* * * * * php /var/www/pelican/artisan schedule:run >> /dev/null 2>&1" ];
-    };
-
     # Enable the OpenSSH daemon
     openssh = {
       enable = true;
@@ -168,7 +163,7 @@
       gnome-system-monitor
       pavucontrol        # Audio interface
       brightnessctl      # For i3 brightness without sudo
-      llvmPackages_19.clangWithLibcAndBasicRtAndLibcxx llvmPackages_19.clang-manpages # Will remove later, temporary till I fix permission issues with using zig for building with make
+      llvmPackages.clangWithLibcAndBasicRtAndLibcxx llvmPackages.clang-manpages # Will remove later, temporary till I fix permission issues with using zig for building with make
       arc-theme          # Dark theme related: Arc-Dark GTK theme
       gnome-themes-extra # Dark theme related: Includes Adwaita-dark
       simplescreenrecorder # My favorite recording software
