@@ -331,9 +331,13 @@ in
 #       github.copilot
 #       github.copilot-chat
         hediet.vscode-drawio
+        vscjava.vscode-java-pack # This is mainly for P3 (Uni project) with vaadin to do java web development
+        redhat.java # This is mainly for P3 (Uni project) with vaadin to do java web development
       ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace (map (x:
         let I=builtins.elemAt; in
         { name=I x 0;                   publisher=I x 1; version=I x 2; sha256=I x 3; } ) [
+        [ "vscode-boot-dev-pack"        "vmware"         "latest" "0k181dz71ivjn5qkz3x0f65kvnkz4pgi5jq9bwy6a14g67ipya71" ] # This is mainly for P3 (Uni project) with vaadin to do java web development
+        [ "vaadin-vscode"               "vaadin"         "latest" "12nbr3br4g8q9r85xwhhsd0m3hw46srffdivml4jpj8gfh9qy3jj" ] # This is mainly for P3 (Uni project) with vaadin to do java web development
         [ "vscode-stripe"               "Stripe"         "latest" "07jwjzya4961w7mz8gpjw1300bigzpn2k8pqdng6k9b72jij80la" ]
         [ "bqn"                         "mk12"           "latest" "0bnpc1xw5gs362sk213r0n2p37zd08m6jgj61jh3y098wni6say8" ]
         [ "newline"                     "chang196700"    "latest" "0xijg1nqlrlwkl4ls21hzikr30iz8fd98ynpbmhhdxrkm3iccqa1" ]

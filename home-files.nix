@@ -3,6 +3,7 @@
     enable = true;
     text = ''
       {
+        "vaadin.sendUsageStatistics": false, // This is mainly for P3 (Uni project) with vaadin to do java web development
         "agdaMode.connection.commandLineOptions": "-l=/home/brian/proj/agda-lib",
         "agdaMode.libraryPath": "/home/brian/proj/agda-lib",
         "bqn.enableBackslashCompletion": false,
