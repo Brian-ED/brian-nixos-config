@@ -29,7 +29,7 @@
         "idris.idris2Mode": true,
         "idris.idrisPath": "/nix/store/7mb2q6ciih9w1sk2yqyvqkfrwvi526wd-idris2-0.7.0/bin/idris2",
         "python.createEnvironment.trigger": "off",
-        "stripe.cliInstallPath": "${pkgs.stripe-cli.outPath}/bin/stripe"
+        "stripe.cliInstallPath": "${pkgs.stripe-cli.outPath}/bin/stripe",
         "terminal.integrated.enableMultiLinePasteWarning": "never",
         "terminal.integrated.fontSize": 10,
         "update.showReleaseNotes": false,
