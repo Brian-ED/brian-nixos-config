@@ -5,6 +5,7 @@
     nixpkgs.url        = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-25.05"   ;
     k.url              = "github:runtimeverification/k"       ;
+    darwin.url         = "github:LnL7/nix-darwin"             ;
 
     brian-i3-config = { url = "github:Brian-ED/brian-i3-config"; flake = false; };
     singeli         = { url = "github:mlochbaum/Singeli"       ; flake = false; };
@@ -61,6 +62,16 @@
           ./qemu-config.nix
         ];
       };
+    };
+
+    darwinConfigurations.macOSIntel = inputs.darwin.lib.darwinSystem {
+      system = "x86_64-darwin"; # I can generalize this when/if i get a non-intel mac
+      specialArgs = {inherit inputs;};
+      modules = [
+        ./hardware/intel-mac.nix # Include the results of the hardware scan
+        ./configuration-darwin.nix
+        ./unsafe-config.nix
+      ];
     };
   };
 }
