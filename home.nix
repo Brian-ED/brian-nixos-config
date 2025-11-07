@@ -225,7 +225,8 @@ in
     python3
   ] ++ (with pkgs; [
     stripe-cli
-    jdk25 # javac for SingeliPlayground
+    #jdk25 # javac for SingeliPlayground
+    jdk21 # java for vscode redhat java ext. Used in P3 uni project
     (writeShellScriptBin "mount-hard-drive" ''
       sudo cryptsetup luksOpen /dev/disk/by-uuid/41782a7f-3269-433b-8beb-c74fba89ef2d a
       sudo mount /dev/mapper/a /mnt/hard-drive
@@ -332,10 +333,12 @@ in
 #       github.copilot-chat
         hediet.vscode-drawio
         vscjava.vscode-java-pack # This is mainly for P3 (Uni project) with vaadin to do java web development
+        vscjava.vscode-java-debug # This is mainly for P3 (Uni project) with vaadin to do java web development
         redhat.java # This is mainly for P3 (Uni project) with vaadin to do java web development
       ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace (map (x:
         let I=builtins.elemAt; in
         { name=I x 0;                   publisher=I x 1; version=I x 2; sha256=I x 3; } ) [
+        [ "vscode-spring-boot"          "vmware"         "latest" "0cjg5sxkxafql68r7jl0521g0lm79z8jdxzcwlcvpff6kh1pzh9y" ] # This is mainly for P3 (Uni project) with vaadin to do java web development
         [ "vscode-boot-dev-pack"        "vmware"         "latest" "0k181dz71ivjn5qkz3x0f65kvnkz4pgi5jq9bwy6a14g67ipya71" ] # This is mainly for P3 (Uni project) with vaadin to do java web development
         [ "vaadin-vscode"               "vaadin"         "latest" "12nbr3br4g8q9r85xwhhsd0m3hw46srffdivml4jpj8gfh9qy3jj" ] # This is mainly for P3 (Uni project) with vaadin to do java web development
         [ "vscode-stripe"               "Stripe"         "latest" "07jwjzya4961w7mz8gpjw1300bigzpn2k8pqdng6k9b72jij80la" ]

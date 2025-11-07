@@ -77,6 +77,15 @@
       };
     };
 
+    fprintd.package = pkgs.fprintd.overrideAttrs {
+      src = pkgs.fetchFromGitLab {
+        domain = "gitlab.freedesktop.org";
+        owner = "libfprint";
+        repo = "fprintd";
+        rev = "11f0316d069cc90c154c8cb0e46478388c5e2a74";
+        hash = "";
+      };
+    };
     # Firefox settings (Haven't looked into it yet)
     # firefox-syncserver = {
     #   secrets = "./file.json";

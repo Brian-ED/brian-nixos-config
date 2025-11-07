@@ -3,7 +3,7 @@
     enable = true;
     text = ''
       {
-        "vaadin.sendUsageStatistics": false, // This is mainly for P3 (Uni project) with vaadin to do java web development
+        "redhat.telemetry.enabled": false, // This is mainly for P3 (Uni project) with vaadin to do java web development
         "agdaMode.connection.commandLineOptions": "-l=/home/brian/proj/agda-lib",
         "agdaMode.libraryPath": "/home/brian/proj/agda-lib",
         "bqn.enableBackslashCompletion": false,
@@ -64,7 +64,6 @@
         "git.confirmSync": false,
         "tws.trimOnSave": false,
         "tws.highlightTrailingWhiteSpace": true,
-        "diffEditor.ignoreTrimWhitespace": false,
         "nix.formatterPath": "nixfmt", // or "nixpkgs-fmt" or "alejandra" or "nix3-fmt" or pass full list of args such as  or `["treefmt", "--stdin", "{file}"]`
         "nix.enableLanguageServer": true,
         "nix.serverPath": "nil", // or "nixd"
@@ -94,12 +93,12 @@
           "fortran": "cd $dir && gfortran $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
           "FortranFreeForm": "cd $dir && gfortran $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
           "fsharp": "fsi",
-          "gleam": "gleam run -m $fileNameWithoutExt"
+          "gleam": "gleam run -m $fileNameWithoutExt",
           "go": "go run",
           "groovy": "groovy",
           "haskell": "runghc",
           "haxe": "haxe --cwd $dirWithoutTrailingSlash --run $fileNameWithoutExt",
-          "html": "firefox"
+          "html": "firefox",
           "java": "cd $dir && javac $fileName && java $fileNameWithoutExt",
           "javascript": "cd $dir && node $fileName",
           "julia": "julia",
