@@ -65,24 +65,6 @@ let
     NH_FLAKE = "${homeDir}/nixos";
     SINGELI_PATH = inputs.singeli;
   };
-
-  # Used for shell aliases and shell scripts
-  NRO = "${pkgs.nh}/bin/nh os   switch ${homeDir}/proj/brian-nixos-config";
-  HR  = "${pkgs.nh}/bin/nh home switch ${homeDir}/proj/brian-nixos-config";
-  NROQ = "sudo nixos-rebuild switch --flake ${homeDir}/proj/brian-nixos-config/#brians-laptop";
-  HRQ = "${home-manager}/bin/home-manager switch --flake ${homeDir}/proj/brian-nixos-config/#brian";
-  parallelCmdsScript = name: cmd1: cmd2: pkgs.writeShellScriptBin name ''
-      ${cmd1} &
-      pid1=$!
-      tmpfile=$(mktemp)
-      ${pkgs.expect}/bin/unbuffer ${cmd2} > $tmpfile
-      pid2=$!
-      wait $pid1
-      wait $pid2
-      cat "$tmpfile"
-      rm "$tmpfile"
-    '';
-
 in
 {
   imports = [ inputs.nvf.homeManagerModules.default ];
@@ -108,36 +90,6 @@ in
           html    .enable = true;
         };
       };
-    };
-  };
-
-  services.home-manager.autoExpire = {
-    enable = true;
-    timestamp = "-30 days";
-    frequency = "monthly";
-    store = {
-      cleanup = true;
-      options = "--delete-older-than 30d";
-    };
-  };
-
-  services.restic2 = {
-    enable = true;
-    backups.localbackup = {
-      insecureNoPassword = true;
-      repository = "/mnt/hard-drive/restic-backup";
-      paths = [
-        "/home"
-      ];
-      exclude = [
-        "/home/*/.cache"
-      ];
-      pruneOpts = [
-        "--keep-daily 7"
-        "--keep-weekly 5"
-        "--keep-monthly 12"
-        "--keep-yearly 75"
-      ];
     };
   };
 
@@ -231,8 +183,6 @@ in
       sudo cryptsetup luksOpen /dev/disk/by-uuid/41782a7f-3269-433b-8beb-c74fba89ef2d a
       sudo mount /dev/mapper/a /mnt/hard-drive
     '')
-    (parallelCmdsScript "NR" NRO HR)
-    (parallelCmdsScript "NRQ" NROQ HRQ)
     (writeShellScriptBin "sing" ''
       if [ ! $@ == "" ]; then
         mkdir --parents out
@@ -244,7 +194,9 @@ in
         ${cbqn-native}/bin/bqn ${inputs.singeli}/singeli --help
       fi
     '')
+    trashy # For making it so I can avoid deleting files right away, and instead trash them
 #   ZealOS
+    nix-watch
     k   # On github: runtimeverification/k. A verification language
     qbe # Compiler backend
     qemu # Virtual machines
@@ -297,7 +249,7 @@ in
     rustc cargo       # Rust stuff
     zig zls           # Zig stuff
     firefox           # Web browser
-    nemo              # File explorer
+    nemo-with-extensions # File explorer
     ffmpeg            # This is a dependency of my youtube song downloader for my playlist, which is used by the I3 shortcut $mod+Control+Shift+m
     xclip             # Clipboard utility
     unzip
@@ -338,11 +290,11 @@ in
       ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace (map (x:
         let I=builtins.elemAt; in
         { name=I x 0;                   publisher=I x 1; version=I x 2; sha256=I x 3; } ) [
-        [ "vscode-spring-boot"          "vmware"         "latest" "0cjg5sxkxafql68r7jl0521g0lm79z8jdxzcwlcvpff6kh1pzh9y" ] # This is mainly for P3 (Uni project) with vaadin to do java web development
+        [ "vscode-spring-boot"          "vmware"         "latest" "0iba4xzas6khc96vx0clsgwqhgz92q1zqpnbgff367smwfggzica" ] # This is mainly for P3 (Uni project) with vaadin to do java web development
         [ "vscode-boot-dev-pack"        "vmware"         "latest" "0k181dz71ivjn5qkz3x0f65kvnkz4pgi5jq9bwy6a14g67ipya71" ] # This is mainly for P3 (Uni project) with vaadin to do java web development
         [ "vaadin-vscode"               "vaadin"         "latest" "12nbr3br4g8q9r85xwhhsd0m3hw46srffdivml4jpj8gfh9qy3jj" ] # This is mainly for P3 (Uni project) with vaadin to do java web development
         [ "vscode-stripe"               "Stripe"         "latest" "07jwjzya4961w7mz8gpjw1300bigzpn2k8pqdng6k9b72jij80la" ]
-        [ "bqn"                         "mk12"           "latest" "0bnpc1xw5gs362sk213r0n2p37zd08m6jgj61jh3y098wni6say8" ]
+        [ "bqn"                         "mk12"           "latest" "sha256-nTnL75BzHrpnJVO8DFfrLZZGavCC4OzvAlyrGCXSak4=" ]
         [ "newline"                     "chang196700"    "latest" "0xijg1nqlrlwkl4ls21hzikr30iz8fd98ynpbmhhdxrkm3iccqa1" ]
         [ "tws"                         "jkiviluoto"     "latest" "0aj58iasgnmd2zb7zxz587k9mfmykjwrb8h7hfvpkmh76s9bj4y5" ] # Trailing white space
         [ "toggle-zen-mode"             "fudd"           "latest" "0whmbpnin1r1qnq45fpz7ayp51d4lilvbnv7llqd6jplx5b4n3ds" ]
@@ -350,7 +302,7 @@ in
         [ "iceworks-time-master"        "iceworks-team"  "latest" "05k7icssa7llbp4a44kny0556hvimmdh6fm394y5rh86bxqq0iq3" ]
         [ "suteppu"                     "Itsakaseru"     "latest" "1z0zkznwwm0z1vyq2wsw9rf1kg8pfpb3rl7glx0zp3aq8sxvnfsf" ]
         [ "vscode-sort"                 "henriiik"       "latest" "0sam2qfa596dcbabx3alrwsgm56a8wzb65dp45yv172kcaam5yd6" ]
-        [ "slint"                       "Slint"          "latest" "0zq1ld07rgrgkmy066ds0p3yalyr9f8kwysazhvxqv9wsfdwjwqv" ]
+        [ "slint"                       "Slint"          "latest" "sha256-/7zn5jpIqT//PriiJRmbygud7BmAMKVN8C6KOgfx9cI=" ]
         [ "remote-explorer"             "ms-vscode"      "latest" "10rsnl5yk08mhcwg5j7s2xsawd7v2ilcgg2rm9v904v3nd2qi8xv" ]
         #[ "ols"                         "DanielGavin"    "latest" "0rl6mjkabgbwc0vnm96ax1jhjh5rrky0i1w40fhs1zqyfd83mrsx" ] # Odin
         [ "vscode-lowercase"            "ruiquelhas"     "latest" "03kwbnc25rfzsr7lzgkycwxnifv4nx04rfcvmfcqqhacx74g14gs" ]
@@ -388,17 +340,76 @@ in
       package = pkgs.gnome-themes-extra;
     };
   };
+
+  programs.obs-studio = {
+    enable = true;
+    plugins = with pkgs.obs-studio-plugins; [
+      wlrobs
+      obs-backgroundremoval
+      obs-pipewire-audio-capture
+    ];
+  };
+
   # Dark mode for apps that respect XSettings
   xdg = {
     enable = true;
     mime.enable = true;
+    desktopEntries.nemo = {
+      name = "Nemo";
+      exec = "${pkgs.nemo-with-extensions}/bin/nemo";
+    };
+    mimeApps = {
+      enable = true;
+      defaultApplications = {
+        "inode/directory" = [ "nemo.desktop" ];
+        "application/x-gnome-saved-search" = [ "nemo.desktop" ];
+      };
+    };
   };
-  services.xsettingsd = {
-    enable = true;
-    settings = {
-      "Net/ThemeName" = "Arc-Dark";
-      "Net/IconThemeName" = "Papirus-Dark";
-      "Gtk/CursorThemeName" = "Adwaita";
+  dconf.settings = {
+    "org/cinnamon/desktop/applications/terminal" = {
+      exec = "alacritty";
+    };
+    "org/cinnamon/desktop/interface" = {
+      can-change-accels = true;
+    };
+  };
+  services = {
+    xsettingsd = {
+      enable = true;
+      settings = {
+        "Net/ThemeName" = "Arc-Dark";
+        "Net/IconThemeName" = "Papirus-Dark";
+        "Gtk/CursorThemeName" = "Adwaita";
+      };
+    };
+    home-manager.autoExpire = {
+      enable = true;
+      timestamp = "-30 days";
+      frequency = "monthly";
+      store = {
+        cleanup = true;
+        options = "--delete-older-than 30d";
+      };
+    };
+    restic2 = {
+      enable = true;
+      backups.localbackup = {
+        insecureNoPassword = true;
+        repository = "/mnt/hard-drive/restic-backup";
+        paths = [
+          "/home"
+        ];
+        exclude = [
+          "/home/*/.cache"
+        ];
+        pruneOpts = [
+          "--keep-daily 7"
+          "--keep-weekly 5"
+          "--keep-monthly 12"
+          "--keep-yearly 75"
+        ];
+      };
     };
   };
   programs.i3status = {
@@ -488,14 +499,20 @@ in
   programs.bash = {
     initExtra = lib.concatStrings (lib.mapAttrsToList (n: v: "export ${n}=\"${v}\"\n") sessionVariables); # I couldn't get home.sessionVariables working. Found this solution here: https://github.com/nix-community/home-manager/issues/1011
     enable = true;
-    shellAliases = {
+    shellAliases = rec {
       volup = "wpctl set-volume $(wpctl status | egrep '\\*.*Speaker'  | grep -oE '[0-9]+' | head -n 1) 10%+";
       addsong = "${python3}/bin/yt-dlp --format 251 --paths ${winUser}/Music/ $@";
       code = "codium";
-      nix-watch = "${nix-watch}/bin/nix-watch";
       fix-nix-hash = "nix hash convert --hash-algo sha256 --to nix32 $1"; # give in format sha256-...=
-      inherit NRO  HR
-              NROQ HRQ;
+
+      # Nix build OS things
+      NRO = "${pkgs.nh}/bin/nh os   switch ${homeDir}/proj/brian-nixos-config";
+      HR  = "${pkgs.nh}/bin/nh home switch ${homeDir}/proj/brian-nixos-config";
+      NROQ = "sudo nixos-rebuild switch --flake ${homeDir}/proj/brian-nixos-config/#brians-laptop";
+      HRQ = "${home-manager}/bin/home-manager switch --flake ${homeDir}/proj/brian-nixos-config/#brian";
+      NR = "${HR} && ${NRO}"; # Runs home manager first since NRO will ask for sudo when it ends, and I don't want to wait again after providing sudo
+      NRQ = "${NROQ} && ${HRQ}"; # Runs home manager last since NROQ will ask for sudo at the start, and I don't want to wait again after providing sudo
+
       P = "pwd | ${pkgs.xclip}/bin/xclip -selection clipboard";
       clip = "${pkgs.xclip}/bin/xclip -selection clipboard";
       lo = "${pkgs.libreoffice-qt6-fresh}/bin/libreoffice";
@@ -507,15 +524,19 @@ in
       mintemail = "${pkgs.thunderbird}/bin/thunderbird --profile ${minUser}/.thunderbird/v5k5cfgq.default-release $@";
       aplk = "setxkbmap -layout fo,apl -option grp:lswitch";
       bqnk = "setxkbmap -layout fo,bqn -option grp:lswitch";
-      find = "${pkgs.fd}/bin/fd $@";
       net = "nmcli dev wifi && nmcli dev wifi connect --ask"; # Find a network to connect to
       cat = "${pkgs.bat}/bin/bat $@";
-      # Not sure what to map this to: ''fzf --height 50% --layout reverse --info inline --preview 'bat --color=always --style=full,-grid --line-range=:500 {}' --preview-window right,70%,border-none'';
+
+      # ls-like things
       l   = "${pkgs.eza}/bin/eza --color=always --all --classify=always --long --color=always --absolute=on --header --git --git-repos --time-style=relative --total-size --no-permissions --no-user --sort extension --icons";
       ls  = "${pkgs.eza}/bin/eza --color=always       --classify=always --across                                                                                                                                      --icons";
-      lsr = "${pkgs.eza}/bin/eza --color=always       --classify=always --across --tree                                                                                                                               --icons";
-      lsrf = "${pkgs.fd} $@";
+      lsr = "${l} --tree";
+      lsrf = "${pkgs.fd}/bin/fd $@";
+      navfind = "fzf --height 50% --layout reverse --info inline --preview 'bat --color=always --style=full,-grid --line-range=:500 {}' --preview-window right,70%,border-none";
+
+      rm = "rm --interactive"; # I want to remind myself before deleting stuff. Also, I shouldn't really use this, instead I should use trashy
       mv = "mv --update=none-fail"; # Accidentally deleted a file while moving it. Now, I get an error when moving a file that replaces another file
+      tp = "${pkgs.trashy}/bin/trashy put $@";
       d = "nix develop";
       win = "cd ${winUser}";
       min = "cd ${minUser}";

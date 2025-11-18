@@ -2,20 +2,20 @@
   description = "A very basic flake";
 
   inputs = {
-    nixpkgs.url        = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-25.05"   ;
-    k.url              = "github:runtimeverification/k"       ;
-    darwin.url         = "github:LnL7/nix-darwin"             ;
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-stable.url   = "github:NixOS/nixpkgs/nixos-25.05"   ;
+    k.url                = "github:runtimeverification/k"       ;
+    darwin.url           = "github:LnL7/nix-darwin"             ;
 
     brian-i3-config = { url = "github:Brian-ED/brian-i3-config"; flake = false; };
     singeli         = { url = "github:mlochbaum/Singeli"       ; flake = false; };
 
-    nixos-conf-editor = { url = "github:snowfallorg/nixos-conf-editor"; inputs.nixpkgs.follows = "nixpkgs"; };
-    home-manager      = { url = "github:nix-community/home-manager"   ; inputs.nixpkgs.follows = "nixpkgs"; };
-    nixGL             = { url = "github:nix-community/nixGL"          ; inputs.nixpkgs.follows = "nixpkgs"; };
-    nix-watch         = { url = "github:Cloud-Scythe-Labs/nix-watch"  ; inputs.nixpkgs.follows = "nixpkgs"; };
-    nil               = { url = "github:oxalica/nil"                  ; inputs.nixpkgs.follows = "nixpkgs"; };
-    nvf               = { url = "github:notashelf/nvf"                ; inputs.nixpkgs.follows = "nixpkgs"; };
+    nixos-conf-editor = { url = "github:snowfallorg/nixos-conf-editor"            ; inputs.nixpkgs.follows = "nixpkgs-stable"; };
+    home-manager      = { url = "github:nix-community/home-manager/release-25.05" ; inputs.nixpkgs.follows = "nixpkgs-stable"; };
+    nixGL             = { url = "github:nix-community/nixGL"                      ; inputs.nixpkgs.follows = "nixpkgs-stable"; };
+    nix-watch         = { url = "github:Cloud-Scythe-Labs/nix-watch"              ; inputs.nixpkgs.follows = "nixpkgs-stable"; };
+    nil               = { url = "github:oxalica/nil"                              ; inputs.nixpkgs.follows = "nixpkgs-stable"; };
+    nvf               = { url = "github:notashelf/nvf"                            ; inputs.nixpkgs.follows = "nixpkgs-stable"; };
   };
 
   outputs = inputs: let
@@ -24,11 +24,10 @@
     min = "/mnt/linux-mint";
     winUser = "${win}/Users/brian";
     minUser = "${min}/home/brian";
-    pkgs = import inputs.nixpkgs {
-      inherit system;
-      overlays = [ inputs.nixGL.overlay ];
-    };
-    pkgs-stable = inputs.nixpkgs-stable.legacyPackages.${system};
+    env = { inherit system; overlays = [ inputs.nixGL.overlay ]; };
+    pkgs-unstable = import inputs.nixpkgs-unstable env;
+    pkgs-stable   = import inputs.nixpkgs-stable env;
+    pkgs = pkgs-stable;
   in {
     homeConfigurations.brian = inputs.home-manager.lib.homeManagerConfiguration {
       inherit pkgs;
@@ -37,7 +36,7 @@
     };
 
     nixosConfigurations = {
-      brians-laptop = inputs.nixpkgs.lib.nixosSystem {
+      brians-laptop = pkgs.lib.nixosSystem {
         inherit system;
         specialArgs = {inherit inputs win min;};
         modules = [
@@ -46,7 +45,7 @@
           ./unsafe-config.nix
         ] ++ (if false then [ ./optional/vm.nix ] else []) ;
       };
-      lifebook = inputs.nixpkgs.lib.nixosSystem {
+      lifebook = pkgs.lib.nixosSystem {
         inherit system;
         specialArgs = {inherit inputs;};
         modules = [
@@ -54,7 +53,7 @@
           ./configuration.nix
         ];
       };
-      remote-server = inputs.nixpkgs.lib.nixosSystem {
+      remote-server = pkgs.lib.nixosSystem {
         inherit system;
         specialArgs = {inherit inputs;};
         modules = [
