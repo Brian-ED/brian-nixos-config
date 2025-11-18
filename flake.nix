@@ -28,6 +28,7 @@
     pkgs-unstable = import inputs.nixpkgs-unstable env;
     pkgs-stable   = import inputs.nixpkgs-stable env;
     pkgs = pkgs-stable;
+    nixpkgs = inputs.nixpkgs-stable;
   in {
     homeConfigurations.brian = inputs.home-manager.lib.homeManagerConfiguration {
       inherit pkgs;
@@ -36,7 +37,7 @@
     };
 
     nixosConfigurations = {
-      brians-laptop = pkgs.lib.nixosSystem {
+      brians-laptop = nixpkgs.lib.nixosSystem {
         inherit system;
         specialArgs = {inherit inputs win min;};
         modules = [
@@ -45,7 +46,7 @@
           ./unsafe-config.nix
         ] ++ (if false then [ ./optional/vm.nix ] else []) ;
       };
-      lifebook = pkgs.lib.nixosSystem {
+      lifebook = nixpkgs.lib.nixosSystem {
         inherit system;
         specialArgs = {inherit inputs;};
         modules = [
@@ -53,7 +54,7 @@
           ./configuration.nix
         ];
       };
-      remote-server = pkgs.lib.nixosSystem {
+      remote-server = nixpkgs.lib.nixosSystem {
         inherit system;
         specialArgs = {inherit inputs;};
         modules = [
