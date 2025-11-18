@@ -103,6 +103,13 @@
         configFile = "${inputs.brian-i3-config}/config";
         extraPackages = [];
       };
+
+      # Configure keymap in X11
+      xkb = {
+        options = "grp:lswitch";
+        layout = "fo,bqn";
+        variant = "";
+      };
     };
 
     # Enable CUPS to print documents
