@@ -119,6 +119,32 @@
       # no need to redefine it in your config for now)
       #media-session.enable = true;
     };
+    # Trying to handle multiple monitors, WIP
+    #autorandr = {
+    #  enable = true;
+    #  profiles = {
+    #    mobile = {
+    #      fingerprint = {
+    #        eDP-1 = "00ffffffffffff0030e41f0600000000001c0104a51f117802e085a3544e9b260e5054000000010101010101010101010101010101012e3680a070381f403020350035ae1000001a542b80a070381f403020350035ae1000001a000000fe004c4720446973706c61790a2020000000fe004c503134305746392d5350453200be";
+    #      };
+    #      config = {
+    #        eDP-1.enable = true;
+    #        eDP-1.primary = true;
+    #      };
+    #    };
+    #    docked = {
+    #      fingerprint = {
+    #        eDP-1 = "00ffffffffffff0030e41f0600000000001c0104a51f117802e085a3544e9b260e5054000000010101010101010101010101010101012e3680a070381f403020350035ae1000001a542b80a070381f403020350035ae1000001a000000fe004c4720446973706c61790a2020000000fe004c503134305746392d5350453200be";
+    #        HDMI-1 = "00ffffffffffff004c2d3e0f000e0001011c0103806f3e780a23ada4544d99260f474abdef80714f81c0810081809500a9c0b300010104740030f2705a80b0588a00501d7400001e023a801871382d40582c4500501d7400001e000000fd00184b0f511e000a202020202020000000fc0053414d53554e470a202020202001f702034cf0535f101f041305142021225d5e626364071603122909070715075057070183010000e2004fe30503016e030c001000b83c20008001020304e3060d01e50e60616566e5018b849001011d80d0721c1620102c2580501d7400009e662156aa51001e30468f3300501d7400001e000000000000000000000000000000a3";
+    #      };
+    #      config = {
+    #        eDP-1.enable = true;
+    #        HDMI-1.enable = true;
+    #        HDMI-1.position = "1920x0";
+    #      };
+    #    };
+    #  };
+    #};
   };
   environment = {
     # Apparently dyalogscript's /bin/dyalogscript is better than "/usr/bin/env dyalogscript".
@@ -144,7 +170,6 @@
       restic            # Backup the borgBackup folder at drive/backup-brian-Lenovo-Yoga-C940-14IIL-LinuxMintCinamon
       obsidian          # Unfree package. Can only use for non-profit
       nodejs            # Javascript interpreter
-      pgadmin4          # Postgresql for database connection
       haruna            # Video player
       light             # My i3 config uses this
       elixir            # I want to try out elixer to develop concurrent applications
