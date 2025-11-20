@@ -1,9 +1,12 @@
 {
   description = "A very basic flake";
 
-  inputs = {
+  inputs = rec {
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-stable.url   = "github:NixOS/nixpkgs/nixos-25.05"   ;
+
+    nixpkgs = nixpkgs-stable;
+
     k.url                = "github:runtimeverification/k"       ;
     darwin.url           = "github:LnL7/nix-darwin"             ;
 
@@ -26,20 +29,21 @@
     minUser = "${min}/home/brian";
     env = { inherit system; overlays = [ inputs.nixGL.overlay ]; };
     pkgs-unstable = import inputs.nixpkgs-unstable env;
-    pkgs-stable   = import inputs.nixpkgs-stable env;
-    pkgs = pkgs-stable;
-    nixpkgs = inputs.nixpkgs-stable;
+    pkgs-stable   = import inputs.nixpkgs-stable   env;
+    pkgs          = import inputs.nixpkgs          env;
+    nixpkgs = inputs.nixpkgs;
+    nixPath = pkgs.lib.mapAttrsToList (n: _: "${n}=flake:${n}") inputs; # For disabling channels
   in {
     homeConfigurations.brian = inputs.home-manager.lib.homeManagerConfiguration {
       inherit pkgs;
       modules = [ ./home.nix ./pkgs/restic-temp.nix ];
-      extraSpecialArgs = {inherit inputs pkgs-stable winUser minUser; };
+      extraSpecialArgs = {inherit inputs pkgs-stable winUser minUser nixPath; };
     };
 
     nixosConfigurations = {
       brians-laptop = nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = {inherit inputs win min;};
+        specialArgs = {inherit inputs win min nixPath;};
         modules = [
           ./hardware/lenovo-C940-14IIL.nix # Include the results of the hardware scan
           ./configuration.nix
@@ -48,7 +52,7 @@
       };
       lifebook = nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = {inherit inputs;};
+        specialArgs = {inherit inputs nixPath;};
         modules = [
           ./hardware/lifebook-AH512.nix
           ./configuration.nix
@@ -56,7 +60,7 @@
       };
       remote-server = nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = {inherit inputs;};
+        specialArgs = {inherit inputs nixPath;};
         modules = [
           ./hardware/qemu.nix
           ./qemu-config.nix
@@ -66,7 +70,7 @@
 
     darwinConfigurations.macOSIntel = inputs.darwin.lib.darwinSystem {
       system = "x86_64-darwin"; # I can generalize this when/if i get a non-intel mac
-      specialArgs = {inherit inputs;};
+      specialArgs = {inherit inputs nixPath;};
       modules = [
         ./hardware/intel-mac.nix # Include the results of the hardware scan
         ./configuration-darwin.nix

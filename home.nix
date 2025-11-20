@@ -1,5 +1,5 @@
 # TODO get home manager to manage files ~/.gtkrc-2.0
-{ pkgs, pkgs-stable, lib, inputs, winUser, minUser, ...}:
+{ pkgs, pkgs-stable, lib, inputs, winUser, minUser, nixPath, ...}:
 let
   nix-watch         = inputs.nix-watch        .packages.${pkgs.system}.default;
   home-manager      = inputs.home-manager     .packages.${pkgs.system}.home-manager;
@@ -64,6 +64,7 @@ let
     TERMINAL = "alacritty";
     NH_FLAKE = "${homeDir}/nixos";
     SINGELI_PATH = inputs.singeli;
+    NIX_PATH = lib.concatStringsSep ":" nixPath;
   };
 in
 {

@@ -1,7 +1,7 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’)
-{pkgs, lib, inputs, ... }:
+{pkgs, lib, inputs, nixPath, ... }:
 {
   swapDevices = [{
     device = "/var/lib/swapfile";
@@ -9,12 +9,12 @@
   }];
   nix = {
     channel.enable = false;
-    nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") inputs; # For disabling channels
+    inherit nixPath;
     settings = {
       experimental-features = [ "nix-command" "flakes" ];
       warn-dirty = false;
       trusted-users = [ "brian" ];
-      nix-path = lib.mapAttrsToList (n: _: "${n}=flake:${n}") inputs; # For disabling channels
+      nix-path = nixPath; # For disabling channels
       flake-registry = ""; # ensures flakes are truly self-contained
     };
   };
