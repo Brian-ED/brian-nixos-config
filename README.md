@@ -32,3 +32,19 @@ List of things to try after setting up [snowfall lib](https://snowfall.org/refer
 Read this keyboard info <https://www.youtube.com/watch?v=ZczZKHwWUFY&list=RD4fKt_IP1WHc&index=23>.
 Alacreti [config example](https://github.com/REALERvolker1/homescripts/blob/main/.config/alacritty/alacritty.toml).
 [screenshot util](https://wiki.archlinux.org/title/Screen_capture), last i checked was [maim](https://github.com/naelstrof/maim).
+
+## TODO Install
+pkgs.code-cursor AI vs-code?
+[SnowfallOS config editor](https://github.com/snowfallorg/nixos-conf-editor).
+[SnowfallOS software center](https://github.com/snowfallorg/nix-software-center).
+[NVF](https://notashelf.github.io/nvf/), [manual](https://notashelf.github.io/nvf/index.xhtml#ch-adding-plugins).
+[Stylix](https://github.com/danth/stylix), for styling nixos.
+Could get Dash, which is a faster but changed bash.
+kew music player
+[Obsidain-vim](https://github.com/epwalsh/obsidian.nvim?tab=readme-ov-file#install-and-configure).
+[pastel](https://search.nixos.org/packages?channel=unstable&show=pastel&from=0&size=50&sort=relevance&type=packages&query=pastel).
+
+## OSes to take insperation from
+[Panadestein](https://github.com/Panadestein/nixos-config/blob/main/systems/cyrus/configuration.nix).
+[A flake system](https://github.com/s0me1newithhand7s/reNixos/blob/master/flake.nix).
+[rando](https://github.com/dustinlyons/nixos-config).
