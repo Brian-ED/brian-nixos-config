@@ -543,6 +543,9 @@ in
       min = "cd ${minUser}";
       singplay = "${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel ${homeDir}/proj/singeliPlayground/run ${cbqn-native} ${inputs.singeli}";
       singeli = "${inputs.singeli}/singeli";
+      lines = " wc -l";
+      "≠" = lines;
+      "⌽" = "${pkgs.coreutils-full}/bin/tac ";
     };
   };
 
