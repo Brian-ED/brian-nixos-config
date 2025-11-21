@@ -537,7 +537,7 @@ in
 
       rm = "rm --interactive"; # I want to remind myself before deleting stuff. Also, I shouldn't really use this, instead I should use trashy
       mv = "mv --update=none-fail"; # Accidentally deleted a file while moving it. Now, I get an error when moving a file that replaces another file
-      tp = "${pkgs.trashy}/bin/trashy put $@";
+      tp = "${pkgs.trashy}/bin/trash put $@";
       d = "nix develop";
       win = "cd ${winUser}";
       min = "cd ${minUser}";
