@@ -383,20 +383,20 @@ in
     };
   };
 
-  systemd.user.services.onstartBrian = {
-    Unit = {
-      Description = "On-start script";
-      PartOf = [ "graphical-session.target" ];
-      After = [ "graphical-session.target" ];
-    };
-    Service = {
-      ExecStart = lib.getExe startup;
-      Restart = "on-failure";
-    };
-    Install = {
-      WantedBy = [ "graphical-session.target" ];
-    };
-  };
+#  systemd.user.services.onstartBrian = {
+#    Unit = {
+#      Description = "On-start script";
+#      PartOf = [ "graphical-session.target" ];
+#      After = [ "graphical-session.target" ];
+#    };
+#    Service = {
+#      ExecStart = lib.getExe startup;
+#      Restart = "on-failure";
+#    };
+#    Install = {
+#      WantedBy = [ "graphical-session.target" ];
+#    };
+#  };
 
   services = {
     syncthing.enable = true;
