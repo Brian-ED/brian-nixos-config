@@ -10,6 +10,10 @@ let
   username = "brian";
   homeDir = "/home/${username}";
 
+  startup = pkgs.writeShellScriptBin "startup" ''
+    ${pkgs.paperview}/bin/paperview ${homeDir}/proj/wallpapers/frames2 3
+  '';
+
   # Python with scientific libraries
   python3 = pkgs.python3.withPackages (p: with p;[
     yt-dlp-light pyperclip # These are dependencies of my youtube song downloader for my playlist, which is used by the I3 shortcut $mod+Control+Shift+m
@@ -258,7 +262,10 @@ in
     xed-editor
     (agda.withPackages (p: [ p.standard-library ]))
     gnome-system-monitor
+    paperview
+    startup
     pavucontrol        # Audio interface
+    gmetronome
     llvmPackages_19.clangWithLibcAndBasicRtAndLibcxx llvmPackages_19.clang-manpages # Will remove later, temporary till I fix permission issues with using zig for building with make
     arc-theme          # Dark theme related: Arc-Dark GTK theme
     gnome-themes-extra # Dark theme related: Includes Adwaita-dark
@@ -375,7 +382,25 @@ in
       can-change-accels = true;
     };
   };
+
+  systemd.user.services.onstartBrian = {
+    Unit = {
+      Description = "On-start script";
+      PartOf = [ "graphical-session.target" ];
+      After = [ "graphical-session.target" ];
+    };
+    Service = {
+      ExecStart = lib.getExe startup;
+      Restart = "on-failure";
+    };
+    Install = {
+      WantedBy = [ "graphical-session.target" ];
+    };
+  };
+
   services = {
+    syncthing.enable = true;
+
     xsettingsd = {
       enable = true;
       settings = {
