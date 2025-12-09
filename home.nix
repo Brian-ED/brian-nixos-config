@@ -1,11 +1,11 @@
 # TODO get home manager to manage files ~/.gtkrc-2.0
 { pkgs, pkgs-stable, lib, inputs, winUser, minUser, nixPath, ...}:
 let
-  nix-watch         = inputs.nix-watch        .packages.${pkgs.system}.default;
-  home-manager      = inputs.home-manager     .packages.${pkgs.system}.home-manager;
-  nixos-conf-editor = inputs.nixos-conf-editor.packages.${pkgs.system}.nixos-conf-editor;
-  nil               = inputs.nil              .packages.${pkgs.system}.nil;
-  k                 = inputs.k                .packages.${pkgs.system}.k;
+  nix-watch         = inputs.nix-watch        .packages.${pkgs.stdenv.hostPlatform.system}.default;
+  home-manager      = inputs.home-manager     .packages.${pkgs.stdenv.hostPlatform.system}.home-manager;
+  nixos-conf-editor = inputs.nixos-conf-editor.packages.${pkgs.stdenv.hostPlatform.system}.nixos-conf-editor;
+  nil               = inputs.nil              .packages.${pkgs.stdenv.hostPlatform.system}.nil;
+  k                 = inputs.k                .packages.${pkgs.stdenv.hostPlatform.system}.k;
   cbqn-native = (import ./pkgs/cbqn.nix pkgs);
   username = "brian";
   homeDir = "/home/${username}";
@@ -220,7 +220,7 @@ in
     alacritty         # My chosen terminal. Loads quickly, and doesn't have a inbuilt-windowmanager to complicate it
     xdotool           # Useful for automating tasks
     rofi              # Used by i3 for fancy UI
-    rustdesk          # Remote control. Useful for helping family
+    #rustdesk          # Remote control. Useful for helping family
     fd                # Since I forget how to use the `find` command every time, I replaced it with fd, which lists files recursively as a flat list that i can then egrep
 
     # Alpaca
@@ -298,9 +298,9 @@ in
       ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace (map (x:
         let I=builtins.elemAt; in
         { name=I x 0;                   publisher=I x 1; version=I x 2; sha256=I x 3; } ) [
-        [ "vscode-spring-boot"          "vmware"         "latest" "0iba4xzas6khc96vx0clsgwqhgz92q1zqpnbgff367smwfggzica" ] # This is mainly for P3 (Uni project) with vaadin to do java web development
+        [ "vscode-spring-boot"          "vmware"         "latest" "sha256-jFlcNbDgTphOJR96ehcAU1jOo4zTv5b5po1n/zmnul8=" ] # This is mainly for P3 (Uni project) with vaadin to do java web development
         [ "vscode-boot-dev-pack"        "vmware"         "latest" "0k181dz71ivjn5qkz3x0f65kvnkz4pgi5jq9bwy6a14g67ipya71" ] # This is mainly for P3 (Uni project) with vaadin to do java web development
-        [ "vaadin-vscode"               "vaadin"         "latest" "12nbr3br4g8q9r85xwhhsd0m3hw46srffdivml4jpj8gfh9qy3jj" ] # This is mainly for P3 (Uni project) with vaadin to do java web development
+        [ "vaadin-vscode"               "vaadin"         "latest" "sha256-gr6DtjLFVCDi8i/Dibhitr9EsBVmDa7kHqzocxg2R4M=" ] # This is mainly for P3 (Uni project) with vaadin to do java web development
         [ "vscode-stripe"               "Stripe"         "latest" "07jwjzya4961w7mz8gpjw1300bigzpn2k8pqdng6k9b72jij80la" ]
         [ "bqn"                         "mk12"           "latest" "sha256-nTnL75BzHrpnJVO8DFfrLZZGavCC4OzvAlyrGCXSak4="  ]
         [ "newline"                     "chang196700"    "latest" "0xijg1nqlrlwkl4ls21hzikr30iz8fd98ynpbmhhdxrkm3iccqa1" ]
@@ -564,7 +564,7 @@ in
       d = "nix develop";
       win = "cd ${winUser}";
       min = "cd ${minUser}";
-      singplay = "${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel ${homeDir}/proj/singeliPlayground/run ${cbqn-native} ${inputs.singeli}";
+      singplay = "${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel ${homeDir}/proj/singeliPlayground/run ${cbqn-native}/bin/bqn ${inputs.singeli}";
       singeli = "${inputs.singeli}/singeli";
       lines = " wc -l";
       "≠" = lines;
@@ -601,12 +601,16 @@ in
 
   programs.git = {
     enable = true;
-    extraConfig.safe.directory = [
-      "${winUser}/raylibAPL"
-      "${winUser}/raylibAPL/imports/c-header-to-bqn-ffi"
-      "${winUser}/temp-c-raylib"
-    ];
-    userName = "Brian-ED";
-    userEmail = "brianellingsgaard9@gmail.com";
+    settings = {
+      safe.directory = [
+        "${winUser}/raylibAPL"
+        "${winUser}/raylibAPL/imports/c-header-to-bqn-ffi"
+        "${winUser}/temp-c-raylib"
+      ];
+      user = {
+        name = "Brian-ED";
+        email = "brianellingsgaard9@gmail.com";
+      };
+    };
   };
 }

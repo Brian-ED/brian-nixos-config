@@ -202,7 +202,7 @@
       (import ./pkgs/cbqn.nix pkgs) bqn386 # BQN interpreter and font
     ] ++ [ # The rest is extra packages not found in home
       pkgs.git
-      inputs.home-manager.packages.${pkgs.system}.home-manager
+      inputs.home-manager.packages.${pkgs.stdenv.hostPlatform.system}.home-manager
     ];
     sessionVariables = { LIBVA_DRIVER_NAME = "iHD"; }; # Optionally, set the environment variable
     pathsToLink = [ "/libexec" ]; # For i3

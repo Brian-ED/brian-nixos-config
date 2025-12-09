@@ -3,7 +3,7 @@
 
   inputs = rec {
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-stable.url   = "github:NixOS/nixpkgs/nixos-25.05"   ;
+    nixpkgs-stable.url   = "github:NixOS/nixpkgs/nixos-25.11"   ;
 
     nixpkgs = nixpkgs-stable;
 
@@ -14,7 +14,7 @@
     singeli         = { url = "github:mlochbaum/Singeli"       ; flake = false; };
 
     nixos-conf-editor = { url = "github:snowfallorg/nixos-conf-editor"            ; inputs.nixpkgs.follows = "nixpkgs-stable"; };
-    home-manager      = { url = "github:nix-community/home-manager/release-25.05" ; inputs.nixpkgs.follows = "nixpkgs-stable"; };
+    home-manager      = { url = "github:nix-community/home-manager/release-25.11" ; inputs.nixpkgs.follows = "nixpkgs-stable"; };
     nixGL             = { url = "github:nix-community/nixGL"                      ; inputs.nixpkgs.follows = "nixpkgs-stable"; };
     nix-watch         = { url = "github:Cloud-Scythe-Labs/nix-watch"              ; inputs.nixpkgs.follows = "nixpkgs-stable"; };
     nil               = { url = "github:oxalica/nil"                              ; inputs.nixpkgs.follows = "nixpkgs-stable"; };

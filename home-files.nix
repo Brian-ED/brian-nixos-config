@@ -26,7 +26,7 @@
         "bqn.enableBackslashCompletion": false,
         "code-runner.saveFileBeforeRun": true,
         "diffEditor.experimental.showMoves": true,
-        "diffEditor.ignoreTrimWhitespace": true,
+        "diffEditor.ignoreTrimWhitespace": false,
         "editor.fontLigatures": false, // "editor.inlayHints.enabled": "off",
         "editor.maxTokenizationLineLength": 100000,
         "editor.minimap.enabled": false,
