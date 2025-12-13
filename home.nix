@@ -201,6 +201,7 @@ in
     '')
     trashy # For making it so I can avoid deleting files right away, and instead trash them
 #   ZealOS
+    elan #lean4
     nix-watch
     k   # On github: runtimeverification/k. A verification language
     qbe # Compiler backend
@@ -291,6 +292,7 @@ in
         banacorn.agda-mode
 #       github.copilot
 #       github.copilot-chat
+        leanprover.lean4  tamasfe.even-better-toml # even-better-toml is a dependency for lean4 extension
         hediet.vscode-drawio
         vscjava.vscode-java-pack # This is mainly for P3 (Uni project) with vaadin to do java web development
         vscjava.vscode-java-debug # This is mainly for P3 (Uni project) with vaadin to do java web development
@@ -298,6 +300,9 @@ in
       ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace (map (x:
         let I=builtins.elemAt; in
         { name=I x 0;                   publisher=I x 1; version=I x 2; sha256=I x 3; } ) [
+        [ "inform-6"                    "natrium729"     "latest" "sha256-ILCSrcVb3o9y+0i3ap7RC+nzqSniQaFlULd8RedM5bU="]
+        [ "inform-7"                    "natrium729"     "latest" "sha256-p/bO2+3SZVFNpIRz73oRfHU8yHlg/1JlusETO+MBRg0="]
+        [ "playwright"                  "ms-playwright"  "latest" "sha256-qIQS9rjzTJF0T6RWMJvaxOGcQmoXpIhzVHDMFxGMb/A="] # This is mainly for P3 (Uni project) with vaadin to do java web development
         [ "vscode-spring-boot"          "vmware"         "latest" "sha256-jFlcNbDgTphOJR96ehcAU1jOo4zTv5b5po1n/zmnul8=" ] # This is mainly for P3 (Uni project) with vaadin to do java web development
         [ "vscode-boot-dev-pack"        "vmware"         "latest" "0k181dz71ivjn5qkz3x0f65kvnkz4pgi5jq9bwy6a14g67ipya71" ] # This is mainly for P3 (Uni project) with vaadin to do java web development
         [ "vaadin-vscode"               "vaadin"         "latest" "sha256-gr6DtjLFVCDi8i/Dibhitr9EsBVmDa7kHqzocxg2R4M=" ] # This is mainly for P3 (Uni project) with vaadin to do java web development
