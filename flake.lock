@@ -256,7 +256,7 @@
     "home-manager": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs-stable"
+          "nixpkgs"
         ]
       },
       "locked": {
@@ -376,7 +376,7 @@
     "nil": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs-stable"
+          "nixpkgs"
         ]
       },
       "locked": {
@@ -397,7 +397,7 @@
       "inputs": {
         "flake-utils": "flake-utils_2",
         "nixpkgs": [
-          "nixpkgs-stable"
+          "nixpkgs"
         ]
       },
       "locked": {
@@ -418,7 +418,7 @@
       "inputs": {
         "flake-utils": "flake-utils_3",
         "nixpkgs": [
-          "nixpkgs-stable"
+          "nixpkgs"
         ]
       },
       "locked": {
@@ -439,7 +439,7 @@
       "inputs": {
         "flake-compat": "flake-compat_2",
         "nixpkgs": [
-          "nixpkgs-stable"
+          "nixpkgs"
         ],
         "snowfall-lib": "snowfall-lib"
       },
@@ -575,7 +575,7 @@
         "flake-parts": "flake-parts",
         "mnw": "mnw",
         "nixpkgs": [
-          "nixpkgs-stable"
+          "nixpkgs"
         ],
         "systems": "systems_6"
       },
