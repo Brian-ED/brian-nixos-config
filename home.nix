@@ -607,6 +607,7 @@ in
   programs.git = {
     enable = true;
     settings = {
+      pull.rebase = true;
       safe.directory = [
         "${winUser}/raylibAPL"
         "${winUser}/raylibAPL/imports/c-header-to-bqn-ffi"

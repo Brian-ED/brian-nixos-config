@@ -19,6 +19,7 @@
     enable = true;
     text = ''
       {
+        "git.rebaseWhenSync": true,
         "lean4.alwaysAskBeforeInstallingLeanVersions": true,
         "java.compile.nullAnalysis.mode": "automatic",
         "redhat.telemetry.enabled": false, // This is mainly for P3 (Uni project) with vaadin to do java web development
