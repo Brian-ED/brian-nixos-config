@@ -252,7 +252,14 @@ in
     qutebrowser       # browser with loads of shortcuts
     lxappearance      # GTK theme switcher, useful for i3
     audacious         # For playing music
-    rustc cargo       # Rust stuff
+    ( # Rust stuff
+      #rustc cargo
+      inputs.fenix.packages.${system}.latest.withComponents [ # "latest" can be replaced with "stable" and "beta".
+        "cargo"
+        "rustc"
+        "rust-src"
+      ]
+    )
     zig zls           # Zig stuff
     firefox           # Web browser
     nemo-with-extensions # File explorer
@@ -353,6 +360,8 @@ in
       package = pkgs.gnome-themes-extra;
     };
   };
+
+  programs.fzf.enable = true;
 
   programs.obs-studio = {
     enable = true;
