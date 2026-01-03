@@ -5,8 +5,8 @@ pkgs: pkgs.stdenv.mkDerivation {
   src = pkgs.fetchFromGitHub {
     owner = "dzaima";
     repo = "CBQN";
-    rev = "a5f2404fa59c3ffc4c31bd07a001ef3243f7e244";
-    hash = "sha256-G4XWSZui2ikx6me8350KmSVn9VId353L4GBN3XVP6cs=";
+    rev = "35e1ae218d91dde4d0aea0e82dc066288da38a50";
+    hash = "sha256-CZ/ChQxg+HZVTo916FR60VXkidjp2vspL4CJOfpmWro=";
     fetchSubmodules = true;
   };
 

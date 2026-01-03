@@ -201,18 +201,18 @@ in
     '')
     trashy # For making it so I can avoid deleting files right away, and instead trash them
 #   ZealOS
-    elan #lean4
-    nix-watch
-    k   # On github: runtimeverification/k. A verification language
+    #elan #lean4
+    #nix-watch
+    #k   # On github: runtimeverification/k. A verification language
     qbe # Compiler backend
-    qemu # Virtual machines
+    #qemu # Virtual machines
     gnome-screenshot
-    kiwix-tools # I use this for reading wikipedia offline
+    #kiwix-tools # I use this for reading wikipedia offline
     (dyalog.override { acceptLicense = true; }) ride # Dyalog APL stuff
     libreoffice-qt6-fresh
     duf              # Disk utility
     cryptsetup       # For decrypting my LUKS encrypted harddrive
-    prismlauncher    # Minecraft launcher
+    #prismlauncher    # Minecraft launcher
     #wireguard-tools
     qbittorrent-enhanced # BitTorrent client
     pastel            # Command-line tool to generate, analyze, convert and manipulate colors
@@ -252,15 +252,15 @@ in
     qutebrowser       # browser with loads of shortcuts
     lxappearance      # GTK theme switcher, useful for i3
     audacious         # For playing music
-    ( # Rust stuff
-      #rustc cargo
-      inputs.fenix.packages.${system}.latest.withComponents [ # "latest" can be replaced with "stable" and "beta".
-        "cargo"
-        "rustc"
-        "rust-src"
-      ]
-    )
-    zig zls           # Zig stuff
+    #( # Rust stuff
+    #  #rustc cargo
+    #  inputs.fenix.packages.${system}.latest.withComponents [ # "latest" can be replaced with "stable" and "beta".
+    #    "cargo"
+    #    "rustc"
+    #    "rust-src"
+    #  ]
+    #)
+    #zig zls           # Zig stuff
     firefox           # Web browser
     nemo-with-extensions # File explorer
     ffmpeg            # This is a dependency of my youtube song downloader for my playlist, which is used by the I3 shortcut $mod+Control+Shift+m
@@ -580,7 +580,7 @@ in
       min = "cd ${minUser}";
       singplay = "${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel ${homeDir}/proj/singeliPlayground/run ${cbqn-native}/bin/bqn ${inputs.singeli}";
       singeli = "${inputs.singeli}/singeli";
-      lines = " wc -l";
+      lines = "wc -l";
       "≠" = lines;
       "⌽" = "${pkgs.coreutils-full}/bin/tac ";
     };
