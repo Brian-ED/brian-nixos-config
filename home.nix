@@ -112,7 +112,6 @@ in
       bqnserver              = { path = proj ; repo = "${G}/Brian-ED/bqnserver"             ;};
       "Brian-ED.github.io"   = { path = proj ; repo = "${G}/Brian-ED/Brian-ED.github.io"    ;};
       rayed-bqn-docs         = { path = proj ; repo = "${G}/Brian-ED/rayed-bqn-docs"        ;};
-      consistent_vocabulary  = { path = proj ; repo = "${G}/M1kiMinaj/consistent_vocabulary";};
     };
     cloneCommands = lib.mapAttrsToList (name: {path, repo}: ''
       if [ ! -d ${path}/${name} ]; then
@@ -126,7 +125,8 @@ in
     ${lib.concatStrings cloneCommands}
     if [ ! -d ${proj}/singeliPlayground ]; then
       run ${pkgs.git}/bin/git clone "${G}/dzaima/singeliPlayground" ${proj}/singeliPlayground
-      git="${pkgs.git}/bin/git"
+      run ln -s "${proj}/UIClone" "${proj}/UI"
+      run ${pkgs.git}/bin/git -C "${proj}/singeliPlayground" submodule update --init UIClone
       run ${python3}/bin/python3 ${proj}/singeliPlayground/build.py
     fi
     if [ ! -d ${homeDir}/.config/i3 ]; then
@@ -310,7 +310,7 @@ in
         [ "inform-6"                    "natrium729"     "latest" "sha256-ILCSrcVb3o9y+0i3ap7RC+nzqSniQaFlULd8RedM5bU="]
         [ "inform-7"                    "natrium729"     "latest" "sha256-p/bO2+3SZVFNpIRz73oRfHU8yHlg/1JlusETO+MBRg0="]
         [ "playwright"                  "ms-playwright"  "latest" "sha256-qIQS9rjzTJF0T6RWMJvaxOGcQmoXpIhzVHDMFxGMb/A="] # This is mainly for P3 (Uni project) with vaadin to do java web development
-        [ "vscode-spring-boot"          "vmware"         "latest" "sha256-jFlcNbDgTphOJR96ehcAU1jOo4zTv5b5po1n/zmnul8=" ] # This is mainly for P3 (Uni project) with vaadin to do java web development
+        [ "vscode-spring-boot"          "vmware"         "latest" "sha256-ECt4JcGIbQ9wmxLWYQ+Rwt0f1cA8zg8ZFYO/5NZ8QRo="] # This is mainly for P3 (Uni project) with vaadin to do java web development
         [ "vscode-boot-dev-pack"        "vmware"         "latest" "0k181dz71ivjn5qkz3x0f65kvnkz4pgi5jq9bwy6a14g67ipya71" ] # This is mainly for P3 (Uni project) with vaadin to do java web development
         [ "vaadin-vscode"               "vaadin"         "latest" "sha256-gr6DtjLFVCDi8i/Dibhitr9EsBVmDa7kHqzocxg2R4M=" ] # This is mainly for P3 (Uni project) with vaadin to do java web development
         [ "vscode-stripe"               "Stripe"         "latest" "07jwjzya4961w7mz8gpjw1300bigzpn2k8pqdng6k9b72jij80la" ]

@@ -26,6 +26,7 @@
     };
     initrd.systemd.network.wait-online.enable = false; # Apparently improves boot time. Why should the boot process wait for internet?
     supportedFilesystems = [ "ntfs" "ext4" ];
+    kernelParams = ["video=1024x768@60"];
   };
 
   networking = {

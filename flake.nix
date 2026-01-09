@@ -57,6 +57,7 @@
         modules = [
           ./hardware/lifebook-AH512.nix
           ./configuration.nix
+          ./unsafe-config.nix
         ];
       };
       remote-server = nixpkgs.lib.nixosSystem {
