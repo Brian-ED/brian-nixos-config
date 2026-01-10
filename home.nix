@@ -251,14 +251,14 @@ in
     qutebrowser       # browser with loads of shortcuts
     lxappearance      # GTK theme switcher, useful for i3
     audacious         # For playing music
-    #( # Rust stuff
-    #  #rustc cargo
-    #  inputs.fenix.packages.${system}.latest.withComponents [ # "latest" can be replaced with "stable" and "beta".
-    #    "cargo"
-    #    "rustc"
-    #    "rust-src"
-    #  ]
-    #)
+    ( # Rust stuff
+      #rustc cargo
+      inputs.fenix.packages.${system}.latest.withComponents [ # "latest" can be replaced with "stable" and "beta".
+        "cargo"
+        "rustc"
+        "rust-src"
+      ]
+    )
     #zig zls           # Zig stuff
     firefox           # Web browser
     nemo-with-extensions # File explorer
@@ -295,6 +295,7 @@ in
         banacorn.agda-mode
 #       github.copilot
 #       github.copilot-chat
+        rust-lang.rust-analyzer
         leanprover.lean4  tamasfe.even-better-toml # even-better-toml is a dependency for lean4 extension
         hediet.vscode-drawio
         vscjava.vscode-java-pack # This is mainly for P3 (Uni project) with vaadin to do java web development
