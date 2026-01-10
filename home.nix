@@ -267,6 +267,7 @@ in
     unzip
     pkgs-stable.mypaint     # Basic drawing program
     xed-editor
+    outfieldr # tldr command for better man pages
     (agda.withPackages (p: [ p.standard-library ]))
     gnome-system-monitor
     paperview
