@@ -19,12 +19,14 @@
     enable = true;
     text = ''
       {
+        "agdaMode.connection.downloadPolicy": "No, and don't ask again",
+        "agdaMode.connection.paths": [
+          "/home/brian/.nix-profile/bin/agda"
+        ],
         "git.rebaseWhenSync": true,
         "lean4.alwaysAskBeforeInstallingLeanVersions": true,
         "java.compile.nullAnalysis.mode": "automatic",
         "redhat.telemetry.enabled": false, // This is mainly for P3 (Uni project) with vaadin to do java web development
-        "agdaMode.connection.commandLineOptions": "-l=/home/brian/proj/agda-lib",
-        "agdaMode.libraryPath": "/home/brian/proj/agda-lib",
         "bqn.enableBackslashCompletion": false,
         "code-runner.saveFileBeforeRun": true,
         "diffEditor.experimental.showMoves": true,
@@ -185,9 +187,6 @@
             },
           }
         },
-        "agdaMode.connection.paths": [
-          "/home/brian/.nix-profile/bin/agda"
-        ],
         "editor.unicodeHighlight.allowedCharacters": {
           "ℕ": true,
           " ": false,
@@ -249,7 +248,6 @@
     enable = true;
     text = ''
       ${pkgs.agdaPackages.standard-library.outPath}/standard-library.agda-lib
-      ${homeDir}/proj/agda-lib/agda-lib.agda-lib
     '';
   };
   "${homeDir}/.config/agda/defaults" = {
