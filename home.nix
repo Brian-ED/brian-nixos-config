@@ -1,5 +1,5 @@
 # TODO get home manager to manage files ~/.gtkrc-2.0
-{ pkgs, pkgs-stable, lib, inputs, winUser, minUser, nixPath, ...}:
+{ pkgs, pkgs-stable, pkgs-unstable, lib, inputs, winUser, minUser, nixPath, ...}:
 let
   nix-watch         = inputs.nix-watch        .packages.${pkgs.stdenv.hostPlatform.system}.default;
   home-manager      = inputs.home-manager     .packages.${pkgs.stdenv.hostPlatform.system}.home-manager;
@@ -25,6 +25,7 @@ let
   ]);
 
   sessionVariables = {
+    NIXPKGS_ALLOW_UNFREE = "1"; # --impure is needed anyway for this to take effect, so I don't believe this is unsafe
 
     # Define the terminal prompt
     # Old: \n\[\033[1;32m\][\[\e]0;\u@\h: \w\a\]\u@\h:\w]\$\[\033[0m\]
@@ -208,7 +209,7 @@ in
     #qemu # Virtual machines
     gnome-screenshot
     #kiwix-tools # I use this for reading wikipedia offline
-    (dyalog.override { acceptLicense = true; }) ride # Dyalog APL stuff
+    pkgs-unstable.dyalog ride # Dyalog APL stuff
     libreoffice-qt6-fresh
     duf              # Disk utility
     cryptsetup       # For decrypting my LUKS encrypted harddrive
@@ -284,14 +285,11 @@ in
       vscodeExtensions = with vscode-extensions; [
         ms-dotnettools.vscode-dotnet-runtime
         ms-python.python # Python extension
-        ms-python.vscode-pylance
         ziglang.vscode-zig
         esbenp.prettier-vscode
         formulahendry.code-runner
         vscode-extensions."13xforever".language-x86-64-assembly
         bradlc.vscode-tailwindcss
-        ms-vscode-remote.remote-ssh-edit
-        ms-vscode-remote.remote-ssh
         ms-python.debugpy
         jnoortheen.nix-ide
         ritwickdey.liveserver
@@ -304,37 +302,35 @@ in
         vscjava.vscode-java-pack # This is mainly for P3 (Uni project) with vaadin to do java web development
         vscjava.vscode-java-debug # This is mainly for P3 (Uni project) with vaadin to do java web development
         redhat.java # This is mainly for P3 (Uni project) with vaadin to do java web development
-      ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace (map (x:
-        let I=builtins.elemAt; in
-        { name=I x 0;                   publisher=I x 1; version=I x 2; sha256=I x 3; } ) [
-        [ "inform-6"                    "natrium729"     "latest" "sha256-ILCSrcVb3o9y+0i3ap7RC+nzqSniQaFlULd8RedM5bU="]
-        [ "inform-7"                    "natrium729"     "latest" "sha256-p/bO2+3SZVFNpIRz73oRfHU8yHlg/1JlusETO+MBRg0="]
-        [ "playwright"                  "ms-playwright"  "latest" "sha256-qIQS9rjzTJF0T6RWMJvaxOGcQmoXpIhzVHDMFxGMb/A="] # This is mainly for P3 (Uni project) with vaadin to do java web development
-        [ "vscode-spring-boot"          "vmware"         "latest" "sha256-ECt4JcGIbQ9wmxLWYQ+Rwt0f1cA8zg8ZFYO/5NZ8QRo="] # This is mainly for P3 (Uni project) with vaadin to do java web development
-        [ "vscode-boot-dev-pack"        "vmware"         "latest" "0k181dz71ivjn5qkz3x0f65kvnkz4pgi5jq9bwy6a14g67ipya71" ] # This is mainly for P3 (Uni project) with vaadin to do java web development
-        [ "vaadin-vscode"               "vaadin"         "latest" "sha256-gr6DtjLFVCDi8i/Dibhitr9EsBVmDa7kHqzocxg2R4M=" ] # This is mainly for P3 (Uni project) with vaadin to do java web development
-        [ "vscode-stripe"               "Stripe"         "latest" "07jwjzya4961w7mz8gpjw1300bigzpn2k8pqdng6k9b72jij80la" ]
-        [ "bqn"                         "mk12"           "latest" "sha256-nTnL75BzHrpnJVO8DFfrLZZGavCC4OzvAlyrGCXSak4="  ]
-        [ "newline"                     "chang196700"    "latest" "0xijg1nqlrlwkl4ls21hzikr30iz8fd98ynpbmhhdxrkm3iccqa1" ]
-        [ "tws"                         "jkiviluoto"     "latest" "0aj58iasgnmd2zb7zxz587k9mfmykjwrb8h7hfvpkmh76s9bj4y5" ] # Trailing white space
-        [ "toggle-zen-mode"             "fudd"           "latest" "0whmbpnin1r1qnq45fpz7ayp51d4lilvbnv7llqd6jplx5b4n3ds" ]
-        [ "todo-tree"                   "Gruntfuggly"    "latest" "0yrc9qbdk7zznd823bqs1g6n2i5xrda0f9a7349kknj9wp1mqgqn" ]
-        [ "iceworks-time-master"        "iceworks-team"  "latest" "05k7icssa7llbp4a44kny0556hvimmdh6fm394y5rh86bxqq0iq3" ]
-        [ "suteppu"                     "Itsakaseru"     "latest" "1z0zkznwwm0z1vyq2wsw9rf1kg8pfpb3rl7glx0zp3aq8sxvnfsf" ]
-        [ "vscode-sort"                 "henriiik"       "latest" "0sam2qfa596dcbabx3alrwsgm56a8wzb65dp45yv172kcaam5yd6" ]
-        [ "slint"                       "Slint"          "latest" "sha256-/7zn5jpIqT//PriiJRmbygud7BmAMKVN8C6KOgfx9cI="  ]
-        [ "remote-explorer"             "ms-vscode"      "latest" "10rsnl5yk08mhcwg5j7s2xsawd7v2ilcgg2rm9v904v3nd2qi8xv" ]
-        #[ "ols"                         "DanielGavin"    "latest" "0rl6mjkabgbwc0vnm96ax1jhjh5rrky0i1w40fhs1zqyfd83mrsx" ] # Odin
-        [ "vscode-lowercase"            "ruiquelhas"     "latest" "03kwbnc25rfzsr7lzgkycwxnifv4nx04rfcvmfcqqhacx74g14gs" ]
-        #[ "vsliveshare"                 "MS-vsliveshare" "latest" "0rhwjar2c6bih1c5w4w8gdgpc6f18669gzycag5w9s35bv6bvsr8" ] # Live Share
-        [ "inline-html-indent"          "vulkd"          "latest" "0mh7kpis821088g5qmzay76zrgvgbikl9v2jdjs3mdfkbh2rfl6s" ]
-        #[ "chatgpt-copilot"             "feiskyer"       "latest" "0766vq07gjxgh4xpflzmrcx55i6b9w4hk5zg8yirvgfjscv5gvxv" ]
-        [ "vscode-apl-language-client"  "OptimaSystems"  "latest" "050nn7f6gfzskq1yavqdw77rgl1lxs3p8dqkzrmmliqh5kqh2gr8" ]
-        [ "vscode-apl-language"         "OptimaSystems"  "latest" "003n637vskbi4wypm8qwdy4fa9skp19w6kli1bgc162gzcbswhia" ]
-        [ "vscode-autohotkey-plus-plus" "mark-wiemer"    "latest" "1i7gqxsgyf18165m2j6wb0ps1h6iniy89jhvhy89hnzm2i95a0ck" ]
-        #[ "i3"                          "dcasella"       "latest" "0z7qj6bwch1cxr6pab2i3yqk5id8k14mjlvl6i9f0cmdsxqkmci5" ]
-        #[ "idris-vscode"                "meraymond"      "latest" "0yam13n021lmc93m8rpw96ksci0jshfrlnnfdk1q9yqrxydy6320" ]
-      ]);
+      ] ++ (
+        let I=builtins.elemAt; L=lib.licenses; in pkgs.vscode-utils.extensionsFromVscodeMarketplace (
+          map (x: { name=I x 0; publisher=I x 1; meta.license = I x 2; version=I x 3; sha256=I x 4;} )
+          [ # All licenses here have been manually checked by Brian Ellingsgaard
+            [ "inform-6"                    "natrium729"    L.mit       "latest" "sha256-ILCSrcVb3o9y+0i3ap7RC+nzqSniQaFlULd8RedM5bU="  ]
+            [ "inform-7"                    "natrium729"    L.mit       "latest" "sha256-p/bO2+3SZVFNpIRz73oRfHU8yHlg/1JlusETO+MBRg0="  ]
+            [ "playwright"                  "ms-playwright" L.asl20     "latest" "sha256-qIQS9rjzTJF0T6RWMJvaxOGcQmoXpIhzVHDMFxGMb/A="  ] # This is mainly for P3 (Uni project) with vaadin to do java web development
+            [ "vscode-spring-boot"          "vmware"        L.epl10     "latest" "sha256-D6Ykwlg2oIjaGRIW8B8+TBCEDdueZERU3CW2DF6fdBc="  ] # This is mainly for P3 (Uni project) with vaadin to do java web development
+            [ "vscode-boot-dev-pack"        "vmware"        L.epl10     "latest" "0k181dz71ivjn5qkz3x0f65kvnkz4pgi5jq9bwy6a14g67ipya71" ] # This is mainly for P3 (Uni project) with vaadin to do java web development
+            [ "vaadin-vscode"               "vaadin"        L.asl20     "latest" "sha256-gr6DtjLFVCDi8i/Dibhitr9EsBVmDa7kHqzocxg2R4M="  ] # This is mainly for P3 (Uni project) with vaadin to do java web development
+            [ "vscode-stripe"               "Stripe"        L.mit       "latest" "07jwjzya4961w7mz8gpjw1300bigzpn2k8pqdng6k9b72jij80la" ]
+            [ "bqn"                         "mk12"          L.mit       "latest" "sha256-nTnL75BzHrpnJVO8DFfrLZZGavCC4OzvAlyrGCXSak4="  ]
+            [ "newline"                     "chang196700"   L.mit       "latest" "0xijg1nqlrlwkl4ls21hzikr30iz8fd98ynpbmhhdxrkm3iccqa1" ]
+            [ "tws"                         "jkiviluoto"    L.mit       "latest" "0aj58iasgnmd2zb7zxz587k9mfmykjwrb8h7hfvpkmh76s9bj4y5" ] # Trailing white space
+            [ "todo-tree"                   "Gruntfuggly"   L.mit       "latest" "0yrc9qbdk7zznd823bqs1g6n2i5xrda0f9a7349kknj9wp1mqgqn" ]
+            [ "iceworks-time-master"        "iceworks-team" L.mit       "latest" "05k7icssa7llbp4a44kny0556hvimmdh6fm394y5rh86bxqq0iq3" ]
+            [ "suteppu"                     "Itsakaseru"    L.mit       "latest" "1z0zkznwwm0z1vyq2wsw9rf1kg8pfpb3rl7glx0zp3aq8sxvnfsf" ]
+            [ "slint"                       "Slint"         L.agpl3Only "latest" "sha256-/7zn5jpIqT//PriiJRmbygud7BmAMKVN8C6KOgfx9cI="  ]
+            #[ "ols"                         "DanielGavin"   L.mit       "latest" "0rl6mjkabgbwc0vnm96ax1jhjh5rrky0i1w40fhs1zqyfd83mrsx" ] # Odin
+            [ "vscode-lowercase"            "ruiquelhas"    L.mit       "latest" "03kwbnc25rfzsr7lzgkycwxnifv4nx04rfcvmfcqqhacx74g14gs" ]
+             #[ "chatgpt-copilot"             "feiskyer"     L.ISC       "latest" "0766vq07gjxgh4xpflzmrcx55i6b9w4hk5zg8yirvgfjscv5gvxv" ]
+            [ "vscode-apl-language-client"  "OptimaSystems" L.mit       "latest" "050nn7f6gfzskq1yavqdw77rgl1lxs3p8dqkzrmmliqh5kqh2gr8" ]
+            [ "vscode-apl-language"         "OptimaSystems" L.mit       "latest" "003n637vskbi4wypm8qwdy4fa9skp19w6kli1bgc162gzcbswhia" ]
+            [ "vscode-autohotkey-plus-plus" "mark-wiemer"   L.unfreeRedistributable "latest" "1i7gqxsgyf18165m2j6wb0ps1h6iniy89jhvhy89hnzm2i95a0ck" ] # I could label this as MIT with extra flags for more license information, but one asset is not explicitly labled re-distributable so I decided to use non-redistributable label.
+            #[ "i3"                          "dcasella"      L.asl20     "latest" "0z7qj6bwch1cxr6pab2i3yqk5id8k14mjlvl6i9f0cmdsxqkmci5" ]
+            #[ "idris-vscode"                "meraymond"     L.mit       "latest" "0yam13n021lmc93m8rpw96ksci0jshfrlnnfdk1q9yqrxydy6320" ]
+          ]
+        )
+      );
     })
   ]);
 

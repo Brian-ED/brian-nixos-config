@@ -1,7 +1,7 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’)
-{pkgs, lib, inputs, nixPath, ... }:
+{pkgs, pkgs-unstable, inputs, nixPath, ... }:
 {
   swapDevices = [{
     device = "/var/lib/swapfile";
@@ -157,7 +157,7 @@
   environment = {
     # Apparently dyalogscript's /bin/dyalogscript is better than "/usr/bin/env dyalogscript".
     # This enables it
-    bindyalogscript = "${pkgs.dyalog.override { acceptLicense = true; }}/bin/dyalogscript";
+    bindyalogscript = "${pkgs-unstable.dyalog}/bin/dyalogscript";
 
     # List packages installed in system profile. To search, run:
     # $ nix search wget
@@ -173,11 +173,7 @@
       xorg.xbacklight   # Modify device brightness, xrandr can only modify software brightness
       sops              # Encrypted secrets viewer and editor. TODO: Is it supposed to replace KeePassXC?
       gnome-clocks      # Needed a timer
-      keepassxc         # Password manager. TODO: Needs to be configured
       baobab            # Drive space tree-like view
-      restic            # Backup the borgBackup folder at drive/backup-brian-Lenovo-Yoga-C940-14IIL-LinuxMintCinamon
-      obsidian          # Unfree package. Can only use for non-profit
-      nodejs            # Javascript interpreter
       haruna            # Video player
       light             # My i3 config uses this
       elixir            # I want to try out elixer to develop concurrent applications
@@ -240,7 +236,10 @@
   };
 
   # Allow unfree packages
-  nixpkgs.config.allowUnfree = true; # I use this for Obsidian
+  nixpkgs.config.allowUnfreePredicate = pkg:
+    builtins.elem (pkgs.lib.getName pkg) [
+      "displaylink"
+    ];
 
   security = {
     rtkit.enable = true; # Enable sound with pipewire
