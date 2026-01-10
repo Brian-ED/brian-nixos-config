@@ -174,8 +174,6 @@ in
   home.homeDirectory = homeDir;
   home.stateVersion = "24.11"; # You should not change this value, even if you update Home Manager
 
-  nixpkgs.config.allowUnfree = true;
-
   # Install Nix packages
   home.packages = [
     nil               # Nix langauge server
