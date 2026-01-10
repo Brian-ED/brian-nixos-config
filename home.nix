@@ -447,7 +447,7 @@ in
   };
   programs.i3status = {
     enableDefault = false; # Whether or not to enable the default configuration.   boolean
-    enable = true; # Whether to enable i3status.  boolean
+    enable = true;
     general = {
       colors = true;
       interval = 5;
@@ -466,7 +466,7 @@ in
           l (Indices l));
     in format [ # Modules to add to i3status {file}`config` file. See {manpage}`i3status(1)` for options.   attribute set of (submodule)
       ["tztime local" {
-        format = "%Y-%m-%d %H:%M:%S";
+        format = "%d-%m-%Y %H:%M:%S";
       }]
       ["volume master" {
         format = "♪ %volume";
