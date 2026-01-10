@@ -475,13 +475,13 @@ in
         device = "pulse:alsa_output.pci-0000_00_1f.3-platform-skl_hda_dsp_generic.HiFi__Speaker__sink"; # Find device name by finding ID of main sink device via `wpctl status` on the * row, then `wpctl inspect TheIDYouFound` and find "node.name = ...", and "..."" is your device name that you put after "pulse:"" here
       }]
       ["battery all" {
-        format = "%status %percentage %remaining";
+        format = "%status %percentage";
       }]
       ["load" {
-        format = "load %1min";
+        format = "LOAD %1min";
       }]
       ["memory" {
-        format = "%used";
+        format = "RAM %used";
 #       format = "%used | %available"; # Default
         threshold_degraded = "10%";
 #       threshold_degraded = "1G"; # Default
@@ -489,6 +489,7 @@ in
 #       format_degraded = "MEMORY < %available"; # Default
       }]
       ["disk /" {
+        format = "DISK %avail";
       }]
       ["ipv6" {
         format_down = "";
