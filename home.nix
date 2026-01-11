@@ -276,7 +276,7 @@ in
     rofi              # Used by i3 for fancy UI
     #rustdesk          # Remote control. Useful for helping family
     fd                # Since I forget how to use the `find` command every time, I replaced it with fd, which lists files recursively as a flat list that i can then egrep
-
+    steam             # Steam
     # Alpaca
     #php               # php is used for alpaca server
     #php84Packages.composer # composer is the php package manager
