@@ -71,6 +71,60 @@ let
     SINGELI_PATH = inputs.singeli;
     NIX_PATH = lib.concatStringsSep ":" nixPath;
   };
+
+  vscodeCustom = pkgs.vscode-with-extensions.override {
+    vscode = pkgs.vscodium;
+    vscodeExtensions = with pkgs.vscode-extensions; [
+      ms-dotnettools.vscode-dotnet-runtime
+      ms-python.python # Python extension
+      ziglang.vscode-zig
+      esbenp.prettier-vscode
+      formulahendry.code-runner
+      pkgs.vscode-extensions."13xforever".language-x86-64-assembly
+      bradlc.vscode-tailwindcss
+      ms-python.debugpy
+      jnoortheen.nix-ide
+      ritwickdey.liveserver
+      eamodio.gitlens
+      banacorn.agda-mode
+#       github.copilot
+#       github.copilot-chat
+      rust-lang.rust-analyzer
+      leanprover.lean4  tamasfe.even-better-toml # even-better-toml is a dependency for lean4 extension
+      hediet.vscode-drawio
+      vscjava.vscode-java-pack # This is mainly for P3 (Uni project) with vaadin to do java web development
+      vscjava.vscode-java-debug # This is mainly for P3 (Uni project) with vaadin to do java web development
+      redhat.java # This is mainly for P3 (Uni project) with vaadin to do java web development
+    ] ++ (
+      let I=builtins.elemAt; L=lib.licenses; in pkgs.vscode-utils.extensionsFromVscodeMarketplace (
+        map (x: { name=I x 0; publisher=I x 1; meta.license = I x 2; version=I x 3; sha256=I x 4;} )
+        [ # All licenses here have been manually checked by Brian Ellingsgaard
+          [ "inform-6"                    "natrium729"    L.mit       "latest" "sha256-ILCSrcVb3o9y+0i3ap7RC+nzqSniQaFlULd8RedM5bU="  ]
+          [ "inform-7"                    "natrium729"    L.mit       "latest" "sha256-p/bO2+3SZVFNpIRz73oRfHU8yHlg/1JlusETO+MBRg0="  ]
+          [ "playwright"                  "ms-playwright" L.asl20     "latest" "sha256-qIQS9rjzTJF0T6RWMJvaxOGcQmoXpIhzVHDMFxGMb/A="  ] # This is mainly for P3 (Uni project) with vaadin to do java web development
+          [ "vscode-spring-boot"          "vmware"        L.epl10     "latest" "sha256-D6Ykwlg2oIjaGRIW8B8+TBCEDdueZERU3CW2DF6fdBc="  ] # This is mainly for P3 (Uni project) with vaadin to do java web development
+          [ "vscode-boot-dev-pack"        "vmware"        L.epl10     "latest" "0k181dz71ivjn5qkz3x0f65kvnkz4pgi5jq9bwy6a14g67ipya71" ] # This is mainly for P3 (Uni project) with vaadin to do java web development
+          [ "vaadin-vscode"               "vaadin"        L.asl20     "latest" "sha256-gr6DtjLFVCDi8i/Dibhitr9EsBVmDa7kHqzocxg2R4M="  ] # This is mainly for P3 (Uni project) with vaadin to do java web development
+          [ "vscode-stripe"               "Stripe"        L.mit       "latest" "07jwjzya4961w7mz8gpjw1300bigzpn2k8pqdng6k9b72jij80la" ]
+          [ "bqn"                         "mk12"          L.mit       "latest" "sha256-nTnL75BzHrpnJVO8DFfrLZZGavCC4OzvAlyrGCXSak4="  ]
+          [ "newline"                     "chang196700"   L.mit       "latest" "0xijg1nqlrlwkl4ls21hzikr30iz8fd98ynpbmhhdxrkm3iccqa1" ]
+          [ "tws"                         "jkiviluoto"    L.mit       "latest" "0aj58iasgnmd2zb7zxz587k9mfmykjwrb8h7hfvpkmh76s9bj4y5" ] # Trailing white space
+          [ "todo-tree"                   "Gruntfuggly"   L.mit       "latest" "0yrc9qbdk7zznd823bqs1g6n2i5xrda0f9a7349kknj9wp1mqgqn" ]
+          [ "iceworks-time-master"        "iceworks-team" L.mit       "latest" "05k7icssa7llbp4a44kny0556hvimmdh6fm394y5rh86bxqq0iq3" ]
+          [ "suteppu"                     "Itsakaseru"    L.mit       "latest" "1z0zkznwwm0z1vyq2wsw9rf1kg8pfpb3rl7glx0zp3aq8sxvnfsf" ]
+          [ "slint"                       "Slint"         L.agpl3Only "latest" "sha256-/7zn5jpIqT//PriiJRmbygud7BmAMKVN8C6KOgfx9cI="  ]
+          #[ "ols"                         "DanielGavin"   L.mit       "latest" "0rl6mjkabgbwc0vnm96ax1jhjh5rrky0i1w40fhs1zqyfd83mrsx" ] # Odin
+          [ "vscode-lowercase"            "ruiquelhas"    L.mit       "latest" "03kwbnc25rfzsr7lzgkycwxnifv4nx04rfcvmfcqqhacx74g14gs" ]
+            #[ "chatgpt-copilot"             "feiskyer"     L.ISC       "latest" "0766vq07gjxgh4xpflzmrcx55i6b9w4hk5zg8yirvgfjscv5gvxv" ]
+          [ "vscode-apl-language-client"  "OptimaSystems" L.mit       "latest" "050nn7f6gfzskq1yavqdw77rgl1lxs3p8dqkzrmmliqh5kqh2gr8" ]
+          [ "vscode-apl-language"         "OptimaSystems" L.mit       "latest" "003n637vskbi4wypm8qwdy4fa9skp19w6kli1bgc162gzcbswhia" ]
+          [ "vscode-autohotkey-plus-plus" "mark-wiemer"   L.unfreeRedistributable "latest" "1i7gqxsgyf18165m2j6wb0ps1h6iniy89jhvhy89hnzm2i95a0ck" ] # I could label this as MIT with extra flags for more license information, but one asset is not explicitly labled re-distributable so I decided to use non-redistributable label.
+          #[ "i3"                          "dcasella"      L.asl20     "latest" "0z7qj6bwch1cxr6pab2i3yqk5id8k14mjlvl6i9f0cmdsxqkmci5" ]
+          #[ "idris-vscode"                "meraymond"     L.mit       "latest" "0yam13n021lmc93m8rpw96ksci0jshfrlnnfdk1q9yqrxydy6320" ]
+        ]
+      )
+    );
+  };
 in
 {
   imports = [ inputs.nvf.homeManagerModules.default ];
@@ -176,6 +230,7 @@ in
 
   # Install Nix packages
   home.packages = [
+    vscodeCustom
     nil               # Nix langauge server
     home-manager      # Have home manager manage itself
     python3
@@ -198,7 +253,7 @@ in
         ${cbqn-native}/bin/bqn ${inputs.singeli}/singeli --help
       fi
     '')
-    trashy # For making it so I can avoid deleting files right away, and instead trash them
+    gtrash # For making it so I can avoid deleting files right away, and instead trash them
 #   ZealOS
     #elan #lean4
     #nix-watch
@@ -211,11 +266,10 @@ in
     libreoffice-qt6-fresh
     duf              # Disk utility
     cryptsetup       # For decrypting my LUKS encrypted harddrive
-    #prismlauncher    # Minecraft launcher
     #wireguard-tools
     qbittorrent-enhanced # BitTorrent client
     pastel            # Command-line tool to generate, analyze, convert and manipulate colors
-    bat fzf eza zoxide nushell # Some things I've been trying to improve the terminal. Bad so far.
+    bat eza zoxide nushell # Some things I've been trying to improve the terminal. Bad so far.
     xcolor            # color-pick shortcut for i3
     alacritty         # My chosen terminal. Loads quickly, and doesn't have a inbuilt-windowmanager to complicate it
     xdotool           # Useful for automating tasks
@@ -229,7 +283,6 @@ in
     #docker_28         # Docker is a dependency of alpaca
 
     #nixos-conf-editor # Editor for this configuration
-    #xorg.xkbcomp      # Temporary for messing with my keyboard settings
     xorg.xev          # I use this for testing button presses on i3
     # TODO Do I really need 3 applications for light control on i3?
     xorg.xbacklight   # Modify device brightness, xrandr can only modify software brightness
@@ -279,59 +332,6 @@ in
     gnome-themes-extra # Dark theme related: Includes Adwaita-dark
     simplescreenrecorder # My favorite recording software
     cbqn-native bqn386 # BQN interpreter and font
-    (vscode-with-extensions.override {
-      vscode = vscodium;
-      vscodeExtensions = with vscode-extensions; [
-        ms-dotnettools.vscode-dotnet-runtime
-        ms-python.python # Python extension
-        ziglang.vscode-zig
-        esbenp.prettier-vscode
-        formulahendry.code-runner
-        vscode-extensions."13xforever".language-x86-64-assembly
-        bradlc.vscode-tailwindcss
-        ms-python.debugpy
-        jnoortheen.nix-ide
-        ritwickdey.liveserver
-        eamodio.gitlens
-        banacorn.agda-mode
-#       github.copilot
-#       github.copilot-chat
-        rust-lang.rust-analyzer
-        leanprover.lean4  tamasfe.even-better-toml # even-better-toml is a dependency for lean4 extension
-        hediet.vscode-drawio
-        vscjava.vscode-java-pack # This is mainly for P3 (Uni project) with vaadin to do java web development
-        vscjava.vscode-java-debug # This is mainly for P3 (Uni project) with vaadin to do java web development
-        redhat.java # This is mainly for P3 (Uni project) with vaadin to do java web development
-      ] ++ (
-        let I=builtins.elemAt; L=lib.licenses; in pkgs.vscode-utils.extensionsFromVscodeMarketplace (
-          map (x: { name=I x 0; publisher=I x 1; meta.license = I x 2; version=I x 3; sha256=I x 4;} )
-          [ # All licenses here have been manually checked by Brian Ellingsgaard
-            [ "inform-6"                    "natrium729"    L.mit       "latest" "sha256-ILCSrcVb3o9y+0i3ap7RC+nzqSniQaFlULd8RedM5bU="  ]
-            [ "inform-7"                    "natrium729"    L.mit       "latest" "sha256-p/bO2+3SZVFNpIRz73oRfHU8yHlg/1JlusETO+MBRg0="  ]
-            [ "playwright"                  "ms-playwright" L.asl20     "latest" "sha256-qIQS9rjzTJF0T6RWMJvaxOGcQmoXpIhzVHDMFxGMb/A="  ] # This is mainly for P3 (Uni project) with vaadin to do java web development
-            [ "vscode-spring-boot"          "vmware"        L.epl10     "latest" "sha256-D6Ykwlg2oIjaGRIW8B8+TBCEDdueZERU3CW2DF6fdBc="  ] # This is mainly for P3 (Uni project) with vaadin to do java web development
-            [ "vscode-boot-dev-pack"        "vmware"        L.epl10     "latest" "0k181dz71ivjn5qkz3x0f65kvnkz4pgi5jq9bwy6a14g67ipya71" ] # This is mainly for P3 (Uni project) with vaadin to do java web development
-            [ "vaadin-vscode"               "vaadin"        L.asl20     "latest" "sha256-gr6DtjLFVCDi8i/Dibhitr9EsBVmDa7kHqzocxg2R4M="  ] # This is mainly for P3 (Uni project) with vaadin to do java web development
-            [ "vscode-stripe"               "Stripe"        L.mit       "latest" "07jwjzya4961w7mz8gpjw1300bigzpn2k8pqdng6k9b72jij80la" ]
-            [ "bqn"                         "mk12"          L.mit       "latest" "sha256-nTnL75BzHrpnJVO8DFfrLZZGavCC4OzvAlyrGCXSak4="  ]
-            [ "newline"                     "chang196700"   L.mit       "latest" "0xijg1nqlrlwkl4ls21hzikr30iz8fd98ynpbmhhdxrkm3iccqa1" ]
-            [ "tws"                         "jkiviluoto"    L.mit       "latest" "0aj58iasgnmd2zb7zxz587k9mfmykjwrb8h7hfvpkmh76s9bj4y5" ] # Trailing white space
-            [ "todo-tree"                   "Gruntfuggly"   L.mit       "latest" "0yrc9qbdk7zznd823bqs1g6n2i5xrda0f9a7349kknj9wp1mqgqn" ]
-            [ "iceworks-time-master"        "iceworks-team" L.mit       "latest" "05k7icssa7llbp4a44kny0556hvimmdh6fm394y5rh86bxqq0iq3" ]
-            [ "suteppu"                     "Itsakaseru"    L.mit       "latest" "1z0zkznwwm0z1vyq2wsw9rf1kg8pfpb3rl7glx0zp3aq8sxvnfsf" ]
-            [ "slint"                       "Slint"         L.agpl3Only "latest" "sha256-/7zn5jpIqT//PriiJRmbygud7BmAMKVN8C6KOgfx9cI="  ]
-            #[ "ols"                         "DanielGavin"   L.mit       "latest" "0rl6mjkabgbwc0vnm96ax1jhjh5rrky0i1w40fhs1zqyfd83mrsx" ] # Odin
-            [ "vscode-lowercase"            "ruiquelhas"    L.mit       "latest" "03kwbnc25rfzsr7lzgkycwxnifv4nx04rfcvmfcqqhacx74g14gs" ]
-             #[ "chatgpt-copilot"             "feiskyer"     L.ISC       "latest" "0766vq07gjxgh4xpflzmrcx55i6b9w4hk5zg8yirvgfjscv5gvxv" ]
-            [ "vscode-apl-language-client"  "OptimaSystems" L.mit       "latest" "050nn7f6gfzskq1yavqdw77rgl1lxs3p8dqkzrmmliqh5kqh2gr8" ]
-            [ "vscode-apl-language"         "OptimaSystems" L.mit       "latest" "003n637vskbi4wypm8qwdy4fa9skp19w6kli1bgc162gzcbswhia" ]
-            [ "vscode-autohotkey-plus-plus" "mark-wiemer"   L.unfreeRedistributable "latest" "1i7gqxsgyf18165m2j6wb0ps1h6iniy89jhvhy89hnzm2i95a0ck" ] # I could label this as MIT with extra flags for more license information, but one asset is not explicitly labled re-distributable so I decided to use non-redistributable label.
-            #[ "i3"                          "dcasella"      L.asl20     "latest" "0z7qj6bwch1cxr6pab2i3yqk5id8k14mjlvl6i9f0cmdsxqkmci5" ]
-            #[ "idris-vscode"                "meraymond"     L.mit       "latest" "0yam13n021lmc93m8rpw96ksci0jshfrlnnfdk1q9yqrxydy6320" ]
-          ]
-        )
-      );
-    })
   ]);
 
   # manages dotfiles
@@ -537,13 +537,13 @@ in
     shellAliases = rec {
       volup = "wpctl set-volume $(wpctl status | egrep '\\*.*Speaker'  | grep -oE '[0-9]+' | head -n 1) 10%+";
       addsong = "${python3}/bin/yt-dlp --format 251 --paths ${winUser}/Music/ $@";
-      code = "codium";
-      fix-nix-hash = "nix hash convert --hash-algo sha256 --to nix32 $1"; # give in format sha256-...=
+      code = "${vscodeCustom}/bin/codium";
+      fix-nix-hash = "${pkgs.nix}/bin/nix hash convert --hash-algo sha256 --to nix32 $1"; # give in format sha256-...=
 
       # Nix build OS things
       NRO = "${pkgs.nh}/bin/nh os   switch ${homeDir}/proj/brian-nixos-config";
       HR  = "${pkgs.nh}/bin/nh home switch ${homeDir}/proj/brian-nixos-config";
-      NROQ = "sudo nixos-rebuild switch --flake ${homeDir}/proj/brian-nixos-config/#brians-laptop";
+      NROQ = "sudo ${pkgs.nixos-rebuild-ng}/bin/nixos-rebuild switch --flake ${homeDir}/proj/brian-nixos-config/#brians-laptop";
       HRQ = "${home-manager}/bin/home-manager switch --flake ${homeDir}/proj/brian-nixos-config/#brian";
       NR = "${HR} && ${NRO}"; # Runs home manager first since NRO will ask for sudo when it ends, and I don't want to wait again after providing sudo
       NRQ = "${NROQ} && ${HRQ}"; # Runs home manager last since NROQ will ask for sudo at the start, and I don't want to wait again after providing sudo
@@ -554,30 +554,31 @@ in
       "." = "cd .."; # Hilariously this works
       "," = "cd ~";
       "_" = "cd - >> /dev/null";
-      mcsnorri = "prismlauncher --launch 1.21.8-extra --server 198.244.176.195:2009";
-      mclocal = "prismlauncher --launch 1.21.8 --world 'Sorter Showcase v1.2'";
+      mcsnorri = "${pkgs.prismlauncher}/bin/prismlauncher --launch 1.21.8-extra --server 198.244.176.195:2009";
+      mclocal = "${pkgs.prismlauncher}/bin/prismlauncher --launch 1.21.8 --world 'Sorter Showcase v1.2'";
       mintemail = "${pkgs.thunderbird}/bin/thunderbird --profile ${minUser}/.thunderbird/v5k5cfgq.default-release $@";
-      aplk = "setxkbmap -layout fo,apl -option grp:lswitch";
-      bqnk = "setxkbmap -layout fo,bqn -option grp:lswitch";
-      net = "nmcli dev wifi && nmcli dev wifi connect --ask"; # Find a network to connect to
+      aplk = "${pkgs.xorg.setxkbmap}/bin/setxkbmap -layout fo,apl -option grp:lswitch";
+      bqnk = "${pkgs.xorg.setxkbmap}/bin/setxkbmap -layout fo,bqn -option grp:lswitch";
+      net = "${pkgs.networkmanager}/bin/nmcli dev wifi && ${pkgs.networkmanager}/bin/nmcli dev wifi connect --ask"; # Find a network to connect to
       cat = "${pkgs.bat}/bin/bat $@";
+      clean30d = "${pkgs.nh}/bin/nh clean all --keep-since 30d && ${pkgs.gtrash}/bin/gtrash prune --day 30 && ${pkgs.nix}/bin/nix store optimise";
 
       # ls-like things
       l   = "${pkgs.eza}/bin/eza --color=always --all --classify=always --long --color=always --absolute=on --header --git --git-repos --time-style=relative --total-size --no-permissions --no-user --sort extension --icons";
       ls  = "${pkgs.eza}/bin/eza --color=always       --classify=always --across                                                                                                                                      --icons";
       lsr = "${l} --tree";
       lsrf = "${pkgs.fd}/bin/fd $@";
-      navfind = "fzf --height 50% --layout reverse --info inline --preview 'bat --color=always --style=full,-grid --line-range=:500 {}' --preview-window right,70%,border-none";
+      navfind = "${pkgs.fzf}/bin/fzf --height 50% --layout reverse --info inline --preview 'bat --color=always --style=full,-grid --line-range=:500 {}' --preview-window right,70%,border-none";
 
-      rm = "rm --interactive"; # I want to remind myself before deleting stuff. Also, I shouldn't really use this, instead I should use trashy
-      mv = "mv --update=none-fail"; # Accidentally deleted a file while moving it. Now, I get an error when moving a file that replaces another file
-      tp = "${pkgs.trashy}/bin/trash put $@";
-      d = "nix develop";
+      rm = "${pkgs.coreutils-full}/bin/rm --interactive"; # I want to remind myself before deleting stuff. Also, I shouldn't really use this, instead I should use trashy
+      mv = "${pkgs.coreutils-full}/bin/mv --update=none-fail"; # Accidentally deleted a file while moving it. Now, I get an error when moving a file that replaces another file
+      tp = "${pkgs.gtrash}/bin/gtrash put $@";
+      d = "${pkgs.nix}/bin/nix develop";
       win = "cd ${winUser}";
       min = "cd ${minUser}";
       singplay = "${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel ${homeDir}/proj/singeliPlayground/run ${cbqn-native}/bin/bqn ${inputs.singeli}";
       singeli = "${inputs.singeli}/singeli";
-      lines = "wc -l";
+      lines = "${pkgs.coreutils-full}/bin/wc -l";
       "≠" = lines;
       "⌽" = "${pkgs.coreutils-full}/bin/tac ";
     };
