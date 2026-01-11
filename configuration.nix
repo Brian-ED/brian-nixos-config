@@ -168,7 +168,6 @@
       alacritty         # My chosen terminal. Loads quickly, and doesn't have a inbuilt-windowmanager to complicate it
       xdotool           # Useful for automating tasks
       rofi              # Used by i3 for fancy UI
-      xorg.xkbcomp      # Temporary for messing with my keyboard settings
       xorg.xev          # I use this for testing button presses on i3
       xorg.xbacklight   # Modify device brightness, xrandr can only modify software brightness
       sops              # Encrypted secrets viewer and editor. TODO: Is it supposed to replace KeePassXC?
