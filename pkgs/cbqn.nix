@@ -5,8 +5,8 @@ pkgs: pkgs.stdenv.mkDerivation {
   src = pkgs.fetchFromGitHub {
     owner = "dzaima";
     repo = "CBQN";
-    rev = "35e1ae218d91dde4d0aea0e82dc066288da38a50";
-    hash = "sha256-CZ/ChQxg+HZVTo916FR60VXkidjp2vspL4CJOfpmWro=";
+    rev = "a0d4ef7a499873dafe3dbc91cf8f4683e0b5821c";
+    hash = "sha256-TGqoajyki5HNxBiT5wuabdQvYnrFc2bBNBsyXUo3TE0=";
     fetchSubmodules = true;
   };
 
@@ -47,6 +47,23 @@ pkgs: pkgs.stdenv.mkDerivation {
     ln -sf BQN $out/bin/bqn
     ln -sf BQN $out/bin/cbqn
   '';
+
+#  doCheck = true;
+#  checkPhase = ''
+#    runHook preCheck
+#    bash test/mainCfgs.sh path/to/mlochbaum/BQN # run the test suite for a couple primary configurations
+#    bash test/x86Cfgs.sh  path/to/mlochbaum/BQN # run the test suite for x86-64-specific configurations, including singeli; 32-bit build is "supposed" to fail one test involving ⋆⁼
+#    bash test/moreCfgs.sh path/to/mlochbaum/BQN # run "2+2" in a bunch of configurations; requires dzaima/BQN to be accessible as dbqn
+#    bqn test/run.bqn                           # run tests in test/cases/
+#    make -C test/ffi // test FFI functionality; expects both regular and shared library CBQN builds to already exist
+#
+#      test/joinReuse.bqn   # test in-place join; requires -DPRINT_JOIN_REUSE
+#      test/readTests.bqn   # read mlochbaum/BQN tests in various formats
+#      test/precompiled.bqn # run a precompiled expression
+#
+#    runHook postCheck
+#  '';
+
 
   meta = {
     description = "Optimized CBQN interpreter with REPLXX support for AMD Ryzen";

@@ -188,6 +188,7 @@
           }
         },
         "editor.unicodeHighlight.allowedCharacters": {
+          "α": true,
           "ℕ": true,
           " ": false,
           "∨": true,
