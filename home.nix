@@ -102,11 +102,11 @@ let
           [ "inform-6"                    "natrium729"    L.mit       "latest" "sha256-ILCSrcVb3o9y+0i3ap7RC+nzqSniQaFlULd8RedM5bU="  ]
           [ "inform-7"                    "natrium729"    L.mit       "latest" "sha256-p/bO2+3SZVFNpIRz73oRfHU8yHlg/1JlusETO+MBRg0="  ]
           [ "playwright"                  "ms-playwright" L.asl20     "latest" "sha256-qIQS9rjzTJF0T6RWMJvaxOGcQmoXpIhzVHDMFxGMb/A="  ] # This is mainly for P3 (Uni project) with vaadin to do java web development
-          [ "vscode-spring-boot"          "vmware"        L.epl10     "latest" "sha256-D6Ykwlg2oIjaGRIW8B8+TBCEDdueZERU3CW2DF6fdBc="  ] # This is mainly for P3 (Uni project) with vaadin to do java web development
+          [ "vscode-spring-boot"          "vmware"        L.epl10     "latest" "sha256-4P8Unhdtv/Vo2kTxXIuTdYV72ZfUn9XP82vUm1eAsss="  ] # This is mainly for P3 (Uni project) with vaadin to do java web development
           [ "vscode-boot-dev-pack"        "vmware"        L.epl10     "latest" "0k181dz71ivjn5qkz3x0f65kvnkz4pgi5jq9bwy6a14g67ipya71" ] # This is mainly for P3 (Uni project) with vaadin to do java web development
           [ "vaadin-vscode"               "vaadin"        L.asl20     "latest" "sha256-gr6DtjLFVCDi8i/Dibhitr9EsBVmDa7kHqzocxg2R4M="  ] # This is mainly for P3 (Uni project) with vaadin to do java web development
           [ "vscode-stripe"               "Stripe"        L.mit       "latest" "07jwjzya4961w7mz8gpjw1300bigzpn2k8pqdng6k9b72jij80la" ]
-          [ "bqn"                         "mk12"          L.mit       "latest" "sha256-nTnL75BzHrpnJVO8DFfrLZZGavCC4OzvAlyrGCXSak4="  ]
+          [ "bqn"                         "mk12"          L.mit       "latest" "sha256-ccs+jTqL5SoYZziuaodWbzD/HIXHatwzhUTPzCAz32E="  ]
           [ "newline"                     "chang196700"   L.mit       "latest" "0xijg1nqlrlwkl4ls21hzikr30iz8fd98ynpbmhhdxrkm3iccqa1" ]
           [ "tws"                         "jkiviluoto"    L.mit       "latest" "0aj58iasgnmd2zb7zxz587k9mfmykjwrb8h7hfvpkmh76s9bj4y5" ] # Trailing white space
           [ "todo-tree"                   "Gruntfuggly"   L.mit       "latest" "0yrc9qbdk7zznd823bqs1g6n2i5xrda0f9a7349kknj9wp1mqgqn" ]
@@ -118,7 +118,7 @@ let
             #[ "chatgpt-copilot"             "feiskyer"     L.ISC       "latest" "0766vq07gjxgh4xpflzmrcx55i6b9w4hk5zg8yirvgfjscv5gvxv" ]
           [ "vscode-apl-language-client"  "OptimaSystems" L.mit       "latest" "050nn7f6gfzskq1yavqdw77rgl1lxs3p8dqkzrmmliqh5kqh2gr8" ]
           [ "vscode-apl-language"         "OptimaSystems" L.mit       "latest" "003n637vskbi4wypm8qwdy4fa9skp19w6kli1bgc162gzcbswhia" ]
-          [ "vscode-autohotkey-plus-plus" "mark-wiemer"   L.unfreeRedistributable "latest" "1i7gqxsgyf18165m2j6wb0ps1h6iniy89jhvhy89hnzm2i95a0ck" ] # I could label this as MIT with extra flags for more license information, but one asset is not explicitly labled re-distributable so I decided to use non-redistributable label.
+          [ "vscode-autohotkey-plus-plus" "mark-wiemer"   L.unfreeRedistributable "latest" "sha256-55eHm1m3PsCzAkCMubTqeK+e7a64UfI6Svmn1owm0Yc=" ] # I could label this as MIT with extra flags for more license information, but one asset is not explicitly labled re-distributable so I decided to use non-redistributable label.
           #[ "i3"                          "dcasella"      L.asl20     "latest" "0z7qj6bwch1cxr6pab2i3yqk5id8k14mjlvl6i9f0cmdsxqkmci5" ]
           #[ "idris-vscode"                "meraymond"     L.mit       "latest" "0yam13n021lmc93m8rpw96ksci0jshfrlnnfdk1q9yqrxydy6320" ]
         ]
