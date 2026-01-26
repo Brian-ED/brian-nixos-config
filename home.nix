@@ -388,6 +388,7 @@ in
     "org/cinnamon/desktop/applications/terminal" = {
       exec = "alacritty";
     };
+    "org/gnome/desktop/interface".color-scheme = "prefer-dark"; # Turns gtk apps to dark mode
     "org/cinnamon/desktop/interface" = {
       can-change-accels = true;
     };
