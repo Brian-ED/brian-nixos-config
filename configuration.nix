@@ -21,7 +21,10 @@
 
   boot = {
     loader = {
-      systemd-boot.enable = true;
+      systemd-boot = {
+        configurationLimit = 10; # Auto-deletes stuff in /boot. It keeps filling up
+        enable = true;
+      };
       efi.canTouchEfiVariables = true;
     };
     initrd.systemd.network.wait-online.enable = false; # Apparently improves boot time. Why should the boot process wait for internet?
