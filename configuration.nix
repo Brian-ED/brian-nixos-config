@@ -62,6 +62,19 @@
   powerManagement.powertop.enable = true; # powertop auto tuning on startup # Disabled usb after some time of incativity, so not usable on desktop
 
   services = {
+    picom = {
+      enable = true;
+      package = pkgs.picom-pijulius;
+      wintypes = { # Window types special rules
+        popup_menu = { opacity = 0.7; };
+        dropdown_menu = { opacity = 0.7; };
+      };
+      opacityRules = []; # ["95:class_g = 'URxvt' && !_NET_WM_STATE@:32a" "0:_NET_WM_STATE@:32a *= '_NET_WM_STATE_HIDDEN'"]
+      menuOpacity = 0.7; # integer or floating point number between 0 and 1 (both inclusive)
+      vSync = true;
+      backend = "egl"; # one of "egl", "glx", "xrender", "xr_glx_hybrid" # I still had problems while running with xrender
+    };
+
     # Powermanagment
     tlp.enable = true; # TLP power management daemon
     upower.enable = true; # DBus service that provides power management support to applications.
