@@ -25,8 +25,6 @@
         ],
         "git.rebaseWhenSync": true,
         "lean4.alwaysAskBeforeInstallingLeanVersions": true,
-        "java.compile.nullAnalysis.mode": "automatic",
-        "redhat.telemetry.enabled": false, // This is mainly for P3 (Uni project) with vaadin to do java web development
         "bqn.enableBackslashCompletion": false,
         "code-runner.saveFileBeforeRun": true,
         "diffEditor.experimental.showMoves": true,
@@ -74,11 +72,7 @@
         },
         "editor.lineHeight": 1.3,
         "prettier.configPath": ".prettierrc",
-        "[javascriptreact]": {
-            "editor.defaultFormatter": "esbenp.prettier-vscode"
-        },
         "python.analysis.autoImportCompletions": true,
-        "javascript.updateImportsOnFileMove.enabled": "always",
         "git.autofetch": true,
         "code-runner.runInTerminal": true,
         "code-runner.respectShebang": false,

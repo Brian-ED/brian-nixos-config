@@ -92,19 +92,12 @@ let
       rust-lang.rust-analyzer
       leanprover.lean4  tamasfe.even-better-toml # even-better-toml is a dependency for lean4 extension
       hediet.vscode-drawio
-      vscjava.vscode-java-pack # This is mainly for P3 (Uni project) with vaadin to do java web development
-      vscjava.vscode-java-debug # This is mainly for P3 (Uni project) with vaadin to do java web development
-      redhat.java # This is mainly for P3 (Uni project) with vaadin to do java web development
     ] ++ (
       let I=builtins.elemAt; L=lib.licenses; in pkgs.vscode-utils.extensionsFromVscodeMarketplace (
         map (x: { name=I x 0; publisher=I x 1; meta.license = I x 2; version=I x 3; sha256=I x 4;} )
         [ # All licenses here have been manually checked by Brian Ellingsgaard
           [ "inform-6"                    "natrium729"    L.mit       "latest" "sha256-ILCSrcVb3o9y+0i3ap7RC+nzqSniQaFlULd8RedM5bU="  ]
           [ "inform-7"                    "natrium729"    L.mit       "latest" "sha256-p/bO2+3SZVFNpIRz73oRfHU8yHlg/1JlusETO+MBRg0="  ]
-          [ "playwright"                  "ms-playwright" L.asl20     "latest" "sha256-qIQS9rjzTJF0T6RWMJvaxOGcQmoXpIhzVHDMFxGMb/A="  ] # This is mainly for P3 (Uni project) with vaadin to do java web development
-          [ "vscode-spring-boot"          "vmware"        L.epl10     "latest" "sha256-4P8Unhdtv/Vo2kTxXIuTdYV72ZfUn9XP82vUm1eAsss="  ] # This is mainly for P3 (Uni project) with vaadin to do java web development
-          [ "vscode-boot-dev-pack"        "vmware"        L.epl10     "latest" "0k181dz71ivjn5qkz3x0f65kvnkz4pgi5jq9bwy6a14g67ipya71" ] # This is mainly for P3 (Uni project) with vaadin to do java web development
-          [ "vaadin-vscode"               "vaadin"        L.asl20     "latest" "sha256-gr6DtjLFVCDi8i/Dibhitr9EsBVmDa7kHqzocxg2R4M="  ] # This is mainly for P3 (Uni project) with vaadin to do java web development
           [ "vscode-stripe"               "Stripe"        L.mit       "latest" "07jwjzya4961w7mz8gpjw1300bigzpn2k8pqdng6k9b72jij80la" ]
           [ "bqn"                         "mk12"          L.mit       "latest" "sha256-ccs+jTqL5SoYZziuaodWbzD/HIXHatwzhUTPzCAz32E="  ]
           [ "newline"                     "chang196700"   L.mit       "latest" "0xijg1nqlrlwkl4ls21hzikr30iz8fd98ynpbmhhdxrkm3iccqa1" ]
@@ -115,7 +108,7 @@ let
           [ "slint"                       "Slint"         L.agpl3Only "latest" "sha256-/7zn5jpIqT//PriiJRmbygud7BmAMKVN8C6KOgfx9cI="  ]
           #[ "ols"                         "DanielGavin"   L.mit       "latest" "0rl6mjkabgbwc0vnm96ax1jhjh5rrky0i1w40fhs1zqyfd83mrsx" ] # Odin
           [ "vscode-lowercase"            "ruiquelhas"    L.mit       "latest" "03kwbnc25rfzsr7lzgkycwxnifv4nx04rfcvmfcqqhacx74g14gs" ]
-            #[ "chatgpt-copilot"             "feiskyer"     L.ISC       "latest" "0766vq07gjxgh4xpflzmrcx55i6b9w4hk5zg8yirvgfjscv5gvxv" ]
+          #[ "chatgpt-copilot"             "feiskyer"     L.ISC       "latest" "0766vq07gjxgh4xpflzmrcx55i6b9w4hk5zg8yirvgfjscv5gvxv" ]
           [ "vscode-apl-language-client"  "OptimaSystems" L.mit       "latest" "050nn7f6gfzskq1yavqdw77rgl1lxs3p8dqkzrmmliqh5kqh2gr8" ]
           [ "vscode-apl-language"         "OptimaSystems" L.mit       "latest" "003n637vskbi4wypm8qwdy4fa9skp19w6kli1bgc162gzcbswhia" ]
           [ "vscode-autohotkey-plus-plus" "mark-wiemer"   L.unfreeRedistributable "latest" "sha256-55eHm1m3PsCzAkCMubTqeK+e7a64UfI6Svmn1owm0Yc=" ] # I could label this as MIT with extra flags for more license information, but one asset is not explicitly labled re-distributable so I decided to use non-redistributable label.
@@ -236,8 +229,7 @@ in
     python3
   ] ++ (with pkgs; [
     stripe-cli
-    #jdk25 # javac for SingeliPlayground
-    jdk21 # java for vscode redhat java ext. Used in P3 uni project
+    jdk25 # javac for SingeliPlayground
     (writeShellScriptBin "mount-hard-drive" ''
       sudo cryptsetup luksOpen /dev/disk/by-uuid/41782a7f-3269-433b-8beb-c74fba89ef2d a
       sudo mount /dev/mapper/a /mnt/hard-drive
