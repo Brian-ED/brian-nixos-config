@@ -66,11 +66,11 @@
       enable = true;
       package = pkgs.picom-pijulius;
       wintypes = { # Window types special rules
-        popup_menu = { opacity = 0.7; };
-        dropdown_menu = { opacity = 0.7; };
+        popup_menu = { opacity = 1; };
+        dropdown_menu = { opacity = 1; };
       };
       opacityRules = []; # ["95:class_g = 'URxvt' && !_NET_WM_STATE@:32a" "0:_NET_WM_STATE@:32a *= '_NET_WM_STATE_HIDDEN'"]
-      menuOpacity = 0.7; # integer or floating point number between 0 and 1 (both inclusive)
+      menuOpacity = 1; # integer or floating point number between 0 and 1 (both inclusive)
       vSync = true;
       backend = "egl"; # one of "egl", "glx", "xrender", "xr_glx_hybrid" # I still had problems while running with xrender
     };
