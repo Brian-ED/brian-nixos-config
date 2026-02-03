@@ -542,6 +542,7 @@ in
       HRQ = "${home-manager}/bin/home-manager switch --flake ${homeDir}/proj/brian-nixos-config/#brian";
       NR = "${HR} && ${NRO}"; # Runs home manager first since NRO will ask for sudo when it ends, and I don't want to wait again after providing sudo
       NRQ = "${NROQ} && ${HRQ}"; # Runs home manager last since NROQ will ask for sudo at the start, and I don't want to wait again after providing sudo
+      NU = "${pkgs.nix}/bin/nix flake update --flake ${homeDir}/proj/brian-nixos-config"; # Nix Update
 
       P = "pwd | ${pkgs.xclip}/bin/xclip -selection clipboard";
       clip = "${pkgs.xclip}/bin/xclip -selection clipboard";
