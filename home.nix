@@ -26,6 +26,7 @@ let
 
   sessionVariables = {
     NIXPKGS_ALLOW_UNFREE = "1"; # --impure is needed anyway for this to take effect, so I don't believe this is unsafe
+    ADW_DISABLE_PORTAL = "1"; # For dark mode for some reason https://discourse.nixos.org/t/setting-theme-for-gnome-apps-to-dark-when-gnome-desktop-is-disabled/71921/10
 
     # Define the terminal prompt
     # Old: \n\[\033[1;32m\][\[\e]0;\u@\h: \w\a\]\u@\h:\w]\$\[\033[0m\]
@@ -296,6 +297,7 @@ in
     qutebrowser       # browser with loads of shortcuts
     lxappearance      # GTK theme switcher, useful for i3
     audacious         # For playing music
+    xkill             # For easily killing/stopping programs
     ( # Rust stuff
       #rustc cargo
       inputs.fenix.packages.${system}.latest.withComponents [ # "latest" can be replaced with "stable" and "beta".
