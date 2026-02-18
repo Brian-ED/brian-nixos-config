@@ -87,7 +87,6 @@ let
       jnoortheen.nix-ide
       ritwickdey.liveserver
       eamodio.gitlens
-      banacorn.agda-mode
 #       github.copilot
 #       github.copilot-chat
       rust-lang.rust-analyzer
@@ -106,7 +105,7 @@ let
           [ "todo-tree"                   "Gruntfuggly"   L.mit       "latest" "0yrc9qbdk7zznd823bqs1g6n2i5xrda0f9a7349kknj9wp1mqgqn" ]
           [ "iceworks-time-master"        "iceworks-team" L.mit       "latest" "05k7icssa7llbp4a44kny0556hvimmdh6fm394y5rh86bxqq0iq3" ]
           [ "suteppu"                     "Itsakaseru"    L.mit       "latest" "1z0zkznwwm0z1vyq2wsw9rf1kg8pfpb3rl7glx0zp3aq8sxvnfsf" ]
-          [ "slint"                       "Slint"         L.agpl3Only "latest" "sha256-/7zn5jpIqT//PriiJRmbygud7BmAMKVN8C6KOgfx9cI="  ]
+          [ "slint"                       "Slint"         L.agpl3Only "latest" "sha256-2J7Bl5xcvA2fAV5QTvb+31cEbF4B1DYuEPZ3ZLyqB0s="  ]
           #[ "ols"                         "DanielGavin"   L.mit       "latest" "0rl6mjkabgbwc0vnm96ax1jhjh5rrky0i1w40fhs1zqyfd83mrsx" ] # Odin
           [ "vscode-lowercase"            "ruiquelhas"    L.mit       "latest" "03kwbnc25rfzsr7lzgkycwxnifv4nx04rfcvmfcqqhacx74g14gs" ]
           #[ "chatgpt-copilot"             "feiskyer"     L.ISC       "latest" "0766vq07gjxgh4xpflzmrcx55i6b9w4hk5zg8yirvgfjscv5gvxv" ]
@@ -115,6 +114,8 @@ let
           [ "vscode-autohotkey-plus-plus" "mark-wiemer"   L.unfreeRedistributable "latest" "sha256-55eHm1m3PsCzAkCMubTqeK+e7a64UfI6Svmn1owm0Yc=" ] # I could label this as MIT with extra flags for more license information, but one asset is not explicitly labled re-distributable so I decided to use non-redistributable label.
           #[ "i3"                          "dcasella"      L.asl20     "latest" "0z7qj6bwch1cxr6pab2i3yqk5id8k14mjlvl6i9f0cmdsxqkmci5" ]
           #[ "idris-vscode"                "meraymond"     L.mit       "latest" "0yam13n021lmc93m8rpw96ksci0jshfrlnnfdk1q9yqrxydy6320" ]
+          [ "agda-mode"                   "banacorn"      L.mit       "latest" "sha256-SrZ+ftC0jykCMEjesfbuoo3IsjwCHYsCxV3zQwBnuME=" ]
+          [ "als-wasm-loader"             "qbane"         L.mit       "latest" "sha256-DttrHvtc+Fo6iA6hDHPaJxNFJxbnOsbE10vqSsRzixQ=" ]
         ]
       )
     );
@@ -230,6 +231,8 @@ in
     python3
   ] ++ (with pkgs; [
     stripe-cli
+    lean.lean-all
+    qpwgraph # A graph view of PipeWire devices
     jdk25 # javac for SingeliPlayground
     (writeShellScriptBin "mount-hard-drive" ''
       sudo cryptsetup luksOpen /dev/disk/by-uuid/41782a7f-3269-433b-8beb-c74fba89ef2d a

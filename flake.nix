@@ -11,6 +11,8 @@
     darwin.url             = "github:LnL7/nix-darwin"                  ;
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
 
+    lean4-nix.url = "github:lenianiva/lean4-nix";
+
     brian-i3-config = { url = "github:Brian-ED/brian-i3-config"; flake = false; };
     singeli         = { url = "github:mlochbaum/Singeli"       ; flake = false; };
 
@@ -39,6 +41,7 @@
         ];
       overlays = [
         inputs.nixGL.overlay
+        (inputs.lean4-nix.readToolchainFile ./lean-toolchain)
       ];
     };
     pkgs-unstable = import inputs.nixpkgs-unstable env;

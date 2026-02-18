@@ -62,6 +62,8 @@
   powerManagement.powertop.enable = true; # powertop auto tuning on startup # Disabled usb after some time of incativity, so not usable on desktop
 
   services = {
+    blueman.enable = true;
+
     picom = {
       enable = true;
       package = pkgs.picom-pijulius;
@@ -247,6 +249,9 @@
     isNormalUser = true;
     initialPassword = "ChangeThisASAP123";
     description = "Brian Ellingsgaard";
+    openssh.authorizedKeys.keys = [
+      #"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD..." # Replace with your actual public key
+    ];
     extraGroups = [ "networkmanager" "wheel" "video" "www-data"]; # Video added so that i3 can change brightness. # www-data is for Pelican
   };
 
