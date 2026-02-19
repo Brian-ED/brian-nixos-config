@@ -15,6 +15,9 @@
       XDG_VIDEOS_DIR="$HOME/dataByBadApps/Videos"
     '';
   };
+
+  "${homeDir}/.config/niri/config.kdl".source = ./modules/niri-config.kdl; # Niri config
+
   "${homeDir}/.config/VSCodium/User/settings.json" = {
     enable = true;
     text = ''

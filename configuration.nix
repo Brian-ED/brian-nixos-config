@@ -88,7 +88,8 @@
       enable = true;
       ports = [ 22 ];
       settings = {
-        PasswordAuthentication = true;
+        PasswordAuthentication = false; # Should probably be true
+        PubkeyAuthentication = true;
         AllowUsers = null; # Allows all users by default. Can be [ "user1" "user2" ]
         UseDns = true;
         X11Forwarding = false;
@@ -200,7 +201,6 @@
       qutebrowser       # browser with loads of shortcuts
       lxappearance      # GTK theme switcher, useful for i3
       audacious         # For playing music
-      zig zls           # Zig stuff
       firefox
       nemo
       xclip

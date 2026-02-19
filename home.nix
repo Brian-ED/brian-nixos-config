@@ -78,7 +78,7 @@ let
     vscodeExtensions = with pkgs.vscode-extensions; [
       ms-dotnettools.vscode-dotnet-runtime
       ms-python.python # Python extension
-      ziglang.vscode-zig
+      #ziglang.vscode-zig
       esbenp.prettier-vscode
       formulahendry.code-runner
       pkgs.vscode-extensions."13xforever".language-x86-64-assembly
@@ -98,7 +98,7 @@ let
         [ # All licenses here have been manually checked by Brian Ellingsgaard
           [ "inform-6"                    "natrium729"    L.mit       "latest" "sha256-ILCSrcVb3o9y+0i3ap7RC+nzqSniQaFlULd8RedM5bU="  ]
           [ "inform-7"                    "natrium729"    L.mit       "latest" "sha256-p/bO2+3SZVFNpIRz73oRfHU8yHlg/1JlusETO+MBRg0="  ]
-          [ "vscode-stripe"               "Stripe"        L.mit       "latest" "07jwjzya4961w7mz8gpjw1300bigzpn2k8pqdng6k9b72jij80la" ]
+          #[ "vscode-stripe"               "Stripe"        L.mit       "latest" "07jwjzya4961w7mz8gpjw1300bigzpn2k8pqdng6k9b72jij80la" ]
           [ "bqn"                         "mk12"          L.mit       "latest" "sha256-ccs+jTqL5SoYZziuaodWbzD/HIXHatwzhUTPzCAz32E="  ]
           [ "newline"                     "chang196700"   L.mit       "latest" "0xijg1nqlrlwkl4ls21hzikr30iz8fd98ynpbmhhdxrkm3iccqa1" ]
           [ "tws"                         "jkiviluoto"    L.mit       "latest" "0aj58iasgnmd2zb7zxz587k9mfmykjwrb8h7hfvpkmh76s9bj4y5" ] # Trailing white space
@@ -329,6 +329,7 @@ in
     gnome-themes-extra # Dark theme related: Includes Adwaita-dark
     simplescreenrecorder # My favorite recording software
     cbqn-native bqn386 # BQN interpreter and font
+    #swaybg # wallpaper
   ]);
 
   # manages dotfiles
@@ -563,8 +564,8 @@ in
       clean30d = "${pkgs.nh}/bin/nh clean all --keep-since 30d && ${pkgs.gtrash}/bin/gtrash prune --day 30 && ${pkgs.nix}/bin/nix store optimise";
 
       # ls-like things
-      l   = "${pkgs.eza}/bin/eza --color=always --all --classify=always --long --color=always --absolute=on --header --git --git-repos --time-style=relative --total-size --no-permissions --no-user --sort extension --icons";
-      ls  = "${pkgs.eza}/bin/eza --color=always       --classify=always --across                                                                                                                                      --icons";
+      l   = "${pkgs.eza}/bin/eza --color=always --all --classify=always --long --color=always --absolute=on --header --git --git-repos --time-style=relative --total-size --no-permissions --no-user --sort size      --icons";
+      ls  = "${pkgs.eza}/bin/eza --color=always       --classify=always --across                                                                                                                     --sort extension --icons";
       lsr = "${l} --tree";
       lsrf = "${pkgs.fd}/bin/fd $@";
       navfind = "${pkgs.fzf}/bin/fzf --height 50% --layout reverse --info inline --preview 'bat --color=always --style=full,-grid --line-range=:500 {}' --preview-window right,70%,border-none";
