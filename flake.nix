@@ -31,6 +31,9 @@
     min = "/mnt/linux-mint";
     winUser = "${win}/Users/brian";
     minUser = "${min}/home/brian";
+    lean-toolchain-file = builtins.toFile "lean-toolchain" ''
+      leanprover/lean4:v4.27.0
+    '';
     env = {
       inherit system;
       config.dyalog.acceptLicense = true;
@@ -41,7 +44,7 @@
         ];
       overlays = [
         inputs.nixGL.overlay
-        (inputs.lean4-nix.readToolchainFile ./lean-toolchain)
+        (inputs.lean4-nix.readToolchainFile { toolchain = lean-toolchain-file; binary = false; })
       ];
     };
     pkgs-unstable = import inputs.nixpkgs-unstable env;
