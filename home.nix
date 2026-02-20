@@ -87,6 +87,7 @@ let
       jnoortheen.nix-ide
       ritwickdey.liveserver
       eamodio.gitlens
+      golang.go
 #       github.copilot
 #       github.copilot-chat
       rust-lang.rust-analyzer
@@ -330,6 +331,7 @@ in
     simplescreenrecorder # My favorite recording software
     cbqn-native bqn386 # BQN interpreter and font
     #swaybg # wallpaper
+    go gopls
   ]);
 
   # manages dotfiles
