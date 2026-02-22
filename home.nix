@@ -537,7 +537,7 @@ in
     enable = true;
     shellAliases = rec {
       volup = "wpctl set-volume $(wpctl status | egrep '\\*.*Speaker'  | grep -oE '[0-9]+' | head -n 1) 10%+";
-      addsong = "${python3}/bin/yt-dlp --format 251 --paths ${winUser}/Music/ $@";
+      addsong = "${python3}/bin/yt-dlp --format 251 --extract-audio --audio-format mp3 --audio-quality 0 --paths ${winUser}/Music/ $@";
       code = "${vscodeCustom}/bin/codium";
       fix-nix-hash = "${pkgs.nix}/bin/nix hash convert --hash-algo sha256 --to nix32 $1"; # give in format sha256-...=
 
