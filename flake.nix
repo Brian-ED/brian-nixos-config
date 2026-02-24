@@ -20,7 +20,6 @@
     home-manager      = { url = "github:nix-community/home-manager/release-25.11"; inputs.nixpkgs.follows = "nixpkgs"; };
     nixGL             = { url = "github:nix-community/nixGL"                     ; inputs.nixpkgs.follows = "nixpkgs"; };
     nix-watch         = { url = "github:Cloud-Scythe-Labs/nix-watch"             ; inputs.nixpkgs.follows = "nixpkgs"; };
-    nil               = { url = "github:oxalica/nil"                             ; inputs.nixpkgs.follows = "nixpkgs"; };
     nvf               = { url = "github:notashelf/nvf"                           ; inputs.nixpkgs.follows = "nixpkgs"; };
     fenix             = { url = "github:nix-community/fenix"                     ; inputs.nixpkgs.follows = "nixpkgs"; };
   };

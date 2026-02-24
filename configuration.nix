@@ -194,7 +194,6 @@
       baobab            # Drive space tree-like view
       haruna            # Video player
       light             # My i3 config uses this
-      elixir            # I want to try out elixer to develop concurrent applications
       gh                # github commands
       libllvm           # Playing around with llvm IR
       pet               # Snippet manager, not exactly sure what that means

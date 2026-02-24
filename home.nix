@@ -4,7 +4,6 @@ let
   nix-watch         = inputs.nix-watch        .packages.${pkgs.stdenv.hostPlatform.system}.default;
   home-manager      = inputs.home-manager     .packages.${pkgs.stdenv.hostPlatform.system}.home-manager;
   nixos-conf-editor = inputs.nixos-conf-editor.packages.${pkgs.stdenv.hostPlatform.system}.nixos-conf-editor;
-  nil               = inputs.nil              .packages.${pkgs.stdenv.hostPlatform.system}.nil;
   k                 = inputs.k                .packages.${pkgs.stdenv.hostPlatform.system}.k;
   cbqn-native = (import ./pkgs/cbqn.nix pkgs);
   username = "brian";
@@ -227,10 +226,10 @@ in
   # Install Nix packages
   home.packages = [
     vscodeCustom
-    nil               # Nix langauge server
     home-manager      # Have home manager manage itself
     python3
   ] ++ (with pkgs; [
+    nil # Nix langauge server
     stripe-cli
     lean.lean-all
     qpwgraph # A graph view of PipeWire devices
