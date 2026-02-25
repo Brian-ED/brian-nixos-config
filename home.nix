@@ -116,6 +116,7 @@ let
           #[ "idris-vscode"                "meraymond"     L.mit       "latest" "0yam13n021lmc93m8rpw96ksci0jshfrlnnfdk1q9yqrxydy6320" ]
           [ "agda-mode"                   "banacorn"      L.mit       "latest" "sha256-SrZ+ftC0jykCMEjesfbuoo3IsjwCHYsCxV3zQwBnuME=" ]
           [ "als-wasm-loader"             "qbane"         L.mit       "latest" "sha256-DttrHvtc+Fo6iA6hDHPaJxNFJxbnOsbE10vqSsRzixQ=" ]
+          [ "vscode-antlr4"               "mike-lischke"  L.mit       "latest" "sha256-PQHN2INJnX+vOWMgubooTtJHklbaioiTA/heXoObORs=" ]
         ]
       )
     );
