@@ -11,7 +11,7 @@
     darwin.url             = "github:LnL7/nix-darwin"                  ;
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
 
-    lean4-nix.url = "github:lenianiva/lean4-nix";
+    lean4-nix.url = "github:lenianiva/lean4-nix?ref=faebfa2e0d7093fea3ffaa493b316bf3449c1dbf";
 
     brian-i3-config = { url = "github:Brian-ED/brian-i3-config"; flake = false; };
     singeli         = { url = "github:mlochbaum/Singeli"       ; flake = false; };

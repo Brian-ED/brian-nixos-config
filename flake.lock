@@ -451,6 +451,7 @@
       },
       "original": {
         "owner": "lenianiva",
+        "ref": "faebfa2e0d7093fea3ffaa493b316bf3449c1dbf",
         "repo": "lean4-nix",
         "type": "github"
       }
