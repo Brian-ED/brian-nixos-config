@@ -426,6 +426,18 @@ in
 #  };
 
   services = {
+
+    udiskie = { # Automatically mount usbs
+      enable = true;
+      settings = {
+          # workaround for
+          # https://github.com/nix-community/home-manager/issues/632
+          program_options = {
+              file_manager = "${pkgs.nemo-with-extensions}/bin/nemo";
+          };
+      };
+    };
+
     xsettingsd = {
       enable = true;
       settings = {
