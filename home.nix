@@ -342,7 +342,7 @@ in
   ]);
 
   # manages dotfiles
-  home.file = import ./home-files.nix {inherit homeDir lib pkgs;};
+  home.file = import ./home-files.nix {inherit config homeDir lib pkgs agda-unimath;};
 
   home = {inherit sessionVariables;};
 
