@@ -238,7 +238,6 @@ in
     home-manager      # Have home manager manage itself
     python3
   ] ++ (with pkgs; [
-    nil # Nix langauge server
     stripe-cli
     qpwgraph # A graph view of PipeWire devices
     jdk25 # javac for SingeliPlayground
