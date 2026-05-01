@@ -39,6 +39,13 @@
     #   singleNode.enable = true;
     # };
   };
+
+      # Mak
+      system.defaults.trackpad.Clicking = true; # q
+      system.defaults.finder.ShowPathbar = true;
+      system.defaults.finder.ShowStatusBar = true;
+      system.defaults.finder.FXPreferredViewStyle = "Nlsv"; # The specific view style
+
   environment = {
     # Apparently dyalogscript's /bin/dyalogscript is better than "/usr/bin/env dyalogscript".
     # This enables it
@@ -106,6 +113,26 @@
   };
 
   programs = {
+    ssh = {
+      startAgent = true;
+      enable = true;
+      matchBlocks = {
+        "asck" = {
+          hostname = "172.25.12.23";
+          user = "root";
+          identityFile = "~/.ssh/asck";
+          identitiesOnly = true;
+        };
+
+        "cluster-nodes" = {
+          host = "10.0.0.101 10.0.0.102 10.0.0.103 10.0.0.104 10.0.0.105 10.0.0.106 10.0.0.107 10.0.0.108";
+          user = "asck";
+          identityFile = "~/.ssh/asck";
+          identitiesOnly = true;
+          proxyJump = "asck";
+        };
+      };
+    };
 
     gnupg.agent = {
       enable = true;

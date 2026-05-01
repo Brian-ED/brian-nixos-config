@@ -1,5 +1,5 @@
 # TODO get home manager to manage files ~/.gtkrc-2.0
-{ pkgs, pkgs-stable, pkgs-unstable, lib, inputs, winUser, minUser, nixPath, ...}:
+{ config, pkgs, pkgs-stable, pkgs-unstable, lib, inputs, winUser, minUser, nixPath, ...}:
 let
   nix-watch         = inputs.nix-watch        .packages.${pkgs.stdenv.hostPlatform.system}.default;
   home-manager      = inputs.home-manager     .packages.${pkgs.stdenv.hostPlatform.system}.home-manager;
@@ -26,6 +26,10 @@ let
   sessionVariables = {
     NIXPKGS_ALLOW_UNFREE = "1"; # --impure is needed anyway for this to take effect, so I don't believe this is unsafe
     ADW_DISABLE_PORTAL = "1"; # For dark mode for some reason https://discourse.nixos.org/t/setting-theme-for-gnome-apps-to-dark-when-gnome-desktop-is-disabled/71921/10
+
+    GOPATH="${config.xdg.stateHome}/go";
+    GOMODCACHE="${config.xdg.cacheHome}/go/pkg/mod";
+    GOTELEMETRYDIR="/dev/null";
 
     # Define the terminal prompt
     # Old: \n\[\033[1;32m\][\[\e]0;\u@\h: \w\a\]\u@\h:\w]\$\[\033[0m\]
@@ -105,7 +109,7 @@ let
           [ "todo-tree"                   "Gruntfuggly"   L.mit       "latest" "0yrc9qbdk7zznd823bqs1g6n2i5xrda0f9a7349kknj9wp1mqgqn" ]
           [ "iceworks-time-master"        "iceworks-team" L.mit       "latest" "05k7icssa7llbp4a44kny0556hvimmdh6fm394y5rh86bxqq0iq3" ]
           [ "suteppu"                     "Itsakaseru"    L.mit       "latest" "1z0zkznwwm0z1vyq2wsw9rf1kg8pfpb3rl7glx0zp3aq8sxvnfsf" ]
-          [ "slint"                       "Slint"         L.agpl3Only "latest" "sha256-2J7Bl5xcvA2fAV5QTvb+31cEbF4B1DYuEPZ3ZLyqB0s="  ]
+          [ "slint"                       "Slint"         L.agpl3Only "latest" "sha256-4kpW3bwXWrhWOslp/GQjCT2bv/kBCktsFo30orIII5U="  ]
           #[ "ols"                         "DanielGavin"   L.mit       "latest" "0rl6mjkabgbwc0vnm96ax1jhjh5rrky0i1w40fhs1zqyfd83mrsx" ] # Odin
           [ "vscode-lowercase"            "ruiquelhas"    L.mit       "latest" "03kwbnc25rfzsr7lzgkycwxnifv4nx04rfcvmfcqqhacx74g14gs" ]
           #[ "chatgpt-copilot"             "feiskyer"     L.ISC       "latest" "0766vq07gjxgh4xpflzmrcx55i6b9w4hk5zg8yirvgfjscv5gvxv" ]
@@ -232,7 +236,6 @@ in
   ] ++ (with pkgs; [
     nil # Nix langauge server
     stripe-cli
-    lean.lean-all
     qpwgraph # A graph view of PipeWire devices
     jdk25 # javac for SingeliPlayground
     (writeShellScriptBin "mount-hard-drive" ''
@@ -370,6 +373,16 @@ in
 
   # Dark mode for apps that respect XSettings
   xdg = {
+
+#    DATA_DIRS
+#    CONFIG_DIRS
+#    RUNTIME_DIR
+#
+#    DataHome = "...";
+#    ConfigHome = "...";
+#    StateHome = "...";
+#    cacheHome = "~/.cache";
+
     enable = true;
     mime.enable = true;
     desktopEntries.nemo = {
@@ -533,8 +546,15 @@ in
   };
 
   programs.bash = {
-    initExtra = lib.concatStrings (lib.mapAttrsToList (n: v: "export ${n}=\"${v}\"\n") sessionVariables); # I couldn't get home.sessionVariables working. Found this solution here: https://github.com/nix-community/home-manager/issues/1011
     enable = true;
+
+    initExtra = lib.concatStrings (lib.mapAttrsToList (n: v: "export ${n}=\"${v}\"\n") sessionVariables); # I couldn't get home.sessionVariables working. Found this solution here: https://github.com/nix-community/home-manager/issues/1011
+
+    historyFile = "${config.xdg.stateHome}/bash/history";
+    historyFileSize = 1000*1000*10;
+
+    historyIgnore = [ "ls" ];
+
     shellAliases = rec {
       volup = "wpctl set-volume $(wpctl status | egrep '\\*.*Speaker'  | grep -oE '[0-9]+' | head -n 1) 10%+";
       addsong = "${python3}/bin/yt-dlp --format 251 --extract-audio --audio-format mp3 --audio-quality 0 --paths ${winUser}/Music/ $@";
@@ -563,7 +583,7 @@ in
       bqnk = "${pkgs.xorg.setxkbmap}/bin/setxkbmap -layout fo,bqn -option grp:lswitch";
       net = "${pkgs.networkmanager}/bin/nmcli dev wifi && ${pkgs.networkmanager}/bin/nmcli dev wifi connect --ask"; # Find a network to connect to
       cat = "${pkgs.bat}/bin/bat $@";
-      clean30d = "${pkgs.nh}/bin/nh clean all --keep-since 30d && ${pkgs.gtrash}/bin/gtrash prune --day 30 && ${pkgs.nix}/bin/nix store optimise";
+      clean30d = "${pkgs.gtrash}/bin/gtrash prune --day 30 && ${pkgs.nh}/bin/nh clean all --optimise --keep-since 30d";
 
       # ls-like things
       l   = "${pkgs.eza}/bin/eza --color=always --all --classify=always --long --color=always --absolute=on --header --git --git-repos --time-style=relative --total-size --no-permissions --no-user --sort size      --icons";
