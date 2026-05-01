@@ -32,11 +32,10 @@
     env = {
       inherit system;
       config.dyalog.acceptLicense = true;
-      config.allowUnfreePredicate = pkg:
-        builtins.elem (nixpkgs.lib.getName pkg) [
-          "dyalog" "obsidian" "steam-unwrapped" "steam"
-          "vscode-extension-mark-wiemer-vscode-autohotkey-plus-plus" # Most of this one is MIT, it's just one asset that's not explicitly
-        ];
+      config.allowUnfreePredicate = pkg: builtins.elem (nixpkgs.lib.getName pkg) [
+        "dyalog" "obsidian" "steam-unwrapped" "steam"
+        "vscode-extension-mark-wiemer-vscode-autohotkey-plus-plus" # Most of this one is MIT, it's just one asset that's not explicitly
+      ];
       overlays = [
         inputs.nixGL.overlay
       ];
