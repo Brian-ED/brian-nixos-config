@@ -95,7 +95,6 @@ let
       ms-python.debugpy
       jnoortheen.nix-ide
       ritwickdey.liveserver
-      eamodio.gitlens
       golang.go
 #       github.copilot
 #       github.copilot-chat
@@ -113,9 +112,8 @@ let
           [ "newline"                     "chang196700"   L.mit       "latest" "0xijg1nqlrlwkl4ls21hzikr30iz8fd98ynpbmhhdxrkm3iccqa1" ]
           [ "tws"                         "jkiviluoto"    L.mit       "latest" "0aj58iasgnmd2zb7zxz587k9mfmykjwrb8h7hfvpkmh76s9bj4y5" ] # Trailing white space
           [ "todo-tree"                   "Gruntfuggly"   L.mit       "latest" "0yrc9qbdk7zznd823bqs1g6n2i5xrda0f9a7349kknj9wp1mqgqn" ]
-          [ "iceworks-time-master"        "iceworks-team" L.mit       "latest" "05k7icssa7llbp4a44kny0556hvimmdh6fm394y5rh86bxqq0iq3" ]
           [ "suteppu"                     "Itsakaseru"    L.mit       "latest" "1z0zkznwwm0z1vyq2wsw9rf1kg8pfpb3rl7glx0zp3aq8sxvnfsf" ]
-          [ "slint"                       "Slint"         L.agpl3Only "latest" "sha256-4kpW3bwXWrhWOslp/GQjCT2bv/kBCktsFo30orIII5U="  ]
+          [ "slint"                       "Slint"         L.agpl3Only "latest" "sha256-iAMagiPhy2hXRUgm96joqnaf7c5I6o75P3pGQ8NA0Xg="  ]
           #[ "ols"                         "DanielGavin"   L.mit       "latest" "0rl6mjkabgbwc0vnm96ax1jhjh5rrky0i1w40fhs1zqyfd83mrsx" ] # Odin
           [ "vscode-lowercase"            "ruiquelhas"    L.mit       "latest" "03kwbnc25rfzsr7lzgkycwxnifv4nx04rfcvmfcqqhacx74g14gs" ]
           #[ "chatgpt-copilot"             "feiskyer"     L.ISC       "latest" "0766vq07gjxgh4xpflzmrcx55i6b9w4hk5zg8yirvgfjscv5gvxv" ]
@@ -124,8 +122,8 @@ let
           [ "vscode-autohotkey-plus-plus" "mark-wiemer"   L.unfreeRedistributable "latest" "sha256-55eHm1m3PsCzAkCMubTqeK+e7a64UfI6Svmn1owm0Yc=" ] # I could label this as MIT with extra flags for more license information, but one asset is not explicitly labled re-distributable so I decided to use non-redistributable label.
           #[ "i3"                          "dcasella"      L.asl20     "latest" "0z7qj6bwch1cxr6pab2i3yqk5id8k14mjlvl6i9f0cmdsxqkmci5" ]
           #[ "idris-vscode"                "meraymond"     L.mit       "latest" "0yam13n021lmc93m8rpw96ksci0jshfrlnnfdk1q9yqrxydy6320" ]
-          [ "agda-mode"                   "banacorn"      L.mit       "latest" "sha256-SrZ+ftC0jykCMEjesfbuoo3IsjwCHYsCxV3zQwBnuME=" ]
-          [ "als-wasm-loader"             "qbane"         L.mit       "latest" "sha256-DttrHvtc+Fo6iA6hDHPaJxNFJxbnOsbE10vqSsRzixQ=" ]
+          [ "agda-mode"                   "banacorn"      L.mit       "latest" "sha256-2xYC+tStBXTL4koqUOcyxQUTDTipeUMTFLbrwqA6p7Q=" ]
+          [ "als-wasm-loader"             "qbane"         L.mit       "latest" "sha256-UZksx1Ce0SijIic5234SnTcVgJckBsSVPsVje50PsLU=" ]
           [ "vscode-antlr4"               "mike-lischke"  L.mit       "latest" "sha256-PQHN2INJnX+vOWMgubooTtJHklbaioiTA/heXoObORs=" ]
         ]
       )
