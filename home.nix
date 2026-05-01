@@ -144,14 +144,14 @@ in
           enable = true;
         };
         languages = {
-          rust    .enable = true;
-          nix     .enable = true;
-          clang   .enable = true; # C/C++
-          ts      .enable = true; # JS/TS
-          python  .enable = true;
-          zig     .enable = true;
-          markdown.enable = true;
-          html    .enable = true;
+          rust      .enable = true;
+          nix       .enable = true;
+          clang     .enable = true; # C/C++
+          typescript.enable = true; # JS/TS
+          python    .enable = true;
+          zig       .enable = true;
+          markdown  .enable = true;
+          html      .enable = true;
         };
       };
     };
