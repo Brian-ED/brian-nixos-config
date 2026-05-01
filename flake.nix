@@ -22,6 +22,7 @@
     nix-watch         = { url = "github:Cloud-Scythe-Labs/nix-watch"             ; inputs.nixpkgs.follows = "nixpkgs"; };
     nvf               = { url = "github:notashelf/nvf"                           ; inputs.nixpkgs.follows = "nixpkgs"; };
     fenix             = { url = "github:nix-community/fenix"                     ; inputs.nixpkgs.follows = "nixpkgs"; };
+    agda-unimath.url = "github:UniMath/agda-unimath/";
   };
 
   outputs = inputs: let

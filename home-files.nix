@@ -1,4 +1,4 @@
-{homeDir, lib, pkgs}: {
+{config, homeDir, lib, pkgs, agda-unimath}: {
   "${homeDir}/.config/user-dirs.dirs" = {
     enable = true;
     text = ''
@@ -246,12 +246,14 @@
     enable = true;
     text = ''
       ${pkgs.agdaPackages.standard-library.outPath}/standard-library.agda-lib
+      ${agda-unimath.outPath}/agda-unimath.agda-lib
     '';
   };
   "${homeDir}/.config/agda/defaults" = {
     enable = true;
     text = ''
       standard-library
+      agda-unimath
     '';
   };
 }

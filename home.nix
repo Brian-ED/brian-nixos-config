@@ -5,6 +5,12 @@ let
   home-manager      = inputs.home-manager     .packages.${pkgs.stdenv.hostPlatform.system}.home-manager;
   nixos-conf-editor = inputs.nixos-conf-editor.packages.${pkgs.stdenv.hostPlatform.system}.nixos-conf-editor;
   k                 = inputs.k                .packages.${pkgs.stdenv.hostPlatform.system}.k;
+  agda-unimath      = inputs.agda-unimath     .packages.${pkgs.stdenv.hostPlatform.system}
+    .agda-unimath.overrideAttrs (old: {
+      dontBuild = true;
+    });
+
+
   cbqn-native = (import ./pkgs/cbqn.nix pkgs);
   username = "brian";
   homeDir = "/home/${username}";
@@ -322,7 +328,7 @@ in
     pkgs-stable.mypaint     # Basic drawing program
     xed-editor
     outfieldr # tldr command for better man pages
-    (agda.withPackages (p: [ p.standard-library ]))
+    (agda.withPackages (p: [ p.standard-library agda-unimath ]))
     gnome-system-monitor
     paperview
     startup
