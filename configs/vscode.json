@@ -34,7 +34,7 @@
   "workbench.navigationControl.enabled": false,
   "workbench.panel.showLabels": false,
   "files.exclude": {
-      "**/.git": true,
+    "**/.git": true
   },
   "files.autoSaveDelay": 200,
   "files.associations": {
@@ -126,7 +126,7 @@
   "nix.serverSettings": {
     "nixd": { // check https://github.com/nix-community/nixd/blob/main/nixd/docs/configuration.md for all nixd config
       "formatting": {
-        "command": ["nixfmt"],
+        "command": ["nixfmt"]
       },
       "nixd": {
         "autoArchive": true
@@ -144,8 +144,8 @@
         // Tip: use ''${workspaceFolder} variable to define path
         "nix-darwin": {
           "expr": "(builtins.getFlake \"''${workspaceFolder}/path/to/flake\").darwinConfigurations.<name>.options",
-        },
-      },
+        }
+      }
     }
   },
   "editor.unicodeHighlight.allowedCharacters": {
