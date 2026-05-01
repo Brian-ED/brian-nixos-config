@@ -11,8 +11,6 @@
     darwin.url             = "github:LnL7/nix-darwin"                  ;
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
 
-    lean4-nix.url = "github:lenianiva/lean4-nix?ref=faebfa2e0d7093fea3ffaa493b316bf3449c1dbf";
-
     brian-i3-config = { url = "github:Brian-ED/brian-i3-config"; flake = false; };
     singeli         = { url = "github:mlochbaum/Singeli"       ; flake = false; };
 
@@ -31,9 +29,6 @@
     min = "/mnt/linux-mint";
     winUser = "${win}/Users/brian";
     minUser = "${min}/home/brian";
-    lean-toolchain-file = builtins.toFile "lean-toolchain" ''
-      leanprover/lean4:v4.27.0
-    '';
     env = {
       inherit system;
       config.dyalog.acceptLicense = true;
@@ -44,7 +39,6 @@
         ];
       overlays = [
         inputs.nixGL.overlay
-        (inputs.lean4-nix.readToolchainFile { toolchain = lean-toolchain-file; binary = false; })
       ];
     };
     pkgs-unstable = import inputs.nixpkgs-unstable env;
