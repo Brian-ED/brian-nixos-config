@@ -63,6 +63,7 @@
 
   services = {
     blueman.enable = true;
+    udisks2.enable = true; # For automounting usbs
 
     picom = {
       enable = true;
