@@ -648,6 +648,15 @@ in
     };
   };
 
+  programs.emacs = {
+    enable = true;
+    package = pkgs.emacs;
+
+    extraPackages = epkgs: with epkgs; [
+      agda2-mode
+    ];
+  };
+
   programs.git = {
     enable = true;
     settings = {
