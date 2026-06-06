@@ -11,7 +11,7 @@
     channel.enable = false;
     inherit nixPath;
     settings = {
-      experimental-features = [ "nix-command" "flakes" ];
+      experimental-features = [ "nix-command" "flakes" "pipe-operators" ];
       warn-dirty = false;
       trusted-users = [ "brian" ];
       nix-path = nixPath; # For disabling channels
