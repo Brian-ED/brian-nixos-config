@@ -57,8 +57,6 @@
   # Select internationalisation properties
   i18n.defaultLocale = "en_US.UTF-8";
 
-  virtualisation.docker.enable = true;
-
   powerManagement.powertop.enable = true; # powertop auto tuning on startup # Disabled usb after some time of incativity, so not usable on desktop
 
   services = {
@@ -175,9 +173,9 @@
     #};
   };
   environment = {
-    # Apparently dyalogscript's /bin/dyalogscript is better than "/usr/bin/env dyalogscript".
-    # This enables it
-    bindyalogscript = "${pkgs-unstable.dyalog}/bin/dyalogscript";
+    ## Apparently dyalogscript's /bin/dyalogscript is better than "/usr/bin/env dyalogscript".
+    ## This enables it
+    #bindyalogscript = "${pkgs-unstable.dyalog}/bin/dyalogscript";
 
     # List packages installed in system profile. To search, run:
     # $ nix search wget
@@ -188,13 +186,12 @@
       alacritty         # My chosen terminal. Loads quickly, and doesn't have a inbuilt-windowmanager to complicate it
       xdotool           # Useful for automating tasks
       rofi              # Used by i3 for fancy UI
-      xorg.xev          # I use this for testing button presses on i3
-      xorg.xbacklight   # Modify device brightness, xrandr can only modify software brightness
+      xev          # I use this for testing button presses on i3
+      xbacklight   # Modify device brightness, xrandr can only modify software brightness
       sops              # Encrypted secrets viewer and editor. TODO: Is it supposed to replace KeePassXC?
       gnome-clocks      # Needed a timer
       baobab            # Drive space tree-like view
       haruna            # Video player
-      light             # My i3 config uses this
       gh                # github commands
       libllvm           # Playing around with llvm IR
       pet               # Snippet manager, not exactly sure what that means
@@ -281,7 +278,9 @@
 
   # Cleanup coredumps
   systemd = {
-    coredump.extraConfig = "MaxUse=250m";
+    coredump.settings.Coredump = {
+      MaxUse = "250m";
+    };
     slices.anti-hungry.sliceConfig = {
       CPUAccounting = true;
       CPUQuota = "50%";

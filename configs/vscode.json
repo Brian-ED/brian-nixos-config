@@ -176,7 +176,8 @@
     "ℂ": true,
     "ℝ": true,
     "ℚ": true,
-    "𝒮": true
+    "𝒮": true,
+    "ψ": true
   },
   "[bqn]": {
     "editor.fontFamily": "'BQN386 Unicode', 'monospace', monospace"
@@ -185,5 +186,7 @@
   "agdaMode.highlighting.IPC": "Temporary Files",
   "files.watcherExclude": {
     "**/_build/**": true
-  }
+  },
+  "git.blame.editorDecoration.enabled": true,
+  "workbench.colorTheme": "Default Dark+"
 }

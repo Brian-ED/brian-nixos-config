@@ -2,6 +2,7 @@
 {
   nixpkgs.overlays = [ inputs.nix-cachyos-kernel.overlays.pinned ]; # use the exact kernel versions as defined in this repo. Guarantees you have binary cache.
   boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
+  boot.zfs.forceImportRoot = false;
   boot.zfs.package = pkgs.cachyosKernels.linuxPackages-cachyos-latest.zfs_cachyos;
   boot.supportedFilesystems = [ "zfs" ];
 

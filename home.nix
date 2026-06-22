@@ -1,5 +1,5 @@
 # TODO get home manager to manage files ~/.gtkrc-2.0
-{ config, pkgs, pkgs-stable, pkgs-unstable, lib, inputs, winUser, minUser, nixPath, ...}:
+{ config, pkgs, pkgs-stable, pkgs-unstable, lib, inputs, winUser, minUser, finUser, nixPath, ...}:
 let
   nix-watch         = inputs.nix-watch        .packages.${pkgs.stdenv.hostPlatform.system}.default;
   home-manager      = inputs.home-manager     .packages.${pkgs.stdenv.hostPlatform.system}.home-manager;
@@ -104,17 +104,17 @@ let
     ] ++ (
       let I=builtins.elemAt; L=lib.licenses; in pkgs.vscode-utils.extensionsFromVscodeMarketplace (
         map (x: { name=I x 0; publisher=I x 1; meta.license = I x 2; version=I x 3; sha256=I x 4;} )
-        [ # All licenses here have been manually checked by Brian Ellingsgaard
+        [ # All licenses here have been manually checked by Brian Ellingsgaard ONCE. They will not be rechecked.
           [ "inform-6"                    "natrium729"    L.mit       "latest" "sha256-ILCSrcVb3o9y+0i3ap7RC+nzqSniQaFlULd8RedM5bU="  ]
           [ "inform-7"                    "natrium729"    L.mit       "latest" "sha256-p/bO2+3SZVFNpIRz73oRfHU8yHlg/1JlusETO+MBRg0="  ]
           #[ "vscode-stripe"               "Stripe"        L.mit       "latest" "07jwjzya4961w7mz8gpjw1300bigzpn2k8pqdng6k9b72jij80la" ]
           [ "bqn"                         "mk12"          L.mit       "latest" "sha256-ccs+jTqL5SoYZziuaodWbzD/HIXHatwzhUTPzCAz32E="  ]
-          [ "newline"                     "chang196700"   L.mit       "latest" "0xijg1nqlrlwkl4ls21hzikr30iz8fd98ynpbmhhdxrkm3iccqa1" ]
+          [ "newline"                     "chang196700"   L.mit       "latest" "sha256-ac40W3JeDN9xD0aUkZLlkaIn59HQu4PvhDbVdzqeqLY=" ]
           [ "tws"                         "jkiviluoto"    L.mit       "latest" "0aj58iasgnmd2zb7zxz587k9mfmykjwrb8h7hfvpkmh76s9bj4y5" ] # Trailing white space
           [ "todo-tree"                   "Gruntfuggly"   L.mit       "latest" "0yrc9qbdk7zznd823bqs1g6n2i5xrda0f9a7349kknj9wp1mqgqn" ]
-          [ "suteppu"                     "Itsakaseru"    L.mit       "latest" "1z0zkznwwm0z1vyq2wsw9rf1kg8pfpb3rl7glx0zp3aq8sxvnfsf" ]
-          [ "slint"                       "Slint"         L.agpl3Only "latest" "sha256-iAMagiPhy2hXRUgm96joqnaf7c5I6o75P3pGQ8NA0Xg="  ]
-          #[ "ols"                         "DanielGavin"   L.mit       "latest" "0rl6mjkabgbwc0vnm96ax1jhjh5rrky0i1w40fhs1zqyfd83mrsx" ] # Odin
+          #[ "suteppu"                     "Itsakaseru"    L.mit       "latest" "1z0zkznwwm0z1vyq2wsw9rf1kg8pfpb3rl7glx0zp3aq8sxvnfsf" ]
+          [ "slint"                       "Slint"         L.agpl3Only "latest" "sha256-whai8bvL+IJdeKe4/AFFQJ3bXrLvg7Ui8CGWpIbZpf8="  ]
+          [ "ols"                         "DanielGavin"   L.mit       "latest" "sha256-X2Tp0rsPp0UoKW4Yz7Ht/7b1zO0bL92u6CtyKRy+hDY=" ] # Odin
           [ "vscode-lowercase"            "ruiquelhas"    L.mit       "latest" "03kwbnc25rfzsr7lzgkycwxnifv4nx04rfcvmfcqqhacx74g14gs" ]
           #[ "chatgpt-copilot"             "feiskyer"     L.ISC       "latest" "0766vq07gjxgh4xpflzmrcx55i6b9w4hk5zg8yirvgfjscv5gvxv" ]
           [ "vscode-apl-language-client"  "OptimaSystems" L.mit       "latest" "050nn7f6gfzskq1yavqdw77rgl1lxs3p8dqkzrmmliqh5kqh2gr8" ]
@@ -122,8 +122,8 @@ let
           [ "vscode-autohotkey-plus-plus" "mark-wiemer"   L.unfreeRedistributable "latest" "sha256-55eHm1m3PsCzAkCMubTqeK+e7a64UfI6Svmn1owm0Yc=" ] # I could label this as MIT with extra flags for more license information, but one asset is not explicitly labled re-distributable so I decided to use non-redistributable label.
           #[ "i3"                          "dcasella"      L.asl20     "latest" "0z7qj6bwch1cxr6pab2i3yqk5id8k14mjlvl6i9f0cmdsxqkmci5" ]
           #[ "idris-vscode"                "meraymond"     L.mit       "latest" "0yam13n021lmc93m8rpw96ksci0jshfrlnnfdk1q9yqrxydy6320" ]
-          [ "agda-mode"                   "banacorn"      L.mit       "latest" "sha256-2xYC+tStBXTL4koqUOcyxQUTDTipeUMTFLbrwqA6p7Q=" ]
-          [ "als-wasm-loader"             "qbane"         L.mit       "latest" "sha256-UZksx1Ce0SijIic5234SnTcVgJckBsSVPsVje50PsLU=" ]
+          [ "agda-mode"                   "banacorn"      L.mit       "latest" "sha256-rz3Ehq/2AewE5ADYHVk8pHICSWO58i8v+nBwzkFkGCY=" ]
+          [ "als-wasm-loader"             "qbane"         L.mit       "latest" "sha256-eUYqWL1rgO1QJnflFK17mhtuaHQ/G66fj2/8jLYWSNM=" ]
           [ "vscode-antlr4"               "mike-lischke"  L.mit       "latest" "sha256-PQHN2INJnX+vOWMgubooTtJHklbaioiTA/heXoObORs=" ]
         ]
       )
@@ -200,6 +200,8 @@ in
     variant =  ""; # X keyboard variant. If `null`, then the system configuration will be used. This defaults to `null` for state version ≥ 19.09 and `""` otherwise
   };
 
+  gtk.gtk4.theme = null; # Weird requirement by nixpkgs because my nixos version is old
+
   home.pointerCursor = { # Cursor configuration. Top-level options declared under this submodule are backend independent options. Options declared under namespaces such as `x11` are backend specific options. By default, only backend independent cursor configurations are generated. If you need configurations for specific backends, you can toggle them via the enable option. For example, [](#opt-home.pointerCursor.x11.enable) will enable x11 cursor configurations. Note that this will merely generate the cursor configurations. To apply the configurations, the relevant subsytems must also be configured. For example, [](#opt-home.pointerCursor.gtk.enable) will generate the gtk cursor configuration, but [](#opt-gtk.enable) needs to be set for it to be applied
     enable = true; # Whether to enable cursor config generation
     dotIcons.enable = true; # TODO: Try true # Whether to enable `.icons` config generation for `home.pointerCursor`
@@ -238,6 +240,8 @@ in
     home-manager      # Have home manager manage itself
     python3
   ] ++ (with pkgs; [
+    spotify
+    discord
     stripe-cli
     qpwgraph # A graph view of PipeWire devices
     jdk25 # javac for SingeliPlayground
@@ -265,7 +269,7 @@ in
     #qemu # Virtual machines
     gnome-screenshot
     #kiwix-tools # I use this for reading wikipedia offline
-    pkgs-unstable.dyalog ride # Dyalog APL stuff
+    #pkgs-unstable.dyalog ride # Dyalog APL stuff
     libreoffice-qt6-fresh
     duf              # Disk utility
     cryptsetup       # For decrypting my LUKS encrypted harddrive
@@ -286,10 +290,9 @@ in
     #docker_28         # Docker is a dependency of alpaca
 
     #nixos-conf-editor # Editor for this configuration
-    xorg.xev          # I use this for testing button presses on i3
+    xev          # I use this for testing button presses on i3
     # TODO Do I really need 3 applications for light control on i3?
-    xorg.xbacklight   # Modify device brightness, xrandr can only modify software brightness
-    light             # My i3 config uses this
+    xbacklight   # Modify device brightness, xrandr can only modify software brightness
     brightnessctl      # For i3 brightness without sudo
     #sops              # Encrypted secrets viewer and editor. TODO: Is it supposed to replace KeePassXC?
     gnome-clocks      # Needed a timer
@@ -297,6 +300,7 @@ in
     rlwrap            # Useful to make Dyalog be a more classic repl
     baobab            # Drive space tree-like view
     obsidian          # Unfree package. Can only use for non-profit
+    zoom              # Maybe unfree, would have to check *before commiting*!!! TODO
     nodejs            # Javascript interpreter
     #pgadmin4          # Postgresql for database connection
     haruna            # Video player
@@ -310,7 +314,7 @@ in
     xkill             # For easily killing/stopping programs
     ( # Rust stuff
       #rustc cargo
-      inputs.fenix.packages.${system}.latest.withComponents [ # "latest" can be replaced with "stable" and "beta".
+      inputs.fenix.packages.${stdenv.hostPlatform.system}.latest.withComponents [ # "latest" can be replaced with "stable" and "beta".
         "cargo"
         "rustc"
         "rust-src"
@@ -322,10 +326,9 @@ in
     ffmpeg            # This is a dependency of my youtube song downloader for my playlist, which is used by the I3 shortcut $mod+Control+Shift+m
     xclip             # Clipboard utility
     unzip
-    pkgs-stable.mypaint     # Basic drawing program
     xed-editor
     outfieldr # tldr command for better man pages
-    (agda.withPackages (p: [ p.standard-library agda-unimath ]))
+    (agda.withPackages (p: [ p.standard-library agda-unimath p.cubical p._1lab ]))
     gnome-system-monitor
     paperview
     startup
@@ -593,9 +596,8 @@ in
       "_" = "cd - >> /dev/null";
       mcsnorri = "${pkgs.prismlauncher}/bin/prismlauncher --launch 1.21.8-extra --server 198.244.176.195:2009";
       mclocal = "${pkgs.prismlauncher}/bin/prismlauncher --launch 1.21.8 --world 'Sorter Showcase v1.2'";
-      mintemail = "${pkgs.thunderbird}/bin/thunderbird --profile ${minUser}/.thunderbird/v5k5cfgq.default-release $@";
-      aplk = "${pkgs.xorg.setxkbmap}/bin/setxkbmap -layout fo,apl -option grp:lswitch";
-      bqnk = "${pkgs.xorg.setxkbmap}/bin/setxkbmap -layout fo,bqn -option grp:lswitch";
+      aplk = "${pkgs.setxkbmap}/bin/setxkbmap -layout fo,apl -option grp:lswitch";
+      bqnk = "${pkgs.setxkbmap}/bin/setxkbmap -layout fo,bqn -option grp:lswitch";
       net = "${pkgs.networkmanager}/bin/nmcli dev wifi && ${pkgs.networkmanager}/bin/nmcli dev wifi connect --ask"; # Find a network to connect to
       cat = "${pkgs.bat}/bin/bat $@";
       clean30d = "${pkgs.gtrash}/bin/gtrash prune --day 30 && ${pkgs.nh}/bin/nh clean all --optimise --keep-since 30d";
@@ -612,7 +614,7 @@ in
       tp = "${pkgs.gtrash}/bin/gtrash put $@";
       d = "${pkgs.nix}/bin/nix develop";
       win = "cd ${winUser}";
-      min = "cd ${minUser}";
+      fin = "cd ${finUser}";
       singplay = "${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel ${homeDir}/proj/singeliPlayground/run ${cbqn-native}/bin/bqn ${inputs.singeli}";
       singeli = "${inputs.singeli}/singeli";
       lines = "${pkgs.coreutils-full}/bin/wc -l";
