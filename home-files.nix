@@ -1,4 +1,4 @@
-{config, homeDir, lib, pkgs, agda-unimath}: {
+{config, homeDir, lib, pkgs}: { # agda-unimath
   "${homeDir}/.config/user-dirs.dirs" = {
     enable = true;
     text = ''
@@ -53,20 +53,21 @@
 
   "${homeDir}/.config/agda/libraries" = {
     enable = true;
+
+    #${agda-unimath.outPath}/agda-unimath.agda-lib
+    #${pkgs.agdaPackages._1lab.outPath}/1lab.agda-lib
     text = ''
       ${pkgs.agdaPackages.standard-library.outPath}/standard-library.agda-lib
-      ${agda-unimath.outPath}/agda-unimath.agda-lib
       ${pkgs.agdaPackages.cubical.outPath}/cubical.agda-lib
-      ${pkgs.agdaPackages._1lab.outPath}/1lab.agda-lib
     '';
   };
   "${homeDir}/.config/agda/defaults" = {
     enable = true;
+    # agda-unimath
+    # 1lab
     text = ''
       standard-library
-      agda-unimath
       cubical
-      1lab
     '';
   };
 }

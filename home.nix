@@ -5,10 +5,10 @@ let
   home-manager      = inputs.home-manager     .packages.${pkgs.stdenv.hostPlatform.system}.home-manager;
   nixos-conf-editor = inputs.nixos-conf-editor.packages.${pkgs.stdenv.hostPlatform.system}.nixos-conf-editor;
   k                 = inputs.k                .packages.${pkgs.stdenv.hostPlatform.system}.k;
-  agda-unimath      = inputs.agda-unimath     .packages.${pkgs.stdenv.hostPlatform.system}
-    .agda-unimath.overrideAttrs (old: {
-      dontBuild = true;
-    });
+  #agda-unimath      = inputs.agda-unimath     .packages.${pkgs.stdenv.hostPlatform.system}
+  #  .agda-unimath.overrideAttrs (old: {
+  #    dontBuild = true;
+  #  });
 
 
   cbqn-native = (import ./pkgs/cbqn.nix pkgs);
@@ -328,7 +328,7 @@ in
     unzip
     xed-editor
     outfieldr # tldr command for better man pages
-    (agda.withPackages (p: [ p.standard-library agda-unimath p.cubical p._1lab ]))
+    (agda.withPackages (p: [ p.standard-library p.cubical ])) # agda-unimath p._1lab
     gnome-system-monitor
     paperview
     startup
@@ -344,7 +344,7 @@ in
   ]);
 
   # manages dotfiles
-  home.file = import ./home-files.nix {inherit config homeDir lib pkgs agda-unimath;};
+  home.file = import ./home-files.nix {inherit config homeDir lib pkgs;}; # agda-unimath
 
   home = {inherit sessionVariables;};
 

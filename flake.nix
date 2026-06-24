@@ -10,7 +10,7 @@
     k                  .url = "github:runtimeverification/k"            ;
     darwin             .url = "github:LnL7/nix-darwin"                  ;
     nix-cachyos-kernel .url = "github:xddxdd/nix-cachyos-kernel/release";
-    agda-unimath       .url = "github:UniMath/agda-unimath/"            ;
+    #agda-unimath       .url = "github:UniMath/agda-unimath/"            ;
 
     brian-i3-config = { url = "github:Brian-ED/brian-i3-config"; flake = false; };
     singeli         = { url = "github:mlochbaum/Singeli"       ; flake = false; };
