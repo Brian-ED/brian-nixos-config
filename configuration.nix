@@ -60,6 +60,8 @@
   powerManagement.powertop.enable = true; # powertop auto tuning on startup # Disabled usb after some time of incativity, so not usable on desktop
 
   services = {
+    pulseaudio.extraClientConf = "cookie-file = /tmp/pulse-cookie";
+
     blueman.enable = true;
     udisks2.enable = true; # For automounting usbs
 
