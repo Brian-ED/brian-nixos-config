@@ -422,7 +422,7 @@ in
 
             Environment =
               [
-                "RESTIC_CACHE_DIR=%C"
+                "RESTIC_CACHE_DIR=%C/${serviceName}"
                 "PATH=${backup.ssh-package}/bin"
               ]
               ++ attrsToEnvs (
@@ -546,7 +546,7 @@ in
           ]}
 
           # Override this as %C will not work
-          RESTIC_CACHE_DIR=$HOME/.cache/${serviceName}
+          RESTIC_CACHE_DIR=${config.xdg.cacheHome}/${serviceName}
 
           PATH=${
             lib.pipe backupService.Service.Environment [
