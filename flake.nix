@@ -36,6 +36,7 @@
         allowUnfreePredicate = pkg: builtins.elem (nixpkgs.lib.getName pkg) [
           "dyalog" "obsidian" "discord" "steam-unwrapped" "steam" "spotify"
           "vscode-extension-mark-wiemer-vscode-autohotkey-plus-plus" # Most of this one is MIT, it's just one asset that's not explicitly
+          "factorio-space-age" # Game
         ];
       };
       overlays = [

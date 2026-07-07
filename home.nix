@@ -240,6 +240,10 @@ in
     home-manager      # Have home manager manage itself
     python3
   ] ++ (with pkgs; [
+    (factorio-space-age.override { # Game
+      username = "Brian_ED";
+      token = "TODO";
+    })
     spotify
     discord
     stripe-cli
