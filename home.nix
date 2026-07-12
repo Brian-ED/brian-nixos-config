@@ -105,25 +105,25 @@ let
       let I=builtins.elemAt; L=lib.licenses; in pkgs.vscode-utils.extensionsFromVscodeMarketplace (
         map (x: { name=I x 0; publisher=I x 1; meta.license = I x 2; version=I x 3; sha256=I x 4;} )
         [ # All licenses here have been manually checked by Brian Ellingsgaard ONCE. They will not be rechecked.
-          [ "inform-6"                    "natrium729"    L.mit       "latest" "sha256-ILCSrcVb3o9y+0i3ap7RC+nzqSniQaFlULd8RedM5bU="  ]
-          [ "inform-7"                    "natrium729"    L.mit       "latest" "sha256-p/bO2+3SZVFNpIRz73oRfHU8yHlg/1JlusETO+MBRg0="  ]
+          #[ "inform-6"                    "natrium729"    L.mit       "latest" "sha256-ILCSrcVb3o9y+0i3ap7RC+nzqSniQaFlULd8RedM5bU="  ]
+          #[ "inform-7"                    "natrium729"    L.mit       "latest" "sha256-p/bO2+3SZVFNpIRz73oRfHU8yHlg/1JlusETO+MBRg0="  ]
           #[ "vscode-stripe"               "Stripe"        L.mit       "latest" "07jwjzya4961w7mz8gpjw1300bigzpn2k8pqdng6k9b72jij80la" ]
           [ "bqn"                         "mk12"          L.mit       "latest" "sha256-ccs+jTqL5SoYZziuaodWbzD/HIXHatwzhUTPzCAz32E="  ]
-          [ "newline"                     "chang196700"   L.mit       "latest" "sha256-ac40W3JeDN9xD0aUkZLlkaIn59HQu4PvhDbVdzqeqLY=" ]
+          #[ "newline"                     "chang196700"   L.mit       "latest" "sha256-ac40W3JeDN9xD0aUkZLlkaIn59HQu4PvhDbVdzqeqLY=" ]
           [ "tws"                         "jkiviluoto"    L.mit       "latest" "0aj58iasgnmd2zb7zxz587k9mfmykjwrb8h7hfvpkmh76s9bj4y5" ] # Trailing white space
-          [ "todo-tree"                   "Gruntfuggly"   L.mit       "latest" "0yrc9qbdk7zznd823bqs1g6n2i5xrda0f9a7349kknj9wp1mqgqn" ]
+          #[ "todo-tree"                   "Gruntfuggly"   L.mit       "latest" "0yrc9qbdk7zznd823bqs1g6n2i5xrda0f9a7349kknj9wp1mqgqn" ]
           #[ "suteppu"                     "Itsakaseru"    L.mit       "latest" "1z0zkznwwm0z1vyq2wsw9rf1kg8pfpb3rl7glx0zp3aq8sxvnfsf" ]
-          [ "slint"                       "Slint"         L.agpl3Only "latest" "sha256-whai8bvL+IJdeKe4/AFFQJ3bXrLvg7Ui8CGWpIbZpf8="  ]
+          #[ "slint"                       "Slint"         L.agpl3Only "latest" "sha256-whai8bvL+IJdeKe4/AFFQJ3bXrLvg7Ui8CGWpIbZpf8="  ]
           [ "ols"                         "DanielGavin"   L.mit       "latest" "sha256-X2Tp0rsPp0UoKW4Yz7Ht/7b1zO0bL92u6CtyKRy+hDY=" ] # Odin
           [ "vscode-lowercase"            "ruiquelhas"    L.mit       "latest" "03kwbnc25rfzsr7lzgkycwxnifv4nx04rfcvmfcqqhacx74g14gs" ]
           #[ "chatgpt-copilot"             "feiskyer"     L.ISC       "latest" "0766vq07gjxgh4xpflzmrcx55i6b9w4hk5zg8yirvgfjscv5gvxv" ]
           [ "vscode-apl-language-client"  "OptimaSystems" L.mit       "latest" "050nn7f6gfzskq1yavqdw77rgl1lxs3p8dqkzrmmliqh5kqh2gr8" ]
           [ "vscode-apl-language"         "OptimaSystems" L.mit       "latest" "003n637vskbi4wypm8qwdy4fa9skp19w6kli1bgc162gzcbswhia" ]
-          [ "vscode-autohotkey-plus-plus" "mark-wiemer"   L.unfreeRedistributable "latest" "sha256-55eHm1m3PsCzAkCMubTqeK+e7a64UfI6Svmn1owm0Yc=" ] # I could label this as MIT with extra flags for more license information, but one asset is not explicitly labled re-distributable so I decided to use non-redistributable label.
+          #[ "vscode-autohotkey-plus-plus" "mark-wiemer"   L.unfreeRedistributable "latest" "sha256-55eHm1m3PsCzAkCMubTqeK+e7a64UfI6Svmn1owm0Yc=" ] # I could label this as MIT with extra flags for more license information, but one asset is not explicitly labled re-distributable so I decided to use non-redistributable label.
           #[ "i3"                          "dcasella"      L.asl20     "latest" "0z7qj6bwch1cxr6pab2i3yqk5id8k14mjlvl6i9f0cmdsxqkmci5" ]
           #[ "idris-vscode"                "meraymond"     L.mit       "latest" "0yam13n021lmc93m8rpw96ksci0jshfrlnnfdk1q9yqrxydy6320" ]
           [ "agda-mode"                   "banacorn"      L.mit       "latest" "sha256-rz3Ehq/2AewE5ADYHVk8pHICSWO58i8v+nBwzkFkGCY=" ]
-          [ "als-wasm-loader"             "qbane"         L.mit       "latest" "sha256-eUYqWL1rgO1QJnflFK17mhtuaHQ/G66fj2/8jLYWSNM=" ]
+          #[ "als-wasm-loader"             "qbane"         L.mit       "latest" "sha256-eUYqWL1rgO1QJnflFK17mhtuaHQ/G66fj2/8jLYWSNM=" ]
           [ "vscode-antlr4"               "mike-lischke"  L.mit       "latest" "sha256-PQHN2INJnX+vOWMgubooTtJHklbaioiTA/heXoObORs=" ]
         ]
       )
@@ -265,6 +265,7 @@ in
       fi
     '')
     gtrash # For making it so I can avoid deleting files right away, and instead trash them
+    odin ols
 #   ZealOS
     #elan #lean4
     #nix-watch
