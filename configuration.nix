@@ -177,7 +177,7 @@
   environment = {
     ## Apparently dyalogscript's /bin/dyalogscript is better than "/usr/bin/env dyalogscript".
     ## This enables it
-    #bindyalogscript = "${pkgs-unstable.dyalog}/bin/dyalogscript";
+    bindyalogscript = "${pkgs-unstable.dyalog}/bin/dyalogscript";
 
     # List packages installed in system profile. To search, run:
     # $ nix search wget

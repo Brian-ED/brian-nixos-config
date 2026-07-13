@@ -274,7 +274,7 @@ in
     #qemu # Virtual machines
     gnome-screenshot
     #kiwix-tools # I use this for reading wikipedia offline
-    #pkgs-unstable.dyalog ride # Dyalog APL stuff
+    pkgs-unstable.dyalog ride # Dyalog APL stuff
     libreoffice-qt6-fresh
     duf              # Disk utility
     cryptsetup       # For decrypting my LUKS encrypted harddrive
