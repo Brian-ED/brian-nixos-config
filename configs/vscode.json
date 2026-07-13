@@ -189,5 +189,7 @@
     "**/_build/**": true
   },
   "git.blame.editorDecoration.enabled": true,
-  "workbench.colorTheme": "Default Dark+"
+  "workbench.colorTheme": "Dark+",
+  "ols.prompt.AskCreateOLS": false,
+  "ols.server.path": "/home/brian/.nix-profile/bin/ols"
 }
