@@ -113,6 +113,11 @@
 
       enable = true; # Enable the X11 windowing system
 
+      displayManager.sessionCommands = ''
+        ${pkgs.xkbset}/bin/xkbset bounceKeys
+        ${pkgs.xkbset}/bin/xkbset delay 300
+      '';
+
       # For i3
       desktopManager = {
         wallpaper.combineScreens = true; # background img = ~/.background-image

@@ -95,9 +95,9 @@ let
       ms-python.debugpy
       jnoortheen.nix-ide
       ritwickdey.liveserver
-      golang.go
-#       github.copilot
-#       github.copilot-chat
+      #golang.go
+      #github.copilot
+      #github.copilot-chat
       rust-lang.rust-analyzer
       leanprover.lean4  tamasfe.even-better-toml # even-better-toml is a dependency for lean4 extension
       hediet.vscode-drawio
@@ -266,6 +266,7 @@ in
     '')
     gtrash # For making it so I can avoid deleting files right away, and instead trash them
     odin ols
+    nixd
 #   ZealOS
     #elan #lean4
     #nix-watch
@@ -317,14 +318,14 @@ in
     lxappearance      # GTK theme switcher, useful for i3
     audacious         # For playing music
     xkill             # For easily killing/stopping programs
-    ( # Rust stuff
-      #rustc cargo
-      inputs.fenix.packages.${stdenv.hostPlatform.system}.latest.withComponents [ # "latest" can be replaced with "stable" and "beta".
-        "cargo"
-        "rustc"
-        "rust-src"
-      ]
-    )
+    #( # Rust stuff
+    #  #rustc cargo
+    #  inputs.fenix.packages.${stdenv.hostPlatform.system}.latest.withComponents [ # "latest" can be replaced with "stable" and "beta".
+    #    "cargo"
+    #    "rustc"
+    #    "rust-src"
+    #  ]
+    #)
     #zig zls           # Zig stuff
     firefox           # Web browser
     nemo-with-extensions # File explorer
@@ -345,7 +346,7 @@ in
     simplescreenrecorder # My favorite recording software
     cbqn-native bqn386 # BQN interpreter and font
     #swaybg # wallpaper
-    go gopls
+    #go gopls
   ]);
 
   # manages dotfiles

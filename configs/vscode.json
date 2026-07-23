@@ -178,7 +178,8 @@
     "ℚ": true,
     "𝒮": true,
     "ψ": true,
-    "𝕂": true
+    "𝕂": true,
+    "．": true
   },
   "[bqn]": {
     "editor.fontFamily": "'BQN386 Unicode', 'monospace', monospace"
