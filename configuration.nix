@@ -114,8 +114,7 @@
       enable = true; # Enable the X11 windowing system
 
       displayManager.sessionCommands = ''
-        ${pkgs.xkbset}/bin/xkbset bounceKeys
-        ${pkgs.xkbset}/bin/xkbset delay 300
+        ${pkgs.xkbset}/bin/xkbset bouncekeys 2
       '';
 
       # For i3

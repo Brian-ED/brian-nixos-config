@@ -27,6 +27,7 @@ let
     mpmath # Arbitrary precision math
     scipy # Lots of mathy functions like eigenvalues and curve fitting
     (p.callPackage ./pkgs/automata.nix {cached-method = p.callPackage ./pkgs/cached-method.nix {};})
+    pycparser
   ]);
 
   sessionVariables = {
@@ -125,6 +126,7 @@ let
           [ "agda-mode"                   "banacorn"      L.mit       "latest" "sha256-rz3Ehq/2AewE5ADYHVk8pHICSWO58i8v+nBwzkFkGCY=" ]
           #[ "als-wasm-loader"             "qbane"         L.mit       "latest" "sha256-eUYqWL1rgO1QJnflFK17mhtuaHQ/G66fj2/8jLYWSNM=" ]
           [ "vscode-antlr4"               "mike-lischke"  L.mit       "latest" "sha256-PQHN2INJnX+vOWMgubooTtJHklbaioiTA/heXoObORs=" ]
+          [ "toggle-zen-mode"             "fudd"          L.mit       "latest" "sha256-3YGyzbYfaXx4xKWFjFBiXgKbvw2+Aw8cuXSHtk73SUY=" ]
         ]
       )
     );
@@ -340,7 +342,7 @@ in
     startup
     pavucontrol        # Audio interface
     gmetronome
-    llvmPackages_19.clangWithLibcAndBasicRtAndLibcxx llvmPackages_19.clang-manpages # Will remove later, temporary till I fix permission issues with using zig for building with make
+    llvmPackages_22.clangWithLibcAndBasicRtAndLibcxx llvmPackages_22.clang-manpages # Will remove later, temporary till I fix permission issues with using zig for building with make
     arc-theme          # Dark theme related: Arc-Dark GTK theme
     gnome-themes-extra # Dark theme related: Includes Adwaita-dark
     simplescreenrecorder # My favorite recording software
