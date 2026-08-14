@@ -173,6 +173,7 @@ in
       bqnserver              = { path = proj ; repo = "${G}/Brian-ED/bqnserver"             ;};
       "Brian-ED.github.io"   = { path = proj ; repo = "${G}/Brian-ED/Brian-ED.github.io"    ;};
       rayed-bqn-docs         = { path = proj ; repo = "${G}/Brian-ED/rayed-bqn-docs"        ;};
+      tagarin                = { path = proj ; repo = "${G}/Brian-ED/tagarin"               ;};
     };
     cloneCommands = lib.mapAttrsToList (name: {path, repo}: ''
       if [ ! -d ${path}/${name} ]; then
@@ -628,6 +629,9 @@ in
       lines = "${pkgs.coreutils-full}/bin/wc -l";
       "≠" = lines;
       "⌽" = "${pkgs.coreutils-full}/bin/tac ";
+
+      # Tagging search
+      "æ" = "${cbqn-native}/bin/bqn -r -e \"$(${cbqn-native}/bin/bqn ${homeDir}/proj/tagarin/search.bqn)\"";
     };
   };
 

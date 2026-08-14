@@ -194,7 +194,6 @@
       rofi              # Used by i3 for fancy UI
       xev          # I use this for testing button presses on i3
       xbacklight   # Modify device brightness, xrandr can only modify software brightness
-      sops              # Encrypted secrets viewer and editor. TODO: Is it supposed to replace KeePassXC?
       gnome-clocks      # Needed a timer
       baobab            # Drive space tree-like view
       haruna            # Video player
