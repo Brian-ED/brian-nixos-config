@@ -278,7 +278,7 @@ in
     #qemu # Virtual machines
     gnome-screenshot
     #kiwix-tools # I use this for reading wikipedia offline
-    pkgs-unstable.dyalog ride # Dyalog APL stuff
+    ride # Dyalog APL stuff (moved Dyalog to aliases to supply arguments)
     libreoffice-qt6-fresh
     duf              # Disk utility
     cryptsetup       # For decrypting my LUKS encrypted harddrive
@@ -632,6 +632,7 @@ in
 
       # Tagging search
       "æ" = "${cbqn-native}/bin/bqn -r -e \"$(${cbqn-native}/bin/bqn ${homeDir}/proj/tagarin/search.bqn)\"";
+      "dyalog" = "${pkgs-unstable.dyalog}/bin/dyalog AplCoreName=/tmp/aplcore* MaxAplCores=4";
     };
   };
 
