@@ -499,6 +499,8 @@ in
     };
   };
 
+  home.preferXdgDirectories = true;
+
 #  systemd.user.services.onstartBrian = {
 #    Unit = {
 #      Description = "On-start script";
