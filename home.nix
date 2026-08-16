@@ -84,7 +84,84 @@ let
   };
 
   vscodeCustom = pkgs.vscode-with-extensions.override {
-    vscode = pkgs.vscodium;
+    vscode = pkgs.vscodium
+        # None of this works to make vscodium not create the .vscode-oss folder :(
+        #.overrideAttrs (old: {
+        #      postFixup = (old.postFixup or "") + ''
+        #        for f in $(find $out -name product.json); do
+        #          echo "$f"
+        #          substituteInPlace "$f" \
+        #            --replace-fail '".vscode-oss"' \
+        #                           '"vscode"' \
+        #            --replace-fail '".vscodium-server"' \
+        #                           '"vscodium-server"'\
+        #            --replace-fail 'cli' \
+        #                           'ok'
+        #        done
+        #      '';
+        #      postFixup = (old.postFixup or "") + ''
+        #        for f in $(find $out -name product.json); do
+        #          substituteInPlace "$f" \
+        #            --replace-fail '"dataFolderName": ".vscode-oss"' \
+        #                           '"dataFolderName": "vscode"' \
+        #            --replace-fail '"serverDataFolderName": ".vscodium-server"' \
+        #                           '"serverDataFolderName": "vscodium-server"'
+        #        done
+        #      '';
+        #      postPatch = (old.postPatch or "") + ''
+        #        for f in $(find $out -name cli.js); do
+        #          substituteInPlace "$f" \
+        #            --replace-fail '"dataFolderName":".vscode-oss"' \
+        #                           '"dataFolderName":"vscode"'
+        #        done
+        #        for f in $(find $out -name cli.js); do
+        #          substituteInPlace "$f" \
+        #            --replace-fail '"dataFolderName":".vscode-oss"' \
+        #                           '"dataFolderName":"vscode"'
+        #        done
+        #        for f in $(find $out -name main.js); do
+        #          substituteInPlace "$f" \
+        #            --replace-fail '"dataFolderName":".vscode-oss"' \
+        #                           '"dataFolderName":"vscode"'
+        #        done
+        #        for f in $(find $out -name sharedProcessMain.js); do
+        #          substituteInPlace "$f" \
+        #            --replace-fail '"dataFolderName":".vscode-oss"' \
+        #                           '"dataFolderName":"vscode"'
+        #        done
+        #        for f in $(find $out -name cliProcessMain.js); do
+        #          substituteInPlace "$f" \
+        #            --replace-fail '"dataFolderName":".vscode-oss"' \
+        #                           '"dataFolderName":"vscode"'
+        #        done
+        #        for f in $(find $out -name agentHostMain.js); do
+        #          substituteInPlace "$f" \
+        #            --replace-fail '"dataFolderName":".vscode-oss"' \
+        #                           '"dataFolderName":"vscode"'
+        #        done
+        #        for f in $(find $out -name ptyHostMain.js); do
+        #          substituteInPlace "$f" \
+        #            --replace-fail '"dataFolderName":".vscode-oss"' \
+        #                           '"dataFolderName":"vscode"'
+        #        done
+        #        for f in $(find $out -name extensionHostProcess.js); do
+        #          substituteInPlace "$f" \
+        #            --replace-fail '"dataFolderName":".vscode-oss"' \
+        #                           '"dataFolderName":"vscode"'
+        #        done
+        #        for f in $(find $out -name extensionHostWorkerMain.js); do
+        #          substituteInPlace "$f" \
+        #            --replace-fail '"dataFolderName":".vscode-oss"' \
+        #                           '"dataFolderName":"vscode"'
+        #        done
+        #        for f in $(find $out -name telemetryApp.js); do
+        #          substituteInPlace "$f" \
+        #            --replace-fail '"dataFolderName":".vscode-oss"' \
+        #                           '"dataFolderName":"vscode"'
+        #        done
+        #      '';
+        #    })
+    ;
     vscodeExtensions = with pkgs.vscode-extensions; [
       ms-dotnettools.vscode-dotnet-runtime
       ms-python.python # Python extension
