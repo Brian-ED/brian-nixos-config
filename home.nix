@@ -633,6 +633,8 @@ in
       # Tagging search
       "æ" = "${cbqn-native}/bin/bqn -r -e \"$(${cbqn-native}/bin/bqn ${homeDir}/proj/tagarin/search.bqn)\"";
       "dyalog" = "${pkgs-unstable.dyalog}/bin/dyalog AplCoreName=/tmp/aplcore* MaxAplCores=4";
+
+      "thunderbird" = "${pkgs.thunderbird}/bin/thunderbird & sleep 1 && rmdir ${homeDir}/thunderbird";
     };
   };
 
