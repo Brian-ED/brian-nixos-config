@@ -192,5 +192,9 @@
   "git.blame.editorDecoration.enabled": true,
   "workbench.colorTheme": "Dark+",
   "ols.prompt.AskCreateOLS": false,
-  "ols.server.path": "/home/brian/.nix-profile/bin/ols"
+  "ols.server.path": "/home/brian/.nix-profile/bin/ols",
+  "tinymist.typstExtraArgs": [
+    "--font-path=/home/brian/.nix-profile/share/fonts/truetype/BQN386.ttf",
+    "--font-path=/home/brian/.nix-profile/share/fonts/truetype/APL386.ttf"
+  ]
 }
