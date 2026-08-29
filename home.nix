@@ -355,40 +355,27 @@ in
     gtrash # For making it so I can avoid deleting files right away, and instead trash them
     odin ols
     nixd
-#   ZealOS
-    #elan #lean4
-    #nix-watch
-    #k   # On github: runtimeverification/k. A verification language
     qbe # Compiler backend
-    #qemu # Virtual machines
     gnome-screenshot
-    #kiwix-tools # I use this for reading wikipedia offline
+    #kiwix-tools # For reading wikipedia offline
     ride # Dyalog APL stuff (moved Dyalog to aliases to supply arguments)
     libreoffice-qt6-fresh
     duf              # Disk utility
     cryptsetup       # For decrypting my LUKS encrypted harddrive
-    #wireguard-tools
     qbittorrent-enhanced # BitTorrent client
     pastel            # Command-line tool to generate, analyze, convert and manipulate colors
     bat eza zoxide nushell # Some things I've been trying to improve the terminal. Bad so far.
     xcolor            # color-pick shortcut for i3
-    alacritty         # My chosen terminal. Loads quickly, and doesn't have a inbuilt-windowmanager to complicate it
+    alacritty         # Terminal that loads quickly
     xdotool           # Useful for automating tasks
     rofi              # Used by i3 for fancy UI
     #rustdesk          # Remote control. Useful for helping family
     fd                # Since I forget how to use the `find` command every time, I replaced it with fd, which lists files recursively as a flat list that i can then egrep
     steam             # Steam
-    # Alpaca
-    #php               # php is used for alpaca server
-    #php84Packages.composer # composer is the php package manager
-    #docker_28         # Docker is a dependency of alpaca
-
-    #nixos-conf-editor # Editor for this configuration
     xev          # I use this for testing button presses on i3
     # TODO Do I really need 3 applications for light control on i3?
     xbacklight   # Modify device brightness, xrandr can only modify software brightness
     brightnessctl      # For i3 brightness without sudo
-    #sops              # Encrypted secrets viewer and editor. TODO: Is it supposed to replace KeePassXC?
     gnome-clocks      # Needed a timer
     keepassxc         # Password manager. TODO: Needs to be configured
     rlwrap            # Useful to make Dyalog be a more classic repl
@@ -396,12 +383,7 @@ in
     obsidian          # Unfree package. Can only use for non-profit
     zoom              # Maybe unfree, would have to check *before commiting*!!! TODO
     nodejs            # Javascript interpreter
-    #pgadmin4          # Postgresql for database connection
     haruna            # Video player
-    #elixir            # I want to try out elixer to develop concurrent applications
-    #gh                # github commands
-    #libllvm           # Playing around with llvm IR
-    #pet               # Snippet manager, not exactly sure what that means # TODO: Figure this out
     qutebrowser       # browser with loads of shortcuts
     lxappearance      # GTK theme switcher, useful for i3
     audacious         # For playing music
@@ -432,9 +414,7 @@ in
     arc-theme          # Dark theme related: Arc-Dark GTK theme
     gnome-themes-extra # Dark theme related: Includes Adwaita-dark
     simplescreenrecorder # My favorite recording software
-    bqn386 # BQN interpreter and font
-    apl386
-    #swaybg # wallpaper
+    bqn386 apl386 # BQN and APL font
     #go gopls
   ]);
 
