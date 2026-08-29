@@ -328,15 +328,6 @@ in
     home-manager      # Have home manager manage itself
     python3-history-wrap
   ] ++ (with pkgs; [
-    (factorio-space-age.override { # Game
-      username = "Brian_ED";
-      token = "TODO";
-    })
-    spotify
-    discord
-    stripe-cli
-    qpwgraph # A graph view of PipeWire devices
-    jdk25 # javac for SingeliPlayground
     (writeShellScriptBin "mount-hard-drive" ''
       sudo cryptsetup luksOpen /dev/disk/by-uuid/41782a7f-3269-433b-8beb-c74fba89ef2d a
       sudo mount /dev/mapper/a /mnt/hard-drive
