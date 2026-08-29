@@ -3,10 +3,6 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’)
 {pkgs, pkgs-unstable, inputs, nixPath, ... }:
 {
-  swapDevices = [{
-    device = "/var/lib/swapfile";
-    size = 16*1024; # 16 GB
-  }];
   nix = {
     channel.enable = false;
     inherit nixPath;
@@ -62,6 +58,8 @@
   powerManagement.powertop.enable = true; # powertop auto tuning on startup # Disabled usb after some time of incativity, so not usable on desktop
 
   services = {
+    swapspace.enable = true; # Replaces swapDevices swapfile
+
     pulseaudio.extraClientConf = "cookie-file = /tmp/pulse-cookie";
 
     blueman.enable = true;
@@ -110,20 +108,9 @@
     displayManager.defaultSession = "none+i3";
     xserver = {
       excludePackages = [ pkgs.xterm ];
-
       videoDrivers = [ "modesetting" "fbdev" ];
-
       enable = true; # Enable the X11 windowing system
-
-      displayManager.sessionCommands = ''
-        ${pkgs.xkbset}/bin/xkbset bouncekeys 10
-      '';
-
-      # For i3
-      desktopManager = {
-        wallpaper.combineScreens = true; # background img = ~/.background-image
-        wallpaper.mode = "center"; # One of "center", "fill", "max", "scale", "tile"
-      };
+      displayManager.sessionCommands = "${pkgs.xkbset}/bin/xkbset bouncekeys 10";
 
       windowManager.i3 = {
         enable = true;
