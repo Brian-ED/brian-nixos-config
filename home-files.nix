@@ -1,20 +1,4 @@
 {config, homeDir, lib, pkgs}: { # agda-unimath
-  "${homeDir}/.config/user-dirs.dirs" = {
-    enable = true;
-    text = ''
-      # Format is XDG_xxx_DIR="$HOME/yyy", where yyy is a shell-escaped
-      # homedir-relative path, or XDG_xxx_DIR="/yyy", where /yyy is an
-      # absolute path. No other format is supported.
-      XDG_DESKTOP_DIR="$HOME/dataByBadApps/Desktop"
-      XDG_DOWNLOAD_DIR="$HOME/Downloads"
-      XDG_TEMPLATES_DIR="$HOME/dataByBadApps/Templates"
-      XDG_PUBLICSHARE_DIR="$HOME/dataByBadApps/Public"
-      XDG_DOCUMENTS_DIR="$HOME/dataByBadApps/Documents"
-      XDG_MUSIC_DIR="$HOME/dataByBadApps/Music"
-      XDG_PICTURES_DIR="$HOME/Pictures"
-      XDG_VIDEOS_DIR="$HOME/dataByBadApps/Videos"
-    '';
-  };
 
   "${homeDir}/.config/niri/config.kdl".source = ./modules/niri-config.kdl; # Niri config
 

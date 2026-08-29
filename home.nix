@@ -1,4 +1,3 @@
-# TODO get home manager to manage files ~/.gtkrc-2.0
 { config, pkgs, pkgs-stable, pkgs-unstable, lib, inputs, winUser, minUser, finUser, nixPath, ...}:
 let
   nix-watch         = inputs.nix-watch        .packages.${pkgs.stdenv.hostPlatform.system}.default;
@@ -23,12 +22,15 @@ let
   python3 = pkgs.python3.withPackages (p: with p;[
     yt-dlp-light pyperclip # These are dependencies of my youtube song downloader for my playlist, which is used by the I3 shortcut $mod+Control+Shift+m
     numpy matplotlib sympy pandas # Me want very much. Used often
-    jupyter ipython ipykernel # Jupiter and dependencies
+    #jupyter ipython ipykernel # Jupiter and dependencies
     mpmath # Arbitrary precision math
     scipy # Lots of mathy functions like eigenvalues and curve fitting
-    (p.callPackage ./pkgs/automata.nix {cached-method = p.callPackage ./pkgs/cached-method.nix {};})
     pycparser
   ]);
+
+  python3-history-wrap = pkgs.writeShellScriptBin "python3" ''
+    PYTHON_HISTORY=${config.xdg.dataHome}/python3-history ${python3}/bin/python
+  '';
 
   sessionVariables = {
     NIXPKGS_ALLOW_UNFREE = "1"; # --impure is needed anyway for this to take effect, so I don't believe this is unsafe
@@ -37,6 +39,10 @@ let
     GOPATH="${config.xdg.stateHome}/go";
     GOMODCACHE="${config.xdg.cacheHome}/go/pkg/mod";
     GOTELEMETRYDIR="/dev/null";
+
+    # NodeJS
+    NODE_REPL_HISTORY = "${config.xdg.dataHome}/nodejs-history";
+    NODE_REPL_HISTORY_SIZE = "10000";
 
     # Define the terminal prompt
     # Old: \n\[\033[1;32m\][\[\e]0;\u@\h: \w\a\]\u@\h:\w]\$\[\033[0m\]
@@ -179,6 +185,8 @@ let
       rust-lang.rust-analyzer
       leanprover.lean4  tamasfe.even-better-toml # even-better-toml is a dependency for lean4 extension
       hediet.vscode-drawio
+      myriad-dreamin.tinymist
+      rocq-prover.vsrocq
     ] ++ (
       let I=builtins.elemAt; L=lib.licenses; in pkgs.vscode-utils.extensionsFromVscodeMarketplace (
         map (x: { name=I x 0; publisher=I x 1; meta.license = I x 2; version=I x 3; sha256=I x 4;} )
@@ -318,7 +326,7 @@ in
   home.packages = [
     vscodeCustom
     home-manager      # Have home manager manage itself
-    python3
+    python3-history-wrap
   ] ++ (with pkgs; [
     (factorio-space-age.override { # Game
       username = "Brian_ED";
@@ -344,6 +352,15 @@ in
         ${cbqn-native}/bin/bqn ${inputs.singeli}/singeli --help
       fi
     '')
+    (factorio-space-age.override { # Game
+      username = "Brian_ED";
+      token = "";
+    })
+    spotify
+    discord
+    stripe-cli
+    qpwgraph # A graph view of PipeWire devices
+    jdk25 # javac for SingeliPlayground
     gtrash # For making it so I can avoid deleting files right away, and instead trash them
     odin ols
     nixd
@@ -424,7 +441,8 @@ in
     arc-theme          # Dark theme related: Arc-Dark GTK theme
     gnome-themes-extra # Dark theme related: Includes Adwaita-dark
     simplescreenrecorder # My favorite recording software
-    cbqn-native bqn386 # BQN interpreter and font
+    bqn386 # BQN interpreter and font
+    apl386
     #swaybg # wallpaper
     #go gopls
   ]);
@@ -463,18 +481,19 @@ in
     ];
   };
 
+  # nix.assumeXdg = true;
+  home.preferXdgDirectories = true;
+
   # Dark mode for apps that respect XSettings
   xdg = {
-
-#    DATA_DIRS
-#    CONFIG_DIRS
-#    RUNTIME_DIR
-#
-#    DataHome = "...";
-#    ConfigHome = "...";
-#    StateHome = "...";
-#    cacheHome = "~/.cache";
-
+    userDirs = {
+      desktop = "${homeDir}/dataByBadApps/Desktop";
+      documents = "${homeDir}/dataByBadApps/Documents";
+      videos = "${homeDir}/dataByBadApps/Videos";
+      music = "${homeDir}/dataByBadApps/Music";
+      publicShare = "${homeDir}/dataByBadApps/Public";
+      templates = "${homeDir}/dataByBadApps/Templates";
+    };
     enable = true;
     mime.enable = true;
     desktopEntries.nemo = {
@@ -498,8 +517,6 @@ in
       can-change-accels = true;
     };
   };
-
-  home.preferXdgDirectories = true;
 
 #  systemd.user.services.onstartBrian = {
 #    Unit = {
@@ -711,8 +728,8 @@ in
 
       # Tagging search
       "æ" = "${cbqn-native}/bin/bqn -r -e \"$(${cbqn-native}/bin/bqn ${homeDir}/proj/tagarin/search.bqn)\"";
-      "dyalog" = "${pkgs-unstable.dyalog}/bin/dyalog AplCoreName=/tmp/aplcore* MaxAplCores=4";
-
+      "dyalog" = "${pkgs-unstable.dyalog}/bin/dyalog AplCoreName=/tmp/aplcore* MaxAplCores=4 LOG_FILE_INUSE=0 APLAN_FOR_EDITOR=1 UCMDCACHEFILE=\"/tmp/UserCommand{UcmdMajor}{UcmdMinor}.{DyalogMajor}{DyalogMinor}{U|C}{bits}.cache\"";
+      "bqn" = "${cbqn-native}/bin/BQN -Xrepl-history-path='${homeDir}/history/bqn'";
       "thunderbird" = "${pkgs.thunderbird}/bin/thunderbird & sleep 1 && rmdir ${homeDir}/thunderbird";
     };
   };
@@ -768,4 +785,10 @@ in
       };
     };
   };
+
+  programs.npm.settings = {
+    prefix = "${homeDir}/.cache/npm";
+  };
+
+  xresources.path = "${homeDir}/.config/Xresources";
 }

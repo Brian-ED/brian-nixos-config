@@ -10,6 +10,8 @@
   nix = {
     channel.enable = false;
     inherit nixPath;
+    # removing __functor for tack compatibility
+    registry = pkgs.lib.mapAttrs (_: flake: {inherit flake;}) (removeAttrs inputs [ "__functor" ]);
     settings = {
       experimental-features = [ "nix-command" "flakes" "pipe-operators" ];
       warn-dirty = false;
@@ -109,7 +111,7 @@
     xserver = {
       excludePackages = [ pkgs.xterm ];
 
-      videoDrivers = [ "displaylink" "modesetting" "fbdev" ];
+      videoDrivers = [ "modesetting" "fbdev" ];
 
       enable = true; # Enable the X11 windowing system
 
@@ -216,8 +218,8 @@
       gnome-themes-extra # Dark theme related: Includes Adwaita-dark
       simplescreenrecorder # My favorite recording software
       (import ./pkgs/cbqn.nix pkgs) bqn386 # BQN interpreter and font
+      git
     ] ++ [ # The rest is extra packages not found in home
-      pkgs.git
       inputs.home-manager.packages.${pkgs.stdenv.hostPlatform.system}.home-manager
     ];
     sessionVariables = { LIBVA_DRIVER_NAME = "iHD"; }; # Optionally, set the environment variable
@@ -258,10 +260,10 @@
   };
 
   # Allow unfree packages
-  nixpkgs.config.allowUnfreePredicate = pkg:
-    builtins.elem (pkgs.lib.getName pkg) [
-      "displaylink"
-    ];
+  #nixpkgs.config.allowUnfreePredicate = pkg:
+  #  builtins.elem (pkgs.lib.getName pkg) [
+  #    "displaylink"
+  #  ];
 
   security = {
     rtkit.enable = true; # Enable sound with pipewire

@@ -47,7 +47,9 @@
     pkgs-stable   = import inputs.nixpkgs-stable   env;
     pkgs          = import inputs.nixpkgs          env;
     nixpkgs = inputs.nixpkgs;
-    nixPath = pkgs.lib.mapAttrsToList (n: _: "${n}=flake:${n}") inputs; # For disabling channels
+
+    flakes = pkgs.lib.filterAttrs (_: input: pkgs.lib.isType "flake" input) inputs;
+    nixPath = pkgs.lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakes; # For disabling channels
   in {
     homeConfigurations.brian = inputs.home-manager.lib.homeManagerConfiguration {
       inherit pkgs;
