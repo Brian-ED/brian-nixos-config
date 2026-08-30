@@ -140,10 +140,6 @@
       alsa.support32Bit = true;
       pulse.enable = true;
       jack.enable = false; # Used for audio work, which I don't do
-
-      # use the example session manager (no others are packaged yet so this is enabled by default,
-      # no need to redefine it in your config for now)
-      #media-session.enable = true;
     };
     # Trying to handle multiple monitors, WIP
     #autorandr = {
