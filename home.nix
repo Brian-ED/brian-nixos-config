@@ -369,6 +369,7 @@ in
     pastel            # Command-line tool to generate, analyze, convert and manipulate colors
     bat eza zoxide nushell # Some things I've been trying to improve the terminal. Bad so far.
     xcolor            # color-pick shortcut for i3
+    feh                    # background starter initialized in i3
     alacritty         # Terminal that loads quickly
     xdotool           # Useful for automating tasks
     rofi              # Used by i3 for fancy UI
