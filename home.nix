@@ -292,7 +292,7 @@ in
 
   home.pointerCursor = { # Cursor configuration. Top-level options declared under this submodule are backend independent options. Options declared under namespaces such as `x11` are backend specific options. By default, only backend independent cursor configurations are generated. If you need configurations for specific backends, you can toggle them via the enable option. For example, [](#opt-home.pointerCursor.x11.enable) will enable x11 cursor configurations. Note that this will merely generate the cursor configurations. To apply the configurations, the relevant subsytems must also be configured. For example, [](#opt-home.pointerCursor.gtk.enable) will generate the gtk cursor configuration, but [](#opt-gtk.enable) needs to be set for it to be applied
     enable = true; # Whether to enable cursor config generation
-    dotIcons.enable = true; # TODO: Try true # Whether to enable `.icons` config generation for `home.pointerCursor`
+    dotIcons.enable = false; # Whether to enable `.icons` config generation for `home.pointerCursor`
     gtk.enable = true; # TODO: Whether to enable gtk config generation for `home.pointerCursor`
     name = "Vanilla-DMZ";  # The cursor name within the package
     package = pkgs.vanilla-dmz; # Package providing the cursor theme
