@@ -110,7 +110,12 @@
       excludePackages = [ pkgs.xterm ];
       videoDrivers = [ "modesetting" "fbdev" ];
       enable = true; # Enable the X11 windowing system
-      displayManager.sessionCommands = "${pkgs.xkbset}/bin/xkbset bouncekeys 10";
+      displayManager = {
+        sessionCommands = "${pkgs.xkbset}/bin/xkbset bouncekeys 10";
+        lightdm.extraConfig = ''
+          smart-xsession-errors=true
+        '';
+      };
 
       windowManager.i3 = {
         enable = true;
@@ -251,6 +256,21 @@
   #  builtins.elem (pkgs.lib.getName pkg) [
   #    "displaylink"
   #  ];
+
+  nixpkgs.overlays = [
+
+    # This overlay applies a pr fixing lightdm to use xdg standards
+    (final: prev: {
+      lightdm = prev.lightdm.overrideAttrs (old: {
+        patches = (old.patches or []) ++ [
+          (final.fetchpatch {
+            url = "https://github.com/ubuntu/lightdm/pull/335.diff";
+            hash = "sha256-tn5LOOZasT2MxNq1fTNjl3eVkQUe3g1WBkteoOz3W1Q=";
+          })
+        ];
+      });
+    })
+  ];
 
   security = {
     rtkit.enable = true; # Enable sound with pipewire
