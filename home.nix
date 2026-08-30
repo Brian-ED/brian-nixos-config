@@ -40,6 +40,9 @@ let
     GOMODCACHE="${config.xdg.cacheHome}/go/pkg/mod";
     GOTELEMETRYDIR="/dev/null";
 
+    # Moves .compose-cache created by alacritty's XCompose dependency
+    XCOMPOSECACHE = "${config.xdg.cacheHome}/x11-compose-cache";
+
     # NodeJS
     NODE_REPL_HISTORY = "${config.xdg.dataHome}/nodejs-history";
     NODE_REPL_HISTORY_SIZE = "10000";
