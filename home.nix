@@ -90,7 +90,7 @@ let
   };
 
   vscodeCustom = pkgs.vscode-with-extensions.override {
-    vscode = pkgs.vscodium
+    vscode = pkgs-unstable.vscodium 
         # None of this works to make vscodium not create the .vscode-oss folder :(
         #.overrideAttrs (old: {
         #      postFixup = (old.postFixup or "") + ''
