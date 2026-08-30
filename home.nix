@@ -460,13 +460,13 @@ in
 
   # Dark mode for apps that respect XSettings
   xdg = {
-    userDirs = {
-      desktop = "${homeDir}/dataByBadApps/Desktop";
-      documents = "${homeDir}/dataByBadApps/Documents";
-      videos = "${homeDir}/dataByBadApps/Videos";
-      music = "${homeDir}/dataByBadApps/Music";
-      publicShare = "${homeDir}/dataByBadApps/Public";
-      templates = "${homeDir}/dataByBadApps/Templates";
+    userDirs = let dataByBadApps = "${config.xdg.stateHome}/dataByBadApps"; in {
+      desktop = "${dataByBadApps}/Desktop";
+      documents = "${dataByBadApps}/Documents";
+      videos = "${dataByBadApps}/Videos";
+      music = "${dataByBadApps}/Music";
+      publicShare = "${dataByBadApps}/Public";
+      templates = "${dataByBadApps}/Templates";
     };
     enable = true;
     mime.enable = true;
