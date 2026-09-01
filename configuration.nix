@@ -269,6 +269,14 @@
   ];
 
   security = {
+    # Turns on logging of /home/brian
+    #auditd.enable = true;
+    #audit = {
+    #  enable = true;
+    #  rules = [
+    #    "-w /home/brian -p wa -k composewatch"
+    #  ];
+    #};
     rtkit.enable = true; # Enable sound with pipewire
     pam.loginLimits = [ { domain = "@users"; item = "rtprio"; type = "-"; value = 1; } ]; # Set system schedular's priority for @users. Apparently improved swayWM perf, found it in their docs
   };
