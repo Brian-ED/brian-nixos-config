@@ -367,7 +367,7 @@ in
     cryptsetup       # For decrypting my LUKS encrypted harddrive
     qbittorrent-enhanced # BitTorrent client
     pastel            # Command-line tool to generate, analyze, convert and manipulate colors
-    bat eza zoxide nushell # Some things I've been trying to improve the terminal. Bad so far.
+    bat eza nushell # Some things I've been trying to improve the terminal. Bad so far.
     xcolor            # color-pick shortcut for i3
     feh                    # background starter initialized in i3
     alacritty         # Terminal that loads quickly
@@ -705,7 +705,6 @@ in
       "æ" = "${cbqn-native}/bin/bqn -r -e \"$(${cbqn-native}/bin/bqn ${homeDir}/proj/tagarin/search.bqn)\"";
       "dyalog" = "${pkgs-unstable.dyalog}/bin/dyalog AplCoreName=/tmp/aplcore* MaxAplCores=4 LOG_FILE_INUSE=0 APLAN_FOR_EDITOR=1 UCMDCACHEFILE=\"/tmp/UserCommand{UcmdMajor}{UcmdMinor}.{DyalogMajor}{DyalogMinor}{U|C}{bits}.cache\"";
       "bqn" = "${cbqn-native}/bin/BQN -Xrepl-history-path='${homeDir}/history/bqn'";
-      "thunderbird" = "${pkgs.thunderbird}/bin/thunderbird & sleep 1 && rmdir ${homeDir}/thunderbird";
     };
   };
 
