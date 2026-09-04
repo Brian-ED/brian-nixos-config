@@ -188,7 +188,7 @@ let
       rust-lang.rust-analyzer
       leanprover.lean4  tamasfe.even-better-toml # even-better-toml is a dependency for lean4 extension
       hediet.vscode-drawio
-      myriad-dreamin.tinymist
+      pkgs-unstable.vscode-extensions.myriad-dreamin.tinymist
       rocq-prover.vsrocq
     ] ++ (
       let I=builtins.elemAt; L=lib.licenses; in pkgs.vscode-utils.extensionsFromVscodeMarketplace (
@@ -679,6 +679,7 @@ in
       aplk = "${pkgs.setxkbmap}/bin/setxkbmap -layout fo,apl -option grp:lswitch";
       bqnk = "${pkgs.setxkbmap}/bin/setxkbmap -layout fo,bqn -option grp:lswitch";
       net = "${pkgs.networkmanager}/bin/nmcli dev wifi && ${pkgs.networkmanager}/bin/nmcli dev wifi connect --ask"; # Find a network to connect to
+      netwatch = "watch ${pkgs.networkmanager}/bin/nmcli dev wifi";
       cat = "${pkgs.bat}/bin/bat $@";
       clean30d = "${pkgs.gtrash}/bin/gtrash prune --day 30 && ${pkgs.nh}/bin/nh clean all --optimise --keep-since 30d";
 
@@ -703,8 +704,8 @@ in
 
       # Tagging search
       "æ" = "${cbqn-native}/bin/bqn -r -e \"$(${cbqn-native}/bin/bqn ${homeDir}/proj/tagarin/search.bqn)\"";
-      "dyalog" = "${pkgs-unstable.dyalog}/bin/dyalog AplCoreName=/tmp/aplcore* MaxAplCores=4 LOG_FILE_INUSE=0 APLAN_FOR_EDITOR=1 UCMDCACHEFILE=\"/tmp/UserCommand{UcmdMajor}{UcmdMinor}.{DyalogMajor}{DyalogMinor}{U|C}{bits}.cache\"";
-      "bqn" = "${cbqn-native}/bin/BQN -Xrepl-history-path='${homeDir}/history/bqn'";
+      dyalog = "${pkgs-unstable.dyalog}/bin/dyalog AplCoreName=/tmp/aplcore* MaxAplCores=4 LOG_FILE_INUSE=0 APLAN_FOR_EDITOR=1 UCMDCACHEFILE=\"/tmp/UserCommand{UcmdMajor}{UcmdMinor}.{DyalogMajor}{DyalogMinor}{U|C}{bits}.cache\"";
+      bqn = "${cbqn-native}/bin/BQN -Xrepl-history-path='${homeDir}/history/bqn'";
     };
   };
 
