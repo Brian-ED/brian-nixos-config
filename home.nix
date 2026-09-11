@@ -674,7 +674,6 @@ in
       ".." = "cd ..";
       "," = "cd ~";
       "_" = "cd - >> /dev/null";
-      mcsnorri = "${pkgs.prismlauncher}/bin/prismlauncher --launch 1.21.8-extra --server 198.244.176.195:2009";
       mclocal = "${pkgs.prismlauncher}/bin/prismlauncher --launch 1.21.8 --world 'Sorter Showcase v1.2'";
       aplk = "${pkgs.setxkbmap}/bin/setxkbmap -layout fo,apl -option grp:lswitch";
       bqnk = "${pkgs.setxkbmap}/bin/setxkbmap -layout fo,bqn -option grp:lswitch";
@@ -705,7 +704,6 @@ in
       # Tagging search
       "æ" = "${cbqn-native}/bin/bqn -r -e \"$(${cbqn-native}/bin/bqn ${homeDir}/proj/tagarin/search.bqn)\"";
       dyalog = "${pkgs-unstable.dyalog}/bin/dyalog AplCoreName=/tmp/aplcore* MaxAplCores=4 LOG_FILE_INUSE=0 APLAN_FOR_EDITOR=1 UCMDCACHEFILE=\"/tmp/UserCommand{UcmdMajor}{UcmdMinor}.{DyalogMajor}{DyalogMinor}{U|C}{bits}.cache\"";
-
 
       temp = ". ${pkgs.writeShellScriptBin "tempDirNor" ''
         if [ ! $@ == "" ]; then
