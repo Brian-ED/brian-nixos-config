@@ -671,7 +671,7 @@ in
       P = "pwd | ${pkgs.xclip}/bin/xclip -selection clipboard";
       clip = "${pkgs.xclip}/bin/xclip -selection clipboard";
       lo = "${pkgs.libreoffice-qt6-fresh}/bin/libreoffice";
-      "." = "cd .."; # Hilariously this works
+      ".." = "cd ..";
       "," = "cd ~";
       "_" = "cd - >> /dev/null";
       mcsnorri = "${pkgs.prismlauncher}/bin/prismlauncher --launch 1.21.8-extra --server 198.244.176.195:2009";
@@ -705,7 +705,24 @@ in
       # Tagging search
       "æ" = "${cbqn-native}/bin/bqn -r -e \"$(${cbqn-native}/bin/bqn ${homeDir}/proj/tagarin/search.bqn)\"";
       dyalog = "${pkgs-unstable.dyalog}/bin/dyalog AplCoreName=/tmp/aplcore* MaxAplCores=4 LOG_FILE_INUSE=0 APLAN_FOR_EDITOR=1 UCMDCACHEFILE=\"/tmp/UserCommand{UcmdMajor}{UcmdMinor}.{DyalogMajor}{DyalogMinor}{U|C}{bits}.cache\"";
-      bqn = "${cbqn-native}/bin/BQN -Xrepl-history-path='${homeDir}/history/bqn'";
+
+
+      temp = ". ${pkgs.writeShellScriptBin "tempDirNor" ''
+        if [ ! $@ == "" ]; then
+          mkdir $@
+          cd $@
+        else
+          mkdir --parents temp && cd temp
+        fi
+      ''}/bin/tempDirNor";
+      "temp⁼" = ". ${pkgs.writeShellScriptBin "tempDirInv" ''
+        if [ ! $@ == "" ]; then
+          cd ..
+          rmdir $@
+        else
+          cd .. && rmdir temp
+        fi
+      ''}/bin/tempDirInv";
     };
   };
 
