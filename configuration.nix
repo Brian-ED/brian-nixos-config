@@ -1,7 +1,7 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’)
-{pkgs, pkgs-unstable, inputs, nixPath, ... }:
+{pkgs, pkgs-unstable, inputs, nixPath, sojuConfigFile, hostName, ... }:
 {
   nix = {
     channel.enable = false;
@@ -31,7 +31,7 @@
   };
 
   networking = {
-    hostName = "brians-laptop"; # Define your hostname
+    inherit hostName;
 
     # wireless.enable = true;  # Enables wireless support via wpa_supplicant
     networkmanager.enable = true; # Enable networking
@@ -167,6 +167,11 @@
     #    };
     #  };
     #};
+
+    soju = {
+      enable = true;
+      configFile = sojuConfigFile;
+    };
   };
   environment = {
     ## Apparently dyalogscript's /bin/dyalogscript is better than "/usr/bin/env dyalogscript".

@@ -26,9 +26,7 @@
   outputs = inputs: let
     system = "x86_64-linux";
     win = "/mnt/windows";
-    fin = "/mnt/finix";
     winUser = "${win}/Users/brian";
-    finUser = "${fin}/home/brian";
     env = {
       inherit system;
       config = {
@@ -50,17 +48,34 @@
 
     flakes = pkgs.lib.filterAttrs (_: input: pkgs.lib.isType "flake" input) inputs;
     nixPath = pkgs.lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakes; # For disabling channels
+  
+    hostName = "brians-laptop";
+
+    sojuConfigFile = pkgs.writeText "soju.conf" (''
+      ${pkgs.lib.concatMapStringsSep "\n" (l: "listen ${l}") [
+        "irc://localhost:6667"
+      ]}
+      hostname ${hostName}.localhost
+    ''
+    #+ ("tls ${tlsCertificate} ${tlsCertificateKey}") # Path to server TLS certificate. Example: tlsCertificate = "/var/host.cert"
+    + ''
+      message-store db
+      http-origin${"" # takes a space-seperated list infront according to the nix options code
+      }
+      accept-proxy-ip${"" # takes a space-seperated list infront according to the nix options code
+      }
+    '');
   in {
     homeConfigurations.brian = inputs.home-manager.lib.homeManagerConfiguration {
       inherit pkgs;
       modules = [ ./home.nix ./pkgs/restic-temp.nix ];
-      extraSpecialArgs = {inherit inputs pkgs-stable pkgs-unstable winUser finUser nixPath; };
+      extraSpecialArgs = {inherit inputs pkgs-stable pkgs-unstable winUser nixPath sojuConfigFile; };
     };
 
     nixosConfigurations = {
       brians-laptop = nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = {inherit inputs pkgs-unstable win fin nixPath;};
+        specialArgs = {inherit inputs pkgs-unstable win nixPath sojuConfigFile hostName;};
         modules = [
           ./hardware/lenovo-C940-14IIL.nix # Include the results of the hardware scan
           ./configuration.nix

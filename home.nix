@@ -1,4 +1,4 @@
-{ config, pkgs, pkgs-stable, pkgs-unstable, lib, inputs, winUser, minUser, finUser, nixPath, ...}:
+{ config, pkgs, pkgs-stable, pkgs-unstable, lib, inputs, winUser, nixPath, sojuConfigFile, ...}:
 let
   nix-watch         = inputs.nix-watch        .packages.${pkgs.stdenv.hostPlatform.system}.default;
   home-manager      = inputs.home-manager     .packages.${pkgs.stdenv.hostPlatform.system}.home-manager;
@@ -13,6 +13,11 @@ let
   cbqn-native = (import ./pkgs/cbqn.nix pkgs);
   username = "brian";
   homeDir = "/home/${username}";
+
+  soju = {
+    username = "brian-e";
+    password = "unsecure-password-because-am-local";
+  };
 
   startup = pkgs.writeShellScriptBin "startup" ''
     ${pkgs.paperview}/bin/paperview ${homeDir}/proj/wallpapers/frames2 3
@@ -29,7 +34,7 @@ let
   ]);
 
   python3-history-wrap = pkgs.writeShellScriptBin "python3" ''
-    PYTHON_HISTORY=${config.xdg.dataHome}/python3-history ${python3}/bin/python
+    PYTHON_HISTORY=${config.xdg.dataHome}/python3-history ${python3}/bin/python "$@"
   '';
 
   sessionVariables = {
@@ -247,42 +252,52 @@ in
     };
   };
 
-  # Sets up repositories for my projects, cloning only if missing, automatically
-  # TODO: Only try cloning if connected to wifi
-  # TODO: warn when a repository is removed from the list but still exists with state (autodelete if no state exists). State includes hidden files, new files, and non-default files found in .git folder.
-  home.activation.makeRepos = let # It's complicated, refer to: https://home-manager-options.extranix.com/?query=home.activation&release=release-25.05
-    proj = "${homeDir}/proj";
-    G = "https://github.com";
-    repositories_I_play_with = {
-      brian-nixos-config     = { path = proj ; repo = "${G}/Brian-ED/brian-nixos-config"    ;};
-      rayed-bqn              = { path = proj ; repo = "${G}/Brian-ED/rayed-bqn"             ;};
-      brian-i3-config        = { path = proj ; repo = "${G}/Brian-ED/brian-i3-config"       ;};
-      raylib-bqn             = { path = proj ; repo = "${G}/Brian-ED/raylib-bqn"            ;};
-      bqnserver              = { path = proj ; repo = "${G}/Brian-ED/bqnserver"             ;};
-      "Brian-ED.github.io"   = { path = proj ; repo = "${G}/Brian-ED/Brian-ED.github.io"    ;};
-      rayed-bqn-docs         = { path = proj ; repo = "${G}/Brian-ED/rayed-bqn-docs"        ;};
-      tagarin                = { path = proj ; repo = "${G}/Brian-ED/tagarin"               ;};
-    };
-    cloneCommands = lib.mapAttrsToList (name: {path, repo}: ''
-      if [ ! -d ${path}/${name} ]; then
-        run ${pkgs.git}/bin/git clone ${repo} ${path}/${name}
+  home.activation = { # It's complicated, refer to: https://home-manager-options.extranix.com/?query=home.activation&release=release-25.05
+    
+    # Does the following commands to deal with soju database requiring a user Halloy can use (I believe)
+    # nix shell nixpkgs#soju
+    # sojudb -config /nix/store/...-soju.conf create-user brian
+    sojuHalloyUser = lib.hm.dag.entryAfter [ "writeBoundary" "installPackages" "soju" ] ''
+      run echo ${soju.password} | run ${pkgs.soju}/bin/sojudb -config ${sojuConfigFile} create-user ${soju.username} 2> /dev/null || true
+    '';
+
+    # Sets up repositories for my projects, cloning only if missing, automatically
+    # TODO: Only try cloning if connected to wifi
+    # TODO: warn when a repository is removed from the list but still exists with state (autodelete if no state exists). State includes hidden files, new files, and non-default files found in .git folder.
+    makeRepos = let
+      proj = "${homeDir}/proj";
+      G = "https://github.com";
+      repositories_I_play_with = {
+        brian-nixos-config     = { path = proj ; repo = "${G}/Brian-ED/brian-nixos-config"    ;};
+        rayed-bqn              = { path = proj ; repo = "${G}/Brian-ED/rayed-bqn"             ;};
+        brian-i3-config        = { path = proj ; repo = "${G}/Brian-ED/brian-i3-config"       ;};
+        raylib-bqn             = { path = proj ; repo = "${G}/Brian-ED/raylib-bqn"            ;};
+        bqnserver              = { path = proj ; repo = "${G}/Brian-ED/bqnserver"             ;};
+        "Brian-ED.github.io"   = { path = proj ; repo = "${G}/Brian-ED/Brian-ED.github.io"    ;};
+        rayed-bqn-docs         = { path = proj ; repo = "${G}/Brian-ED/rayed-bqn-docs"        ;};
+        tagarin                = { path = proj ; repo = "${G}/Brian-ED/tagarin"               ;};
+      };
+      cloneCommands = lib.mapAttrsToList (name: {path, repo}: ''
+        if [ ! -d ${path}/${name} ]; then
+          run ${pkgs.git}/bin/git clone ${repo} ${path}/${name}
+        fi
+      '') repositories_I_play_with;
+    in lib.hm.dag.entryAfter [ "writeBoundary" "installPackages" "git" ] ''
+      if [ ! -d ${proj} ]; then
+        run mkdir ${proj}
       fi
-    '') repositories_I_play_with;
-  in lib.hm.dag.entryAfter [ "writeBoundary" "installPackages" "git" ] ''
-    if [ ! -d ${proj} ]; then
-      run mkdir ${proj}
-    fi
-    ${lib.concatStrings cloneCommands}
-    if [ ! -d ${proj}/singeliPlayground ]; then
-      run ${pkgs.git}/bin/git clone "${G}/dzaima/singeliPlayground" ${proj}/singeliPlayground
-      run ln -s "${proj}/UIClone" "${proj}/UI"
-      run ${pkgs.git}/bin/git -C "${proj}/singeliPlayground" submodule update --init UIClone
-      run ${python3}/bin/python3 ${proj}/singeliPlayground/build.py
-    fi
-    if [ ! -d ${homeDir}/.config/i3 ]; then
-      run ln -s ${proj}/brian-i3-config ${homeDir}/.config/i3
-    fi
-  '';
+      ${lib.concatStrings cloneCommands}
+      if [ ! -d ${proj}/singeliPlayground ]; then
+        run ${pkgs.git}/bin/git clone "${G}/dzaima/singeliPlayground" ${proj}/singeliPlayground
+        run ln -s "${proj}/UIClone" "${proj}/UI"
+        run ${pkgs.git}/bin/git -C "${proj}/singeliPlayground" submodule update --init UIClone
+        run ${python3}/bin/python3 ${proj}/singeliPlayground/build.py
+      fi
+      if [ ! -d ${homeDir}/.config/i3 ]; then
+        run ln -s ${proj}/brian-i3-config ${homeDir}/.config/i3
+      fi
+    '';
+  };
 
   home.keyboard = { # Keyboard configuration. Set to `null` to disable Home Manager keyboard management
     layout  = "fo,bqn";  # If `null`, then the system configuration will be used. This defaults to `null` for state version ≥ 19.09 and `"us"` otherwise
@@ -346,10 +361,53 @@ in
         ${cbqn-native}/bin/bqn ${inputs.singeli}/singeli --help
       fi
     '')
+    # Credit to dzaima https://codeberg.org/dzaima/dotfiles/src/branch/main/bin/real#
+    (writeShellScriptBin "real" ''
+      if [[ $# == 0 ]]; then
+        a="."
+      else
+        a="$1"
+      fi
+      echo "$a"
+
+      function pathcat() {
+        (cd -- "$1" && realpath -s -- "$2")
+      }
+
+      if [ -e "$a" ]; then
+        b="$(pathcat "." "$a")"
+      else
+        b="$(which "$a")"
+      fi
+      if [[ "$a" != "$b" ]]; then
+        echo "→ $b"
+      fi
+
+      if [ -f "$b" ]; then
+        while [[ -h "$b" ]]; do
+          b="$(pathcat `dirname "$b"` `readlink -n "$b"`)"
+          echo "→ $b"
+        done
+        file "$b"
+        echo -n 'size: '; bs -HQD2 "$b"
+      fi
+      ''
+    )
+    # Credit to dzaima https://codeberg.org/dzaima/dotfiles/src/branch/main/bin/debug-args
+    (writeShellScriptBin "debug-args" ''
+      i=0
+      for x in "$@"; do
+        printf '[%d]: %s\n' "$i" "`printf "%s" "$x" | jq -Rs '.'`"
+        ((i++))
+      done
+      true
+    ''
+    )
     (factorio-space-age.override { # Game
       username = "Brian_ED";
       token = "";
     })
+    rocqPackages.rocq-core rocqPackages.stdlib rocqPackages.mathcomp rocqPackages.vsrocq-language-server
     spotify
     discord
     stripe-cli
@@ -370,16 +428,18 @@ in
     bat eza nushell # Some things I've been trying to improve the terminal. Bad so far.
     xcolor            # color-pick shortcut for i3
     feh                    # background starter initialized in i3
-    alacritty         # Terminal that loads quickly
-    xdotool           # Useful for automating tasks
+    libnotify # Notif for low battery in i3
     rofi              # Used by i3 for fancy UI
-    #rustdesk          # Remote control. Useful for helping family
-    fd                # Since I forget how to use the `find` command every time, I replaced it with fd, which lists files recursively as a flat list that i can then egrep
-    steam             # Steam
     xev          # I use this for testing button presses on i3
     # TODO Do I really need 3 applications for light control on i3?
     xbacklight   # Modify device brightness, xrandr can only modify software brightness
     brightnessctl      # For i3 brightness without sudo
+    alacritty         # Terminal that loads quickly
+    xdotool           # Useful for automating tasks
+    lxappearance      # GTK theme switcher, useful for i3
+    #rustdesk          # Remote control. Useful for helping family
+    fd                # Since I forget how to use the `find` command every time, I replaced it with fd, which lists files recursively as a flat list that i can then egrep
+    steam             # Steam
     gnome-clocks      # Needed a timer
     keepassxc         # Password manager. TODO: Needs to be configured
     rlwrap            # Useful to make Dyalog be a more classic repl
@@ -389,7 +449,6 @@ in
     nodejs            # Javascript interpreter
     haruna            # Video player
     qutebrowser       # browser with loads of shortcuts
-    lxappearance      # GTK theme switcher, useful for i3
     audacious         # For playing music
     xkill             # For easily killing/stopping programs
     #( # Rust stuff
@@ -646,7 +705,7 @@ in
   programs.bash = {
     enable = true;
 
-    initExtra = lib.concatStrings (lib.mapAttrsToList (n: v: "export ${n}=\"${v}\"\n") sessionVariables); # I couldn't get home.sessionVariables working. Found this solution here: https://github.com/nix-community/home-manager/issues/1011
+    initExtra = "shopt -s autocd\n" + lib.concatStrings (lib.mapAttrsToList (n: v: "export ${n}=\"${v}\"\n") sessionVariables); # I couldn't get home.sessionVariables working. Found this solution here: https://github.com/nix-community/home-manager/issues/1011
 
     historyFile = "${config.xdg.stateHome}/bash/history";
     historyFileSize = 1000*1000*10;
@@ -660,8 +719,8 @@ in
       fix-nix-hash = "${pkgs.nix}/bin/nix hash convert --hash-algo sha256 --to nix32 $1"; # give in format sha256-...=
 
       # Nix build OS things
-      NRO = "${pkgs.nh}/bin/nh os   switch ${homeDir}/proj/brian-nixos-config";
-      HR  = "${pkgs.nh}/bin/nh home switch ${homeDir}/proj/brian-nixos-config";
+      NRO = "${pkgs.nh}/bin/nh os   switch ${homeDir}/proj/brian-nixos-config --show-activation-logs";
+      HR  = "${pkgs.nh}/bin/nh home switch ${homeDir}/proj/brian-nixos-config --show-activation-logs";
       NROQ = "sudo ${pkgs.nixos-rebuild-ng}/bin/nixos-rebuild switch --flake ${homeDir}/proj/brian-nixos-config/#brians-laptop";
       HRQ = "${home-manager}/bin/home-manager switch --flake ${homeDir}/proj/brian-nixos-config/#brian";
       NR = "${HR} && ${NRO}"; # Runs home manager first since NRO will ask for sudo when it ends, and I don't want to wait again after providing sudo
@@ -671,7 +730,7 @@ in
       P = "pwd | ${pkgs.xclip}/bin/xclip -selection clipboard";
       clip = "${pkgs.xclip}/bin/xclip -selection clipboard";
       lo = "${pkgs.libreoffice-qt6-fresh}/bin/libreoffice";
-      ".." = "cd ..";
+      "←" = "cd ..";
       "," = "cd ~";
       "_" = "cd - >> /dev/null";
       mclocal = "${pkgs.prismlauncher}/bin/prismlauncher --launch 1.21.8 --world 'Sorter Showcase v1.2'";
@@ -694,7 +753,6 @@ in
       tp = "${pkgs.gtrash}/bin/gtrash put $@";
       d = "${pkgs.nix}/bin/nix develop";
       win = "cd ${winUser}";
-      fin = "cd ${finUser}";
       singplay = "${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel ${homeDir}/proj/singeliPlayground/run ${cbqn-native}/bin/bqn ${inputs.singeli}";
       singeli = "${inputs.singeli}/singeli";
       lines = "${pkgs.coreutils-full}/bin/wc -l";
@@ -706,17 +764,15 @@ in
       dyalog = "${pkgs-unstable.dyalog}/bin/dyalog AplCoreName=/tmp/aplcore* MaxAplCores=4 LOG_FILE_INUSE=0 APLAN_FOR_EDITOR=1 UCMDCACHEFILE=\"/tmp/UserCommand{UcmdMajor}{UcmdMinor}.{DyalogMajor}{DyalogMinor}{U|C}{bits}.cache\"";
 
       temp = ". ${pkgs.writeShellScriptBin "tempDirNor" ''
-        if [ ! $@ == "" ]; then
-          mkdir $@
-          cd $@
+        if [ ! "$*" == "" ]; then
+          mkdir "$*" && cd "$*"
         else
           mkdir --parents temp && cd temp
         fi
       ''}/bin/tempDirNor";
       "temp⁼" = ". ${pkgs.writeShellScriptBin "tempDirInv" ''
-        if [ ! $@ == "" ]; then
-          cd ..
-          rmdir $@
+        if [ ! "$*" == "" ]; then
+          cd .. && rmdir "$*"
         else
           cd .. && rmdir temp
         fi
@@ -749,15 +805,6 @@ in
         '';
       };
     };
-  };
-
-  programs.emacs = {
-    enable = true;
-    package = pkgs.emacs;
-
-    extraPackages = epkgs: with epkgs; [
-      agda2-mode
-    ];
   };
 
   programs.git = {
