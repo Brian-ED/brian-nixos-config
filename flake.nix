@@ -10,6 +10,7 @@
     k                  .url = "github:runtimeverification/k"            ;
     darwin             .url = "github:LnL7/nix-darwin"                  ;
     nix-cachyos-kernel .url = "github:xddxdd/nix-cachyos-kernel/release";
+    mikan              .url = "git+https://codeberg.org/1lab/mikan?rev=2f7dce157928563a52632be23765ae28776c5afe";
     #agda-unimath       .url = "github:UniMath/agda-unimath/"            ;
 
     brian-i3-config = { url = "github:Brian-ED/brian-i3-config"; flake = false; };
@@ -65,17 +66,21 @@
       accept-proxy-ip${"" # takes a space-seperated list infront according to the nix options code
       }
     '');
+
+    substituters        = [ "https://cache.nixos.org/"                                        "https://mikan.cachix.org"                                        "https://attic.xuyh0120.win/lantian"                   ];
+    trusted-public-keys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="  "mikan.cachix.org-1:l1i58iAKFlQr1VcWPaYXExVYoVVPx8vXs+jfEttRFhA=" "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc=" ];
+
   in {
     homeConfigurations.brian = inputs.home-manager.lib.homeManagerConfiguration {
       inherit pkgs;
       modules = [ ./home.nix ./pkgs/restic-temp.nix ];
-      extraSpecialArgs = {inherit inputs pkgs-stable pkgs-unstable winUser nixPath sojuConfigFile; };
+      extraSpecialArgs = {inherit inputs pkgs-stable pkgs-unstable winUser nixPath sojuConfigFile substituters; };
     };
 
     nixosConfigurations = {
       brians-laptop = nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = {inherit inputs pkgs-unstable win nixPath sojuConfigFile hostName;};
+        specialArgs = {inherit inputs pkgs-unstable win nixPath sojuConfigFile hostName substituters trusted-public-keys;};
         modules = [
           ./hardware/lenovo-C940-14IIL.nix # Include the results of the hardware scan
           ./configuration.nix

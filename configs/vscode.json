@@ -1,6 +1,7 @@
 {
   "agdaMode.connection.downloadPolicy": "No, and don't ask again",
   "agdaMode.connection.paths": [
+    "/home/brian/.nix-profile/bin/mikan",
     "/home/brian/.nix-profile/bin/agda"
   ],
   "git.rebaseWhenSync": true,
@@ -119,7 +120,7 @@
     "spwn": "spwn build",
     "swift": "swift",
     "typescript": "ts-node",
-    "v": "v run",
+    "v": "cd $dir && rocq compile $fileName -o 'build/$fileNameWithoutExt.vo'",
     "vbscript": "cscript //Nologo",
     "zig": "zig run",
   },
@@ -196,5 +197,17 @@
   "tinymist.typstExtraArgs": [
     "--font-path=/home/brian/.nix-profile/share/fonts/truetype/BQN386.ttf",
     "--font-path=/home/brian/.nix-profile/share/fonts/truetype/APL386.ttf"
-  ]
+  ],
+  "code-runner.executorMapByFileExtension": {
+    ".v": "cd $dir && rocq compile $fileName -o 'build/$fileNameWithoutExt.vo'",
+  },
+  "vsrocq.args": [
+    "-coqlib /home/brian/.nix-profile/lib/coq/"
+  ],
+  "vsrocq.path": "/home/brian/.nix-profile/bin/vsrocqtop",
+  "vsrocq.completion.enable": true,
+  "editor.rulers": [
+    80, 100
+  ],
+  "explorer.confirmPasteNative": false
 }

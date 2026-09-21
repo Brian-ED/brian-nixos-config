@@ -1,9 +1,10 @@
-{ config, pkgs, pkgs-stable, pkgs-unstable, lib, inputs, winUser, nixPath, sojuConfigFile, ...}:
+{ config, pkgs, pkgs-stable, pkgs-unstable, lib, inputs, winUser, nixPath, sojuConfigFile, substituters, ...}:
 let
   nix-watch         = inputs.nix-watch        .packages.${pkgs.stdenv.hostPlatform.system}.default;
   home-manager      = inputs.home-manager     .packages.${pkgs.stdenv.hostPlatform.system}.home-manager;
   nixos-conf-editor = inputs.nixos-conf-editor.packages.${pkgs.stdenv.hostPlatform.system}.nixos-conf-editor;
   k                 = inputs.k                .packages.${pkgs.stdenv.hostPlatform.system}.k;
+  mikan             = inputs.mikan            .packages.${pkgs.stdenv.hostPlatform.system}.default;
   #agda-unimath      = inputs.agda-unimath     .packages.${pkgs.stdenv.hostPlatform.system}
   #  .agda-unimath.overrideAttrs (old: {
   #    dontBuild = true;
@@ -44,6 +45,9 @@ let
     GOPATH="${config.xdg.stateHome}/go";
     GOMODCACHE="${config.xdg.cacheHome}/go/pkg/mod";
     GOTELEMETRYDIR="/dev/null";
+
+    ROCQPATH = "${homeDir}/.nix-profile/lib/coq/${pkgs.rocq-core.rocq-version}/user-contrib";
+    COQPATH = "${homeDir}/.nix-profile/lib/coq/${pkgs.rocq-core.rocq-version}/user-contrib";
 
     # Moves .compose-cache created by alacritty's XCompose dependency
     XCOMPOSECACHE = "${config.xdg.cacheHome}/x11-compose-cache";
@@ -193,8 +197,12 @@ let
       rust-lang.rust-analyzer
       leanprover.lean4  tamasfe.even-better-toml # even-better-toml is a dependency for lean4 extension
       hediet.vscode-drawio
-      pkgs-unstable.vscode-extensions.myriad-dreamin.tinymist
+      pkgs-unstable.vscode-extensions.myriad-dreamin.tinymist # Typst
       rocq-prover.vsrocq
+      tekumara.typos-vscode
+
+      # P5 Odini linting and stuff
+      charliermarsh.ruff
     ] ++ (
       let I=builtins.elemAt; L=lib.licenses; in pkgs.vscode-utils.extensionsFromVscodeMarketplace (
         map (x: { name=I x 0; publisher=I x 1; meta.license = I x 2; version=I x 3; sha256=I x 4;} )
@@ -203,7 +211,7 @@ let
           #[ "inform-7"                    "natrium729"    L.mit       "latest" "sha256-p/bO2+3SZVFNpIRz73oRfHU8yHlg/1JlusETO+MBRg0="  ]
           #[ "vscode-stripe"               "Stripe"        L.mit       "latest" "07jwjzya4961w7mz8gpjw1300bigzpn2k8pqdng6k9b72jij80la" ]
           [ "bqn"                         "mk12"          L.mit       "latest" "sha256-ccs+jTqL5SoYZziuaodWbzD/HIXHatwzhUTPzCAz32E="  ]
-          #[ "newline"                     "chang196700"   L.mit       "latest" "sha256-ac40W3JeDN9xD0aUkZLlkaIn59HQu4PvhDbVdzqeqLY=" ]
+          [ "newline"                     "chang196700"   L.mit       "latest" "sha256-LRLQWoiAKo3z8dcho4n6RFEtDd/tsOkEeiOXbnTvPgA=" ]
           [ "tws"                         "jkiviluoto"    L.mit       "latest" "0aj58iasgnmd2zb7zxz587k9mfmykjwrb8h7hfvpkmh76s9bj4y5" ] # Trailing white space
           #[ "todo-tree"                   "Gruntfuggly"   L.mit       "latest" "0yrc9qbdk7zznd823bqs1g6n2i5xrda0f9a7349kknj9wp1mqgqn" ]
           #[ "suteppu"                     "Itsakaseru"    L.mit       "latest" "1z0zkznwwm0z1vyq2wsw9rf1kg8pfpb3rl7glx0zp3aq8sxvnfsf" ]
@@ -218,7 +226,7 @@ let
           #[ "idris-vscode"                "meraymond"     L.mit       "latest" "0yam13n021lmc93m8rpw96ksci0jshfrlnnfdk1q9yqrxydy6320" ]
           [ "agda-mode"                   "banacorn"      L.mit       "latest" "sha256-rz3Ehq/2AewE5ADYHVk8pHICSWO58i8v+nBwzkFkGCY=" ]
           #[ "als-wasm-loader"             "qbane"         L.mit       "latest" "sha256-eUYqWL1rgO1QJnflFK17mhtuaHQ/G66fj2/8jLYWSNM=" ]
-          [ "vscode-antlr4"               "mike-lischke"  L.mit       "latest" "sha256-PQHN2INJnX+vOWMgubooTtJHklbaioiTA/heXoObORs=" ]
+          #[ "vscode-antlr4"               "mike-lischke"  L.mit       "latest" "sha256-PQHN2INJnX+vOWMgubooTtJHklbaioiTA/heXoObORs=" ]
           [ "toggle-zen-mode"             "fudd"          L.mit       "latest" "sha256-3YGyzbYfaXx4xKWFjFBiXgKbvw2+Aw8cuXSHtk73SUY=" ]
         ]
       )
@@ -253,7 +261,7 @@ in
   };
 
   home.activation = { # It's complicated, refer to: https://home-manager-options.extranix.com/?query=home.activation&release=release-25.05
-    
+
     # Does the following commands to deal with soju database requiring a user Halloy can use (I believe)
     # nix shell nixpkgs#soju
     # sojudb -config /nix/store/...-soju.conf create-user brian
@@ -388,7 +396,7 @@ in
           b="$(pathcat `dirname "$b"` `readlink -n "$b"`)"
           echo "→ $b"
         done
-        file "$b"
+        ${file}/bin/file "$b"
         echo -n 'size: '; bs -HQD2 "$b"
       fi
       ''
@@ -407,7 +415,8 @@ in
       username = "Brian_ED";
       token = "";
     })
-    rocqPackages.rocq-core rocqPackages.stdlib rocqPackages.mathcomp rocqPackages.vsrocq-language-server
+    mikan
+    rocqPackages.rocq-core rocqPackages.stdlib rocqPackages.vsrocq-language-server
     spotify
     discord
     stripe-cli
@@ -479,10 +488,13 @@ in
     simplescreenrecorder # My favorite recording software
     bqn386 apl386 # BQN and APL font
     #go gopls
+
+    # P5
+    terraform google-cloud-sdk
   ]);
 
   # manages dotfiles
-  home.file = import ./home-files.nix {inherit config homeDir lib pkgs;}; # agda-unimath
+  home.file = import ./home-files.nix {inherit config homeDir lib pkgs substituters;}; # agda-unimath
 
   home = {inherit sessionVariables;};
 

@@ -9,7 +9,6 @@
     settings = {
       experimental-features = [ "nix-command" "flakes" ];
       warn-dirty = false;
-      trusted-users = [ "brian" ];
       nix-path = nixPath;
       flake-registry = ""; # ensures flakes are truly self-contained
     };

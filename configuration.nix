@@ -1,7 +1,7 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’)
-{pkgs, pkgs-unstable, inputs, nixPath, sojuConfigFile, hostName, ... }:
+{pkgs, pkgs-unstable, inputs, nixPath, sojuConfigFile, hostName, substituters, trusted-public-keys, ... }:
 {
   nix = {
     channel.enable = false;
@@ -11,9 +11,9 @@
     settings = {
       experimental-features = [ "nix-command" "flakes" "pipe-operators" ];
       warn-dirty = false;
-      trusted-users = [ "brian" ];
       nix-path = nixPath; # For disabling channels
-      flake-registry = ""; # ensures flakes are truly self-contained
+      flake-registry = ""; # ensures flakes are truly self-contained, by disabling bad feature: https://nix.dev/manual/nix/2.34/command-ref/conf-file.html#conf-flake-registry
+      inherit substituters trusted-public-keys;
     };
   };
 
@@ -111,7 +111,7 @@
       videoDrivers = [ "modesetting" "fbdev" ];
       enable = true; # Enable the X11 windowing system
       displayManager = {
-        sessionCommands = "${pkgs.xkbset}/bin/xkbset bouncekeys 10";
+        sessionCommands = "${pkgs.xkbset}/bin/xkbset bouncekeys 200";
         lightdm.extraConfig = ''
           smart-xsession-errors=true
         '';
@@ -173,6 +173,10 @@
       configFile = sojuConfigFile;
     };
   };
+
+  # P5 project
+  virtualisation.docker.enable = true;
+
   environment = {
     ## Apparently dyalogscript's /bin/dyalogscript is better than "/usr/bin/env dyalogscript".
     ## This enables it
@@ -231,6 +235,16 @@
   };
 
   programs = {
+
+    ssh = {
+      knownHosts = {
+        gitlab = {
+          extraHostNames = [ "gitlab.com" "172.65.251.78" ];
+          publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAfuCHKVTjquxvt6CM6tdG4SLp1Btn/nOeHHE5UOzRdf";
+        };
+      };
+    };
+
     i3lock.enable = true;
     dconf.enable = true; # For i3
 
@@ -313,7 +327,6 @@
       MemorySwapMax = "50%";
       MemoryZSwapMax = "50%";
     };
-    services = {};
   };
 
   # This value determines the NixOS release from which the default

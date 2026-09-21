@@ -1,4 +1,4 @@
-{config, homeDir, lib, pkgs}: { # agda-unimath
+{config, homeDir, lib, pkgs, substituters}: {
 
   "${homeDir}/.config/niri/config.kdl".source = ./modules/niri-config.kdl; # Niri config
 
@@ -6,6 +6,10 @@
     enable = true;
     source = config.lib.file.mkOutOfStoreSymlink "/home/brian/proj/brian-nixos-config/configs/vscode.json";
   };
+
+  ".config/nix/nix.conf".text = ''
+    substituters = ${toString substituters}
+  '';
 
   "${homeDir}/.config/alacritty/alacritty.toml" = {
     enable = true;
