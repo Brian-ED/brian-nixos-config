@@ -35,6 +35,7 @@
 
     # wireless.enable = true;  # Enables wireless support via wpa_supplicant
     networkmanager.enable = true; # Enable networking
+    networkmanager.unmanaged = ["interface-name:docker0" "interface-name:veth*"]; # Fixes docker for some reason. Without this, wifi doesn't connect
 
     # Configure network proxy if necessary
     # proxy.default = "http://user:password@proxy:port/";
@@ -54,6 +55,7 @@
 
   # Select internationalisation properties
   i18n.defaultLocale = "en_US.UTF-8";
+  #i18n.defaultLocale = "fo_FO.UTF-8";
 
   powerManagement.powertop.enable = true; # powertop auto tuning on startup # Disabled usb after some time of incativity, so not usable on desktop
 
@@ -111,7 +113,7 @@
       videoDrivers = [ "modesetting" "fbdev" ];
       enable = true; # Enable the X11 windowing system
       displayManager = {
-        sessionCommands = "${pkgs.xkbset}/bin/xkbset bouncekeys 200";
+        sessionCommands = "${pkgs.xkbset}/bin/xkbset bouncekeys 50"; # 70 is too high, 40 is too low. Also TODO this doesn't consistently get applied, so need to activate it somewhere else.
         lightdm.extraConfig = ''
           smart-xsession-errors=true
         '';
@@ -263,7 +265,7 @@
     openssh.authorizedKeys.keys = [
       #"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD..." # Replace with your actual public key
     ];
-    extraGroups = [ "networkmanager" "wheel" "video" "www-data"]; # Video added so that i3 can change brightness. # www-data is for Pelican
+    extraGroups = [ "docker" "networkmanager" "wheel" "video" "www-data" ]; # Video added so that i3 can change brightness. # www-data is for Pelican # Docker for P5
   };
 
   # Allow unfree packages

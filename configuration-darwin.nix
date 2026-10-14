@@ -143,9 +143,6 @@
     description = "Brian Ellingsgaard";
   };
 
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true; # I use this for Obsidian
-
   system.primaryUser = "brian";
 
   # This value determines the NixOS release from which the default

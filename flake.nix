@@ -32,10 +32,11 @@
       inherit system;
       config = {
         dyalog.acceptLicense = true;
-        allowUnfreePredicate = pkg: builtins.elem (nixpkgs.lib.getName pkg) [
+        allowUnfreePackages = [
           "dyalog" "obsidian" "discord" "steam-unwrapped" "steam" "spotify"
           "vscode-extension-mark-wiemer-vscode-autohotkey-plus-plus" # Most of this one is MIT, it's just one asset that's not explicitly
           "factorio-space-age" # Game
+          "terraform" # P5 project: I accept the terms in bsl11 license that I cannot use this package for commercial purposes. I infact use it for uni working with Odini, which is a company dedicated to research and is funded by donations.
         ];
       };
       overlays = [
@@ -49,7 +50,7 @@
 
     flakes = pkgs.lib.filterAttrs (_: input: pkgs.lib.isType "flake" input) inputs;
     nixPath = pkgs.lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakes; # For disabling channels
-  
+
     hostName = "brians-laptop";
 
     sojuConfigFile = pkgs.writeText "soju.conf" (''

@@ -31,7 +31,27 @@ let
     #jupyter ipython ipykernel # Jupiter and dependencies
     mpmath # Arbitrary precision math
     scipy # Lots of mathy functions like eigenvalues and curve fitting
-    pycparser
+    pycparser # C-headeer-to-bqn
+
+    # All for the uni project "Odini"
+    fastapi
+    pydantic
+    pydantic-settings
+    uvicorn
+    python-dotenv
+    google-cloud-storage
+    python-magic
+    pandas
+    xarray
+    dependency-injector
+    requests
+    netcdf4
+    bottleneck
+    openpyxl
+    odfpy
+    xlrd
+    (pkgs.callPackage ./pkgs/pangaeapy.nix p)
+    ruff pytest pip psycopg2 layoutparser transformers torch detectron2 torchvision # Odini
   ]);
 
   python3-history-wrap = pkgs.writeShellScriptBin "python3" ''
@@ -102,7 +122,7 @@ let
   };
 
   vscodeCustom = pkgs.vscode-with-extensions.override {
-    vscode = pkgs-unstable.vscodium 
+    vscode = pkgs-unstable.vscodium
         # None of this works to make vscodium not create the .vscode-oss folder :(
         #.overrideAttrs (old: {
         #      postFixup = (old.postFixup or "") + ''
@@ -265,9 +285,9 @@ in
     # Does the following commands to deal with soju database requiring a user Halloy can use (I believe)
     # nix shell nixpkgs#soju
     # sojudb -config /nix/store/...-soju.conf create-user brian
-    sojuHalloyUser = lib.hm.dag.entryAfter [ "writeBoundary" "installPackages" "soju" ] ''
-      run echo ${soju.password} | run ${pkgs.soju}/bin/sojudb -config ${sojuConfigFile} create-user ${soju.username} 2> /dev/null || true
-    '';
+    ##sojuHalloyUser = lib.hm.dag.entryAfter [ "writeBoundary" "installPackages" "soju" ] ''
+    ##  run echo ${soju.password} | run ${pkgs.soju}/bin/sojudb -config ${sojuConfigFile} create-user ${soju.username} 2> /dev/null || true
+    ##'';
 
     # Sets up repositories for my projects, cloning only if missing, automatically
     # TODO: Only try cloning if connected to wifi
@@ -476,7 +496,7 @@ in
     unzip
     xed-editor
     outfieldr # tldr command for better man pages
-    (agda.withPackages (p: [ p.standard-library p.cubical ])) # agda-unimath p._1lab
+    (agda.withPackages (p: [ p.standard-library p.cubical ]))
     gnome-system-monitor
     paperview
     startup
@@ -497,6 +517,11 @@ in
   home.file = import ./home-files.nix {inherit config homeDir lib pkgs substituters;}; # agda-unimath
 
   home = {inherit sessionVariables;};
+
+  #i18n.glibcLocales = pkgs.glibcLocales.override {
+  #  allLocales = false;
+  #  locales = [ "fo_FO.UTF-8/UTF-8" ];
+  #};
 
   gtk = {
     enable = true;
@@ -725,7 +750,7 @@ in
     historyIgnore = [ "ls" ];
 
     shellAliases = rec {
-      volup = "wpctl set-volume $(wpctl status | egrep '\\*.*Speaker'  | grep -oE '[0-9]+' | head -n 1) 10%+";
+      volup = "wpctl set-volume $(wpctl status | egrep Speaker | grep -oE [0-9]+ | head -n 1) 10%+";
       addsong = "${python3}/bin/yt-dlp --format 251 --extract-audio --audio-format mp3 --audio-quality 0 --paths ${winUser}/Music/ $@";
       code = "${vscodeCustom}/bin/codium";
       fix-nix-hash = "${pkgs.nix}/bin/nix hash convert --hash-algo sha256 --to nix32 $1"; # give in format sha256-...=
@@ -835,6 +860,35 @@ in
     };
   };
 
+  #programs.halloy = {
+  #  enable   = true;
+  #  package  = pkgs-unstable.halloy; # The halloy package to use. null or package
+  #  settings = { # List of available options: https://halloy.chat/configuration.html
+  #    tooltips = "all"; # Values: "all", "autocomplete", "none"
+  #    themes = { # info: https://halloy.chat/configuration/themes/index.html
+  #      dark = "ferra";
+  #      light = "ferra-light";
+  #    };
+  #    "buffer.channel.topic" = {
+  #      enabled = true;
+  #    };
+  #    "servers.liberachat" = {
+  #      channels = [
+  #        "#halloy"
+  #        "#1lab"
+  #      ];
+  #      nickname = "Brian E";
+  #      server = "irc.libera.chat";
+  #    };
+  #    "servers.soju" = {
+  #      port = 6667;
+  #      use_tls = false;
+  #      nickname = "Brian E";
+  #      server = "localhost";
+  #      sasl.plain = soju;
+  #    };
+  #  };
+  #};
   programs.npm.settings = {
     prefix = "${homeDir}/.cache/npm";
   };
