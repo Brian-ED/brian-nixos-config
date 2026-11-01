@@ -209,5 +209,6 @@
   "editor.rulers": [
     80, 100
   ],
-  "explorer.confirmPasteNative": false
+  "explorer.confirmPasteNative": false,
+  "tinymist.formatterProseWrap": true
 }

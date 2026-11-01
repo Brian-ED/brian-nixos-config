@@ -1,17 +1,21 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’)
-{pkgs, pkgs-unstable, inputs, nixPath, sojuConfigFile, hostName, substituters, trusted-public-keys, ... }:
+[
+  # Disable channels
+  ({nixPath, ...}: {
+    nix = {
+      channel.enable = false;
+      settings.nix-path = nixPath; # For disabling channels
+    };
+  })
+
+({pkgs, pkgs-unstable, inputs, nixPath, sojuConfigFile, hostName, substituters, trusted-public-keys, ... }:
 {
   nix = {
-    channel.enable = false;
     inherit nixPath;
     # removing __functor for tack compatibility
     registry = pkgs.lib.mapAttrs (_: flake: {inherit flake;}) (removeAttrs inputs [ "__functor" ]);
     settings = {
       experimental-features = [ "nix-command" "flakes" "pipe-operators" ];
       warn-dirty = false;
-      nix-path = nixPath; # For disabling channels
       flake-registry = ""; # ensures flakes are truly self-contained, by disabling bad feature: https://nix.dev/manual/nix/2.34/command-ref/conf-file.html#conf-flake-registry
       inherit substituters trusted-public-keys;
     };
@@ -61,6 +65,8 @@
 
   services = {
     swapspace.enable = true; # Replaces swapDevices swapfile
+
+    journald.extraConfig = "SystemMaxUse=1G"; # I would set 2G but it's lying, since my log size turned from 5G to 2.2G. Am compensating.
 
     pulseaudio.extraClientConf = "cookie-file = /tmp/pulse-cookie";
 
@@ -170,14 +176,14 @@
     #  };
     #};
 
-    soju = {
-      enable = true;
-      configFile = sojuConfigFile;
-    };
+    #soju = {
+    #  enable = true;
+    #  configFile = sojuConfigFile;
+    #};
   };
 
   # P5 project
-  virtualisation.docker.enable = true;
+  virtualisation.docker = { enable = true; package = pkgs-unstable.docker; };
 
   environment = {
     ## Apparently dyalogscript's /bin/dyalogscript is better than "/usr/bin/env dyalogscript".
@@ -315,10 +321,28 @@
     };
   };
 
-  # Cleanup coredumps
   systemd = {
+
+    # Disabled: systemd errors when starting sleeping and makes
+    # my laptop freeze on systemd "boot" screen.
+    targets = {
+      sleep.enable = false;
+
+      # Suspend to RAM.
+      # Sets apps to be low power usage.
+      suspend.enable = false;
+
+      # Suspend to disk, but doesn't work on my
+      # normal intel laptop
+      hibernate.enable = false;
+      hybrid-sleep.enable = false;
+    };
+
+    # Cleanup coredumps
+    #coredump.extraConfig = "MaxUse=250m";
     coredump.settings.Coredump = {
       MaxUse = "250m";
+      ProcessSizeMax = "250m"; # MaxUse alone still allows a single huge file
     };
     slices.anti-hungry.sliceConfig = {
       CPUAccounting = true;
@@ -339,4 +363,5 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html)
   system.stateVersion = "24.05"; # Did you read the comment?
 
-}
+})
+]

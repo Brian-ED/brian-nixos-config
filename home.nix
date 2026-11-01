@@ -4,6 +4,7 @@ let
   home-manager      = inputs.home-manager     .packages.${pkgs.stdenv.hostPlatform.system}.home-manager;
   nixos-conf-editor = inputs.nixos-conf-editor.packages.${pkgs.stdenv.hostPlatform.system}.nixos-conf-editor;
   k                 = inputs.k                .packages.${pkgs.stdenv.hostPlatform.system}.k;
+  boomer            = inputs.boomer           .packages.${pkgs.stdenv.hostPlatform.system}.default;
   mikan             = inputs.mikan            .packages.${pkgs.stdenv.hostPlatform.system}.default;
   #agda-unimath      = inputs.agda-unimath     .packages.${pkgs.stdenv.hostPlatform.system}
   #  .agda-unimath.overrideAttrs (old: {
@@ -15,17 +16,17 @@ let
   username = "brian";
   homeDir = "/home/${username}";
 
-  soju = {
-    username = "brian-e";
-    password = "unsecure-password-because-am-local";
-  };
+  #soju = {
+  #  username = "brian-e";
+  #  password = "unsecure-password-because-am-local";
+  #};
 
   startup = pkgs.writeShellScriptBin "startup" ''
     ${pkgs.paperview}/bin/paperview ${homeDir}/proj/wallpapers/frames2 3
   '';
 
   # Python with scientific libraries
-  python3 = pkgs.python3.withPackages (p: with p;[
+  python3 = pkgs-stable.python3.withPackages (p: with p;[
     yt-dlp-light pyperclip # These are dependencies of my youtube song downloader for my playlist, which is used by the I3 shortcut $mod+Control+Shift+m
     numpy matplotlib sympy pandas # Me want very much. Used often
     #jupyter ipython ipykernel # Jupiter and dependencies
@@ -62,12 +63,13 @@ let
     NIXPKGS_ALLOW_UNFREE = "1"; # --impure is needed anyway for this to take effect, so I don't believe this is unsafe
     ADW_DISABLE_PORTAL = "1"; # For dark mode for some reason https://discourse.nixos.org/t/setting-theme-for-gnome-apps-to-dark-when-gnome-desktop-is-disabled/71921/10
 
+    DO_NOT_TRACK = "true"; # Disables some telemetry, like Github's gh command https://docs.github.com/en/github-cli/github-cli/github-cli-telemetry
+
     GOPATH="${config.xdg.stateHome}/go";
     GOMODCACHE="${config.xdg.cacheHome}/go/pkg/mod";
     GOTELEMETRYDIR="/dev/null";
 
     ROCQPATH = "${homeDir}/.nix-profile/lib/coq/${pkgs.rocq-core.rocq-version}/user-contrib";
-    COQPATH = "${homeDir}/.nix-profile/lib/coq/${pkgs.rocq-core.rocq-version}/user-contrib";
 
     # Moves .compose-cache created by alacritty's XCompose dependency
     XCOMPOSECACHE = "${config.xdg.cacheHome}/x11-compose-cache";
@@ -435,8 +437,21 @@ in
       username = "Brian_ED";
       token = "";
     })
+    zulip
+    boomer
     mikan
-    rocqPackages.rocq-core rocqPackages.stdlib rocqPackages.vsrocq-language-server
+    (pkgs-unstable.rocq-core.withPackages (
+      ps: with ps; [
+        stdlib
+        vsrocq-language-server
+        mathcomp
+        bignums
+        mathcomp
+        mathcomp-boot
+        hierarchy-builder
+        rocq-elpi
+      ]
+    ))
     spotify
     discord
     stripe-cli
@@ -449,7 +464,7 @@ in
     gnome-screenshot
     #kiwix-tools # For reading wikipedia offline
     ride # Dyalog APL stuff (moved Dyalog to aliases to supply arguments)
-    libreoffice-qt6-fresh
+    libreoffice-qt
     duf              # Disk utility
     cryptsetup       # For decrypting my LUKS encrypted harddrive
     qbittorrent-enhanced # BitTorrent client
@@ -474,7 +489,7 @@ in
     rlwrap            # Useful to make Dyalog be a more classic repl
     baobab            # Drive space tree-like view
     obsidian          # Unfree package. Can only use for non-profit
-    zoom              # Maybe unfree, would have to check *before commiting*!!! TODO
+    #zoom             # Heavy meeting app I use rarely
     nodejs            # Javascript interpreter
     haruna            # Video player
     qutebrowser       # browser with loads of shortcuts
@@ -766,7 +781,6 @@ in
 
       P = "pwd | ${pkgs.xclip}/bin/xclip -selection clipboard";
       clip = "${pkgs.xclip}/bin/xclip -selection clipboard";
-      lo = "${pkgs.libreoffice-qt6-fresh}/bin/libreoffice";
       "←" = "cd ..";
       "," = "cd ~";
       "_" = "cd - >> /dev/null";
@@ -779,8 +793,8 @@ in
       clean30d = "${pkgs.gtrash}/bin/gtrash prune --day 30 && ${pkgs.nh}/bin/nh clean all --optimise --keep-since 30d";
 
       # ls-like things
-      l   = "${pkgs.eza}/bin/eza --color=always --all --classify=always --long --color=always --absolute=on --header --git --git-repos --time-style=relative --total-size --no-permissions --no-user --sort size      --icons";
-      ls  = "${pkgs.eza}/bin/eza --color=always       --classify=always --across                                                                                                                     --sort extension --icons";
+      l   = "${pkgs.eza}/bin/eza --color=always --all --classify=always --long --color=always --absolute=on --header --git --git-repos --time-style=relative --total-size --no-permissions --no-user --sort size";
+      ls  = "${pkgs.eza}/bin/eza --color=always       --classify=always --across                                                                                                                     --sort extension";
       lsr = "${l} --tree";
       lsrf = "${pkgs.fd}/bin/fd $@";
       navfind = "${pkgs.fzf}/bin/fzf --height 50% --layout reverse --info inline --preview 'bat --color=always --style=full,-grid --line-range=:500 {}' --preview-window right,70%,border-none";

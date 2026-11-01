@@ -22,6 +22,12 @@
     nix-watch         = { url = "github:Cloud-Scythe-Labs/nix-watch"             ; inputs.nixpkgs.follows = "nixpkgs"; };
     nvf               = { url = "github:notashelf/nvf"                           ; inputs.nixpkgs.follows = "nixpkgs"; };
     fenix             = { url = "github:nix-community/fenix"                     ; inputs.nixpkgs.follows = "nixpkgs"; };
+
+    # Boomer is a zoom tool made by tsoding. This is a fork of it including a flake.nix
+    boomer = {
+      url = "github:nilp0inter/boomer?rev=3c1917956ac40de94a86d471202c968e4a93c3dd";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs: let
@@ -33,7 +39,7 @@
       config = {
         dyalog.acceptLicense = true;
         allowUnfreePackages = [
-          "dyalog" "obsidian" "discord" "steam-unwrapped" "steam" "spotify"
+          "dyalog" "obsidian" "discord" "discord-unwrapped" "steam-unwrapped" "steam" "spotify"
           "vscode-extension-mark-wiemer-vscode-autohotkey-plus-plus" # Most of this one is MIT, it's just one asset that's not explicitly
           "factorio-space-age" # Game
           "terraform" # P5 project: I accept the terms in bsl11 license that I cannot use this package for commercial purposes. I infact use it for uni working with Odini, which is a company dedicated to research and is funded by donations.
@@ -68,8 +74,8 @@
       }
     '');
 
-    substituters        = [ "https://cache.nixos.org/"                                        "https://mikan.cachix.org"                                        "https://attic.xuyh0120.win/lantian"                   ];
-    trusted-public-keys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="  "mikan.cachix.org-1:l1i58iAKFlQr1VcWPaYXExVYoVVPx8vXs+jfEttRFhA=" "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc=" ];
+    substituters        = [ "https://cache.nixos.org/"                                        "https://mikan.cachix.org/"                                       ];
+    trusted-public-keys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="  "mikan.cachix.org-1:l1i58iAKFlQr1VcWPaYXExVYoVVPx8vXs+jfEttRFhA=" ];
 
   in {
     homeConfigurations.brian = inputs.home-manager.lib.homeManagerConfiguration {
@@ -82,9 +88,8 @@
       brians-laptop = nixpkgs.lib.nixosSystem {
         inherit system;
         specialArgs = {inherit inputs pkgs-unstable win nixPath sojuConfigFile hostName substituters trusted-public-keys;};
-        modules = [
+        modules = (import ./configuration.nix) ++ [
           ./hardware/lenovo-C940-14IIL.nix # Include the results of the hardware scan
-          ./configuration.nix
           ./unsafe-config.nix
           ./modules/cachyos-kernel.nix
         ] ++ (if false then [ ./optional/vm.nix ] else []) ;
