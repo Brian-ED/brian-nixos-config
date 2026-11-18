@@ -76,7 +76,6 @@
       #gh                # github commands
       #libllvm           # Playing around with llvm IR
       #pet               # Snippet manager, not exactly sure what that means
-      #qutebrowser       # browser with loads of shortcuts
       #lxappearance      # GTK theme switcher, useful for i3
       #audacious         # For playing music
       #zig zls           # Zig stuff

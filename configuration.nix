@@ -207,7 +207,6 @@
       gh                # github commands
       libllvm           # Playing around with llvm IR
       pet               # Snippet manager, not exactly sure what that means
-      qutebrowser       # browser with loads of shortcuts
       lxappearance      # GTK theme switcher, useful for i3
       audacious         # For playing music
       firefox
@@ -326,16 +325,16 @@
     # Disabled: systemd errors when starting sleeping and makes
     # my laptop freeze on systemd "boot" screen.
     targets = {
-      sleep.enable = false;
+      sleep.enable = true;
 
       # Suspend to RAM.
       # Sets apps to be low power usage.
-      suspend.enable = false;
+      suspend.enable = true;
 
       # Suspend to disk, but doesn't work on my
       # normal intel laptop
-      hibernate.enable = false;
-      hybrid-sleep.enable = false;
+      hibernate.enable = true;
+      hybrid-sleep.enable = true;
     };
 
     # Cleanup coredumps

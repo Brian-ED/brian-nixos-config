@@ -29,15 +29,6 @@
       ''bright_foreground = "None"'' # This color is only used when draw_bold_text_with_bright_colors is true. If this is not set, the normal foreground will be used. It is set by default, but to be consistent with dim_background I'll make an exception and not remove this
     ];
   };
-  "${homeDir}/.config/qutebrowser/config.py" = {
-    enable = true;
-    executable = true;
-    text = lib.concatStringsSep "\n" [
-      ''config.set("colors.webpage.darkmode.enabled", True)''
-      ''config.set('content.cookies.accept', 'no-3rdparty', 'chrome-devtools://*')''
-      ''config.load_autoconfig(False)'' # Qutebrowser errors if you don't enable this when auto-generating a config, since otherwise it's able to edit it with GUI
-    ];
-  };
 
   "${homeDir}/.config/agda/libraries" = {
     enable = true;

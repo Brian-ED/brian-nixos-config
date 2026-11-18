@@ -1,4 +1,42 @@
-{ config, pkgs, pkgs-stable, pkgs-unstable, lib, inputs, winUser, nixPath, sojuConfigFile, substituters, ...}:
+[
+({pkgs, inputs, lib, ...}:
+let
+  cbqn-native = (import ./pkgs/cbqn.nix pkgs);
+  username = "brian";
+  homeDir = "/home/${username}";
+  sessionVariables = {
+    SINGELI_PATH = inputs.singeli;
+
+    # For running the java application singeliPlayground
+    GSETTINGS_SCHEMA_DIR = "${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}/glib-2.0/schemas";
+    _JAVA_OPTIONS = "-Dawt.useSystemAAFontSettings=lcd";
+  };
+in {
+  home.packages = [
+    (pkgs.writeShellScriptBin "sing" ''
+      if [ ! $@ == "" ]; then
+        mkdir --parents out
+        ${cbqn-native}/bin/bqn ${inputs.singeli}/singeli --out out/out.c --deplog out/log.txt $@
+        ${pkgs.llvmPackages_19.clangWithLibcAndBasicRtAndLibcxx}/bin/clang out/out.c -o out/a.out
+        out/a.out
+        rmdir out 2>/dev/null
+      else
+        ${cbqn-native}/bin/bqn ${inputs.singeli}/singeli --help
+      fi
+    '')
+
+    pkgs.jdk25 # javac for SingeliPlayground
+  ];
+
+  programs.bash.initExtra = lib.concatStrings (lib.mapAttrsToList (n: v: "export ${n}=\"${v}\"\n") sessionVariables); # I couldn't get home.sessionVariables working. Found this solution here: https://github.com/nix-community/home-manager/issues/1011
+  home = {inherit sessionVariables;};
+
+  programs.bash.shellAliases = {
+    singplay = "${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel ${homeDir}/proj/singeliPlayground/run ${cbqn-native}/bin/bqn ${inputs.singeli}";
+    singeli = "${cbqn-native}/bin/bqn ${inputs.singeli}/singeli";
+  };
+})
+({ config, pkgs, pkgs-stable, pkgs-unstable, lib, inputs, winUser, nixPath, sojuConfigFile, substituters, ...}:
 let
   nix-watch         = inputs.nix-watch        .packages.${pkgs.stdenv.hostPlatform.system}.default;
   home-manager      = inputs.home-manager     .packages.${pkgs.stdenv.hostPlatform.system}.home-manager;
@@ -69,8 +107,6 @@ let
     GOMODCACHE="${config.xdg.cacheHome}/go/pkg/mod";
     GOTELEMETRYDIR="/dev/null";
 
-    ROCQPATH = "${homeDir}/.nix-profile/lib/coq/${pkgs.rocq-core.rocq-version}/user-contrib";
-
     # Moves .compose-cache created by alacritty's XCompose dependency
     XCOMPOSECACHE = "${config.xdg.cacheHome}/x11-compose-cache";
 
@@ -111,15 +147,10 @@ let
     + ''\$(if [ \"\$HOME\" = \"\$PWD\" ]; then echo; else dirs; fi)''
     + "$ " + ESCSeq[effect.normal];
 
-    # For running the java application singeliPlayground
-    GSETTINGS_SCHEMA_DIR = "${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}/glib-2.0/schemas";
-    _JAVA_OPTIONS = "-Dawt.useSystemAAFontSettings=lcd";
-
     EDITOR = "codium";
-    BROWSER = "qutebrowser";
+    BROWSER = "firefox";
     TERMINAL = "alacritty";
     NH_FLAKE = "${homeDir}/nixos";
-    SINGELI_PATH = inputs.singeli;
     NIX_PATH = lib.concatStringsSep ":" nixPath;
   };
 
@@ -254,9 +285,19 @@ let
       )
     );
   };
+  rocq-monae-prepared = pkgs-unstable.applyPatches {
+    name = "monae";
+    src = inputs.rocq-monae;
+    postPatch = ''
+      substituteInPlace .nix/coq-overlays/monae/default.nix \
+        --replace-fail "mathcomp.fingroup" "mathcomp.finite-group"
+      #substituteInPlace .nix/coq-overlays/monae/default.nix \
+      #  --replace-fail "mathcomp.fingroup" "mathcomp.finite-group"
+    '';
+  };
 in
 {
-  imports = [ inputs.nvf.homeManagerModules.default ];
+  imports = [ inputs.nvf.homeModules.default ];
   programs.nvf = {
     enable = true;
     # your settings need to go into the settings attribute set
@@ -380,17 +421,6 @@ in
       sudo cryptsetup luksOpen /dev/disk/by-uuid/41782a7f-3269-433b-8beb-c74fba89ef2d a
       sudo mount /dev/mapper/a /mnt/hard-drive
     '')
-    (writeShellScriptBin "sing" ''
-      if [ ! $@ == "" ]; then
-        mkdir --parents out
-        ${cbqn-native}/bin/bqn ${inputs.singeli}/singeli --out out/out.c --deplog out/log.txt $@
-        ${llvmPackages_19.clangWithLibcAndBasicRtAndLibcxx}/bin/clang out/out.c -o out/a.out
-        out/a.out
-        rmdir out 2>/dev/null
-      else
-        ${cbqn-native}/bin/bqn ${inputs.singeli}/singeli --help
-      fi
-    '')
     # Credit to dzaima https://codeberg.org/dzaima/dotfiles/src/branch/main/bin/real#
     (writeShellScriptBin "real" ''
       if [[ $# == 0 ]]; then
@@ -433,30 +463,51 @@ in
       true
     ''
     )
-    (factorio-space-age.override { # Game
-      username = "Brian_ED";
-      token = "";
-    })
+    #(factorio-space-age.override { # Game
+    #  username = "Brian_ED";
+    #  token = "";
+    #})
     zulip
     boomer
     mikan
+    rocq-monae-prepared
     (pkgs-unstable.rocq-core.withPackages (
       ps: with ps; [
         stdlib
         vsrocq-language-server
-        mathcomp
+        mathcomp mathcomp-boot mathcomp-fingroup
         bignums
-        mathcomp
-        mathcomp-boot
         hierarchy-builder
         rocq-elpi
+        (pkgs-unstable.callPackage ({
+          mkRocqDerivation,
+          mathcomp, mathcomp-analysis, mathcomp-infotheo,
+          hierarchy-builder,
+          coq,
+          equations,
+          ...
+        }:
+
+        mkRocqDerivation {
+          pname = "monae";
+          owner = "affeldt-aist";
+          version = "0.9.2";
+          #releaseRev = v: "0.9.2";
+          release."0.9.2".hash = "sha256-CHr+mIwrI/rhzPh6XKMMtunQ0aBJPYxS1tIzm7zBMKA=";
+
+          propagatedBuildInputs = [
+            mathcomp mathcomp-analysis mathcomp-infotheo
+            hierarchy-builder
+            coq
+            equations
+          ];
+        }) ps)
       ]
     ))
     spotify
     discord
     stripe-cli
     qpwgraph # A graph view of PipeWire devices
-    jdk25 # javac for SingeliPlayground
     gtrash # For making it so I can avoid deleting files right away, and instead trash them
     odin ols
     nixd
@@ -492,7 +543,6 @@ in
     #zoom             # Heavy meeting app I use rarely
     nodejs            # Javascript interpreter
     haruna            # Video player
-    qutebrowser       # browser with loads of shortcuts
     audacious         # For playing music
     xkill             # For easily killing/stopping programs
     #( # Rust stuff
@@ -757,7 +807,7 @@ in
   programs.bash = {
     enable = true;
 
-    initExtra = "shopt -s autocd\n" + lib.concatStrings (lib.mapAttrsToList (n: v: "export ${n}=\"${v}\"\n") sessionVariables); # I couldn't get home.sessionVariables working. Found this solution here: https://github.com/nix-community/home-manager/issues/1011
+    initExtra = lib.concatStrings (lib.mapAttrsToList (n: v: "export ${n}=\"${v}\"\n") sessionVariables); # I couldn't get home.sessionVariables working. Found this solution here: https://github.com/nix-community/home-manager/issues/1011
 
     historyFile = "${config.xdg.stateHome}/bash/history";
     historyFileSize = 1000*1000*10;
@@ -804,8 +854,6 @@ in
       tp = "${pkgs.gtrash}/bin/gtrash put $@";
       d = "${pkgs.nix}/bin/nix develop";
       win = "cd ${winUser}";
-      singplay = "${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel ${homeDir}/proj/singeliPlayground/run ${cbqn-native}/bin/bqn ${inputs.singeli}";
-      singeli = "${inputs.singeli}/singeli";
       lines = "${pkgs.coreutils-full}/bin/wc -l";
       "≠" = lines;
       "⌽" = "${pkgs.coreutils-full}/bin/tac ";
@@ -908,4 +956,5 @@ in
   };
 
   xresources.path = "${homeDir}/.config/Xresources";
-}
+})
+]

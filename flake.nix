@@ -28,6 +28,8 @@
       url = "github:nilp0inter/boomer?rev=3c1917956ac40de94a86d471202c968e4a93c3dd";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    rocq-monae = {url = "github:affeldt-aist/monae"; flake = false;};
   };
 
   outputs = inputs: let
@@ -74,14 +76,27 @@
       }
     '');
 
-    substituters        = [ "https://cache.nixos.org/"                                        "https://mikan.cachix.org/"                                       ];
-    trusted-public-keys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="  "mikan.cachix.org-1:l1i58iAKFlQr1VcWPaYXExVYoVVPx8vXs+jfEttRFhA=" ];
+    substituters = [
+      "https://cache.nixos.org/"
+      "https://mikan.cachix.org/"
+      "https://coq-community.cachix.org"
+      "https://coq.cachix.org"
+      "https://math-comp.cachix.org"
+
+    ];
+    trusted-public-keys = [
+      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+      "mikan.cachix.org-1:l1i58iAKFlQr1VcWPaYXExVYoVVPx8vXs+jfEttRFhA="  
+      "coq-community.cachix.org-1:WBDHojv8FM6nI4ZMh43X+2g6j4WpAn+dFhjhWmLCgnA="
+      "coq.cachix.org-1:5QW/wwEnD+l2jvN6QRbRRsa4hBHG3QiQQ26cxu1F5tI="
+      "math-comp.cachix.org-1:ZoAy3dSWncrBPpEsNHa1Rbio0Oly3TFrZXlVTdofbQU="
+    ];
 
   in {
     homeConfigurations.brian = inputs.home-manager.lib.homeManagerConfiguration {
       inherit pkgs;
-      modules = [ ./home.nix ./pkgs/restic-temp.nix ];
-      extraSpecialArgs = {inherit inputs pkgs-stable pkgs-unstable winUser nixPath sojuConfigFile substituters; };
+      modules = (import ./home.nix) ++ [ ./pkgs/restic-temp.nix ];
+      extraSpecialArgs = {inherit inputs system pkgs-stable pkgs-unstable winUser nixPath sojuConfigFile substituters; };
     };
 
     nixosConfigurations = {
